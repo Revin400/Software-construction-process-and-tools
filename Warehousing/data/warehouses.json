@@ -1,0 +1,53 @@
+[
+    {
+        "id": 1,
+        "code": "RTRSPOL",
+        "name": "Rotterdam Spaanse Polder Giessenweg",
+        "address": "Giessenweg 20",
+        "zip": "3044 BA",
+        "city": "Rotterdam",
+        "province": "Zuid-Holland",
+        "country": "NL",
+        "contact": {
+            "name": "John Doe",
+            "phone": "06-12345678",
+            "email": "john@rtrspol.warehousing.eu"
+        },
+        "created_at": "2024-02-03 13:12:00",
+        "updated_at": "2024-02-03 13:12:00"
+    },
+    {
+        "id": 2,
+        "code": "UTRLR",
+        "name": "Utrecht Leidsche Rijn",
+        "address": "Hertogswetering 10",
+        "zip": "3543 AS",
+        "city": "Utrecht",
+        "province": "Utrecht",
+        "country": "NL",
+        "contact": {
+            "name": "Johanna Doe",
+            "phone": "06-87654321",
+            "email": "johanna@utrlr.warehousing.eu"
+        },
+        "created_at": "2024-02-03 13:12:00",
+        "updated_at": "2024-02-03 13:12:00"
+    },
+    {
+        "id": 3,
+        "code": "TILBRBO",
+        "name": "Tilburg Ringbaan Oost",
+        "address": "Ringbaan Oost 114",
+        "zip": "5013 CC",
+        "city": "Tilburg",
+        "province": "Noord-Brabant",
+        "country": "NL",
+        "contact": {
+            "name": "Fred Westfield",
+            "phone": "06-12348765",
+            "email": "fred@tilbrbo.warehousing.eu"
+        },
+        "created_at": "2024-02-03 13:12:00",
+        "updated_at": "2024-02-03 13:12:00"
+    }
+]
