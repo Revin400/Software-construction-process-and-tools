@@ -1,0 +1,3 @@
+#ignore pycaches
+
+**/__pycache__/
