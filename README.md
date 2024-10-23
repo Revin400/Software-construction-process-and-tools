@@ -4,6 +4,6 @@ In deze cursus leer je als software engineer automatiseren om softwareontwikkeli
 
 | Git Repo| Description                |
 | :-------- |  :------------------------- |
-| `Software-construction-process-and-tools` | Updated version of the originel warehouse |
-| `project C (originel python code)` | First version of the code we had to refactor. please click this [link](https://github.com/JaySurj) to go to the python version |
+| `Software-construction-process-and-tools` | Updated version of the original warehouse |
+| `project C (original python code)` | First version of the code we had to refactor. please click this [link](https://github.com/JaySurj) to go to the python version |
 
