@@ -1,0 +1,58 @@
+### GET all Warehouses
+GET http://localhost:5000/api/warehouse
+
+###
+
+### GET Warehouse by ID
+GET http://localhost:5000/api/warehouse/1
+
+###
+
+### Create a new Warehouse
+POST http://localhost:5000/api/warehouse
+Content-Type: application/json
+
+{
+  "Code": "WH001",
+  "Name": "Main Warehouse",
+  "Address": "1234 Warehouse St",
+  "Zip": "12345",
+  "City": "Warehouse City",
+  "Province": "Warehouse Province",
+  "Country": "Warehouse Country",
+  "Contact": {
+    "Name": "John Doe",
+    "Phone": "123-456-7890",
+    "Email": "john.doe@example.com"
+  },
+  "CreatedAt": "2023-10-01T00:00:00Z",
+  "UpdatedAt": "2023-10-01T00:00:00Z"
+}
+
+###
+
+### Update an existing Warehouse
+PUT http://localhost:5000/api/warehouse/3
+Content-Type: application/json
+
+{
+  "code": "W003",
+  "name": "Updated Warehouse",
+  "address": "Updated Address",
+  "zip": "12345",
+  "city": "Updated City",
+  "province": "Updated Province",
+  "country": "Updated Country",
+  "contact": {
+    "name": "Updated Contact",
+    "phone": "123-456-7890",
+    "email": "updated.email@example.com"
+  },
+  "createdAt": "2024-02-03T13:12:00",
+  "updatedAt": "2024-02-03T13:12:00"
+}
+
+###
+
+### Delete an existing Warehouse
+DELETE http://localhost:5000/api/warehouse/1
