@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<WarehouseService>();
+builder.Services.AddScoped<ClientService>();
 
 
 var app = builder.Build();
