@@ -18,3 +18,5 @@ app.MapControllers();
 
 
 app.Run();
+
+Console.WriteLine("Starting up the application...");

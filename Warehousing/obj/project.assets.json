@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\mmsb0\\.nuget\\packages\\": {}
+    "C:\\Users\\yoyoc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mmsb0\\OneDrive\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
+      "projectUniqueName": "C:\\Users\\yoyoc\\OneDrive\\Documenten\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
       "projectName": "Warehousing",
-      "projectPath": "C:\\Users\\mmsb0\\OneDrive\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
-      "packagesPath": "C:\\Users\\mmsb0\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mmsb0\\OneDrive\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\obj\\",
+      "projectPath": "C:\\Users\\yoyoc\\OneDrive\\Documenten\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
+      "packagesPath": "C:\\Users\\yoyoc\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\yoyoc\\OneDrive\\Documenten\\GitHub\\Software-construction-process-and-tools\\Warehousing\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\mmsb0\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\yoyoc\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
