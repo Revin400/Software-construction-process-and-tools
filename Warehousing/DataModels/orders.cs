@@ -23,10 +23,10 @@ public class Order
     public decimal TotalSurcharge { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public List<OrderItem> Items { get; set; }
+    public List<OrderItems> Items { get; set; }
 }
 
-public class OrderItem
+public class OrderItems
 {
     public int ItemId { get; set; }
     public int Amount { get; set; }
