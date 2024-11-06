@@ -6,7 +6,7 @@ using System.Text.Json;
 
 public class OrderService
 {
-    private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "orders.json");
+    private readonly string _filePath;
 
     public OrderService()
     {
@@ -39,52 +39,5 @@ public class OrderService
     {
         var orders = ReadOrdersFromJson();
         return orders.Any() ? orders.Max(o => o.Id) + 1 : 1;
-    }
-
-    public IEnumerable<Order> GetOrders()
-    {
-        return ReadOrdersFromJson();
-    }
-
-    public Order GetOrder(int orderId)
-    {
-        return ReadOrdersFromJson().FirstOrDefault(o => o.Id == orderId);
-    }
-
-    public void AddOrder(Order order)
-    {
-        var orders = ReadOrdersFromJson();
-        order.Id = NextId();
-        order.CreatedAt = DateTime.UtcNow;
-        order.UpdatedAt = DateTime.UtcNow;
-        orders.Add(order);
-        WriteOrdersToJson(orders);
-    }
-
-    public bool UpdateOrder(int orderId, Order order)
-    {
-        var orders = ReadOrdersFromJson();
-        var existingOrder = orders.FirstOrDefault(o => o.Id == orderId);
-        if (existingOrder == null)
-        {
-            return false;
-        }
-        order.UpdatedAt = DateTime.UtcNow;
-        orders[orders.IndexOf(existingOrder)] = order;
-        WriteOrdersToJson(orders);
-        return true;
-    }
-
-    public bool RemoveOrder(int orderId)
-    {
-        var orders = ReadOrdersFromJson();
-        var order = orders.FirstOrDefault(o => o.Id == orderId);
-        if (order == null)
-        {
-            return false;
-        }
-        orders.Remove(order);
-        WriteOrdersToJson(orders);
-        return true;
     }
 }
