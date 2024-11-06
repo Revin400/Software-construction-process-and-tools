@@ -35,7 +35,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("{orderId}/items")]
-    public ActionResult<IEnumerable<OrderItem>> GetItemsInOrder(int orderId)
+    public ActionResult<IEnumerable<OrderItems>> GetItemsInOrder(int orderId)
     {
         var order = data.FirstOrDefault(o => o.Id == orderId);
         if (order == null)
@@ -84,7 +84,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPut("{orderId}/items")]
-    public ActionResult UpdateItemsInOrder(int orderId, [FromBody] List<OrderItem> items)
+    public ActionResult UpdateItemsInOrder(int orderId, [FromBody] List<OrderItems> items)
     {
         var order = data.FirstOrDefault(o => o.Id == orderId);
         if (order == null)
