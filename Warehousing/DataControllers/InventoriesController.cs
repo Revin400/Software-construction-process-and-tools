@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 [Route("api/inventories")]
 [ApiController]
@@ -11,7 +13,7 @@ public class InventoriesController : ControllerBase
 
     public InventoriesController()
     {
-        data = new List<Inventory>(); // Initialize with your data source
+        data = new List<Inventory>();
     }
 
     [HttpGet]
