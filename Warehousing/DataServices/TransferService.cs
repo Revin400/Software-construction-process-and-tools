@@ -10,7 +10,7 @@ public class TransferService
 
     public TransferService(string rootPath)
     {
-        _filePath = Path.Combine(rootPath, "transfers.json");
+        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "transfers.json");
     }
 
     public List<Transfer> ReadTransfersFromJson()

@@ -8,9 +8,9 @@ public class InventoryService
 {
     private readonly string _filePath;
 
-    public InventoryService(string filePath)
+    public InventoryService()
     {
-        _filePath = filePath;
+        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "inventories.json");;
     }
 
     public List<Inventory> ReadInventoriesFromJson()

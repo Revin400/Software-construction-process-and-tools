@@ -6,11 +6,11 @@ using System.Text.Json;
 
 public class OrderService
 {
-    private readonly string _filePath;
+    private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "orders.json");
 
-    public OrderService(string filePath)
+    public OrderService()
     {
-        _filePath = filePath;
+        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "orders.json");;
     }
 
     public List<Order> ReadOrdersFromJson()
