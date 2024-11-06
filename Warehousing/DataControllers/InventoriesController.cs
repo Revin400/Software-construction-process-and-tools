@@ -3,17 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System;
 
-[Route("api/warehouse")]
+[Route("api/inventories")]
 [ApiController]
-public class Inventories : ControllerBase
+public class InventoriesController : ControllerBase
 {
     private readonly string dataPath;
     private List<Inventory> data;
 
-    public Inventories(string rootPath, bool isDebug = false)
+    public InventoriesController(string rootPath, bool isDebug = false)
     {
         dataPath = Path.Combine(rootPath, "inventories.json");
-        Load(isDebug);
     }
 
     public List<Inventory> GetInventories()
@@ -74,56 +73,6 @@ public class Inventories : ControllerBase
     public void RemoveInventory(int inventoryId)
     {
         data.RemoveAll(x => x.Id == inventoryId);
-    }
-
-    private void Load(bool isDebug)
-    {
-        if (isDebug)
-        {
-            data = new List<Inventory>
-            {
-                new Inventory
-                {
-                    Id = 1,
-                    ItemId = 1,
-                    Description = "High Precision Bearings",
-                    ItemReference = "REF123",
-                    LocationId = 1,
-                    TotalOnHand = 150,
-                    TotalExpected = 200,
-                    TotalOrdered = 50,
-                    TotalAllocated = 100,
-                    TotalAvailable = 50,
-                    CreatedAt = DateTime.Parse("2024-03-20T10:00:00Z"),
-                    UpdatedAt = DateTime.Parse("2024-03-21T11:00:00Z")
-                },
-                new Inventory
-                {
-                    Id = 2,
-                    ItemId = 1,
-                    Description = "High Precision Bearings",
-                    ItemReference = "REF123",
-                    LocationId = 2,
-                    TotalOnHand = 150,
-                    TotalExpected = 200,
-                    TotalOrdered = 50,
-                    TotalAllocated = 100,
-                    TotalAvailable = 50,
-                    CreatedAt = DateTime.Parse("2024-03-20T10:00:00Z"),
-                    UpdatedAt = DateTime.Parse("2024-03-21T11:00:00Z")
-                }
-                // Additional inventory entries can be added here
-            };
-        }
-        else
-        {
-            data = JsonSerializer.Deserialize<List<Inventory>>(System.IO.File.ReadAllText(dataPath));
-        }
-    }
-
-    public void Save()
-    {
-        System.IO.File.WriteAllText(dataPath, JsonSerializer.Serialize(data));
     }
 
     private DateTime GetTimestamp()
