@@ -1,38 +1,40 @@
-
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 [Route("api/inventories")]
 [ApiController]
 public class InventoriesController : ControllerBase
 {
-    private readonly string dataPath;
-    private List<Inventory> data;
+    private readonly List<Inventory> data;
 
-    public InventoriesController(string rootPath, bool isDebug = false)
+    public InventoriesController()
     {
-        dataPath = Path.Combine(rootPath, "inventories.json");
+        data = new List<Inventory>(); // Initialize with your data source
     }
 
-    public List<Inventory> GetInventories()
+    [HttpGet]
+    public ActionResult<IEnumerable<Inventory>> GetInventories()
     {
-        return data;
+        return Ok(data);
     }
 
-    public Inventory GetInventory(int inventoryId)
+    [HttpGet("{inventoryId}")]
+    public ActionResult<Inventory> GetInventory(int inventoryId)
     {
-        return data.Find(x => x.Id == inventoryId);
+        var inventory = data.FirstOrDefault(i => i.Id == inventoryId);
+        if (inventory == null)
+        {
+            return NotFound();
+        }
+        return Ok(inventory);
     }
 
-    public List<Inventory> GetInventoriesForItem(int itemId)
+    [HttpGet("item/{itemId}")]
+    public ActionResult<Dictionary<string, decimal>> GetInventoriesForItem(int itemId)
     {
-        return data.FindAll(x => x.ItemId == itemId);
-    }
-
-    public Dictionary<string, int> GetInventoryTotalsForItem(int itemId)
-    {
-        var result = new Dictionary<string, int>
+        var result = new Dictionary<string, decimal>
         {
             { "total_expected", 0 },
             { "total_ordered", 0 },
@@ -50,29 +52,41 @@ public class InventoriesController : ControllerBase
                 result["total_available"] += item.TotalAvailable;
             }
         }
-        return result;
+        return Ok(result);
     }
 
-    public void AddInventory(Inventory inventory)
+    [HttpPost]
+    public ActionResult AddInventory([FromBody] Inventory inventory)
     {
         inventory.CreatedAt = GetTimestamp();
         inventory.UpdatedAt = GetTimestamp();
         data.Add(inventory);
+        return CreatedAtAction(nameof(GetInventory), new { inventoryId = inventory.Id }, inventory);
     }
 
-    public void UpdateInventory(int inventoryId, Inventory inventory)
+    [HttpPut("{inventoryId}")]
+    public ActionResult UpdateInventory(int inventoryId, [FromBody] Inventory inventory)
     {
         inventory.UpdatedAt = GetTimestamp();
         var index = data.FindIndex(x => x.Id == inventoryId);
         if (index >= 0)
         {
             data[index] = inventory;
+            return NoContent();
         }
+        return NotFound();
     }
 
-    public void RemoveInventory(int inventoryId)
+    [HttpDelete("{inventoryId}")]
+    public ActionResult RemoveInventory(int inventoryId)
     {
-        data.RemoveAll(x => x.Id == inventoryId);
+        var inventory = data.FirstOrDefault(i => i.Id == inventoryId);
+        if (inventory == null)
+        {
+            return NotFound();
+        }
+        data.Remove(inventory);
+        return NoContent();
     }
 
     private DateTime GetTimestamp()
