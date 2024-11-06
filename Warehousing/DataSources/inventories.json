@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "itemId": 1,
+        "description": "Sample Inventory",
+        "itemReference": "ITEM001",
+        "locationId": 1,
+        "totalOnHand": 100,
+        "totalExpected": 100,
+        "totalOrdered": 50,
+        "totalAllocated": 30,
+        "totalAvailable": 20
+    }
+]

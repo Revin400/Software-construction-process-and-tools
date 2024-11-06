@@ -9,21 +9,29 @@ using System.Text.Json;
 [ApiController]
 public class InventoriesController : ControllerBase
 {
-    private readonly List<Inventory> data;
+    private readonly InventoryService _inventoryService;
 
-    public InventoriesController()
+    public InventoriesController(InventoryService inventoryService)
     {
-        data = new List<Inventory>();
+        _inventoryService = inventoryService;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Inventory>> GetInventories()
+    public IActionResult GetInventories()
     {
-        return Ok(data);
+        try
+        {
+            var clients = _inventoryService.ReadInventoriesFromJson();
+            return Ok(clients);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error reading clients: {ex.Message}");
+        }
     }
 
     [HttpGet("{inventoryId}")]
-    public ActionResult<Inventory> GetInventory(int inventoryId)
+    public IActionResult GetInventory(int inventoryId)
     {
         var inventory = data.FirstOrDefault(i => i.Id == inventoryId);
         if (inventory == null)

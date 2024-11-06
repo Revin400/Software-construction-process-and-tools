@@ -1,0 +1,59 @@
+### GET all Transfers
+GET http://localhost:5000/api/transfers
+
+###
+
+### GET a specific Transfer by ID
+GET http://localhost:5000/api/transfers/1
+
+###
+
+### Create a new Transfer
+POST http://localhost:5000/api/transfers
+Content-Type: application/json
+
+{
+    "reference": "TRANS001",
+    "transferFrom": 1,
+    "transferTo": 2,
+    "transferStatus": "Processed",
+    "items": [
+        {
+            "itemId": 1,
+            "amount": 50
+        },
+        {
+            "itemId": 2,
+            "amount": 30
+        }
+    ]
+}
+
+###
+
+### Update an existing Transfer
+PUT http://localhost:5000/api/transfers/1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "reference": "TRANS001",
+    "transferFrom": 1,
+    "transferTo": 2,
+    "transferStatus": "Completed",
+    "items": [
+        {
+            "itemId": 1,
+            "amount": 50
+        },
+        {
+            "itemId": 2,
+            "amount": 30
+        }
+    ]
+}
+
+###
+
+### Delete a Transfer
+DELETE http://localhost:5000/api/transfers/1
