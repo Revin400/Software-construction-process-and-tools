@@ -9,6 +9,6 @@ In deze cursus leer je als software engineer automatiseren om softwareontwikkeli
 
 | Extra downloads/information| Description                |
 | :-------- |  :------------------------- |
-| `SQL` | dotnet add package Microsoft.EntityFrameworkCore.Sqlite
-dotnet add package Microsoft.EntityFrameworkCore.Tools |
-| `test` | test)
+| `SQLite` | dotnet add package Microsoft.EntityFrameworkCore.Sqlite|
+| `SQL Tools` |dotnet add package Microsoft.EntityFrameworkCore.Tools |
+| `test` | test
