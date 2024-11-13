@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/item")]
 public class ItemsController : ControllerBase
 {
     private readonly ItemService _itemService;
