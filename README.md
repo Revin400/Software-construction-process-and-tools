@@ -9,5 +9,6 @@ In deze cursus leer je als software engineer automatiseren om softwareontwikkeli
 
 | Extra downloads/information| Description                |
 | :-------- |  :------------------------- |
-| `MongoDB` | dotnet add package MongoDB.Driver |
+| `SQL` | dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+dotnet add package Microsoft.EntityFrameworkCore.Tools |
 | `test` | test)
