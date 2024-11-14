@@ -1,49 +1,37 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Text.Json;
 
 public class ClientService
 {
-    private readonly ClientDbContext _context;
+    private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "clients.json");
 
-    public ClientService(ClientDbContext context)
+    public List<Client> ReadClientsFromJson()
     {
-        _context = context;
-        _context.Database.EnsureCreated();  
-    }
-
-    public List<Client> GetAllClients()
-    {
-        return _context.Clients.ToList();
-    }
-
-    public Client GetClientById(int id)
-    {
-        return _context.Clients.Find(id);
-    }
-
-    public void AddClient(Client client)
-    {
-        client.CreatedAt = DateTime.Now;
-        client.UpdatedAt = DateTime.Now;
-        _context.Clients.Add(client);
-        _context.SaveChanges();
-    }
-
-    public void UpdateClient(Client client)
-    {
-        client.UpdatedAt = DateTime.Now;
-        _context.Clients.Update(client);
-        _context.SaveChanges();
-    }
-
-    public void DeleteClient(int id)
-    {
-        var client = _context.Clients.Find(id);
-        if (client != null)
+        if (!File.Exists(_filePath))
         {
-            _context.Clients.Remove(client);
-            _context.SaveChanges();
+            File.WriteAllText(_filePath, "[]");  
+            return new List<Client>(); 
         }
+
+        var jsonData = File.ReadAllText(_filePath);
+
+        if (string.IsNullOrWhiteSpace(jsonData))
+        {
+            return new List<Client>();
+        }
+        return JsonSerializer.Deserialize<List<Client>>(jsonData) ?? new List<Client>();
+    }
+
+    public void WriteClientsToJson(List<Client> clients)
+    {
+        var jsonData = JsonSerializer.Serialize(clients, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(_filePath, jsonData);
+    }
+
+    public int NextId()
+    {
+        var warehouses = ReadClientsFromJson();
+        return warehouses.Any() ? warehouses.Max(w => w.Id) + 1 : 1; 
     }
 }

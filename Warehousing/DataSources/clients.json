@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "Name": "Acme Corporation",
+    "Address": "123 Main Street",
+    "City": "Anytown",
+    "ZipCode": 0,
+    "Province": "Stateville",
+    "Country": "United States",
+    "ContactName": "John Doe",
+    "ContactPhone": "\u002B1 (555) 122-4567",
+    "ContactEmail": "john.doe2@acmecorp.com",
+    "CreatedAt": "2024-10-24T12:39:22.7783743+02:00",
+    "UpdatedAt": "2024-10-24T12:39:22.7783819+02:00"
+  }
+]
