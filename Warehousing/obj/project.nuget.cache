@@ -1,7 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0etXMCpXXnw=",
+  "dgSpecHash": "DUBLfXQ7gb8azEAV4YO9aVEYeu+lQoTFjejsrilVzF8ucTs+dwXiqb3qhQraU7lymT0IJ3JVnm3xNCQjKgVSHg==",
   "success": true,
+
   "projectFilePath": "C:\\Users\\mmsb0\\OneDrive\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mmsb0\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.0\\microsoft.data.sqlite.core.9.0.0.nupkg.sha512",
@@ -31,5 +32,6 @@
     "C:\\Users\\mmsb0\\.nuget\\packages\\system.text.encodings.web\\9.0.0\\system.text.encodings.web.9.0.0.nupkg.sha512",
     "C:\\Users\\mmsb0\\.nuget\\packages\\system.text.json\\9.0.0\\system.text.json.9.0.0.nupkg.sha512"
   ],
+
   "logs": []
 }
