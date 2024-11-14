@@ -1,37 +1,49 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using System.Linq;
 
 public class ClientService
 {
-    private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "clients.json");
+    private readonly ClientDbContext _context;
 
-    public List<Client> ReadClientsFromJson()
+    public ClientService(ClientDbContext context)
     {
-        if (!File.Exists(_filePath))
-        {
-            File.WriteAllText(_filePath, "[]");  
-            return new List<Client>(); 
-        }
-
-        var jsonData = File.ReadAllText(_filePath);
-
-        if (string.IsNullOrWhiteSpace(jsonData))
-        {
-            return new List<Client>();
-        }
-        return JsonSerializer.Deserialize<List<Client>>(jsonData) ?? new List<Client>();
+        _context = context;
+        _context.Database.EnsureCreated();  
     }
 
-    public void WriteClientsToJson(List<Client> clients)
+    public List<Client> GetAllClients()
     {
-        var jsonData = JsonSerializer.Serialize(clients, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, jsonData);
+        return _context.Clients.ToList();
     }
 
-    public int NextId()
+    public Client GetClientById(int id)
     {
-        var warehouses = ReadClientsFromJson();
-        return warehouses.Any() ? warehouses.Max(w => w.Id) + 1 : 1; 
+        return _context.Clients.Find(id);
+    }
+
+    public void AddClient(Client client)
+    {
+        client.CreatedAt = DateTime.Now;
+        client.UpdatedAt = DateTime.Now;
+        _context.Clients.Add(client);
+        _context.SaveChanges();
+    }
+
+    public void UpdateClient(Client client)
+    {
+        client.UpdatedAt = DateTime.Now;
+        _context.Clients.Update(client);
+        _context.SaveChanges();
+    }
+
+    public void DeleteClient(int id)
+    {
+        var client = _context.Clients.Find(id);
+        if (client != null)
+        {
+            _context.Clients.Remove(client);
+            _context.SaveChanges();
+        }
     }
 }
