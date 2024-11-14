@@ -5,6 +5,9 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddDbContext<ClientDbContext>();
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<WarehouseService>();
 builder.Services.AddScoped<ClientService>();

@@ -17,12 +17,12 @@ public class ClientController : ControllerBase
     {
         try
         {
-            var clients = _clientService.ReadClientsFromJson();
+            var clients = _clientService.GetAllClients();
             return Ok(clients);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Error reading clients: {ex.Message}");
+            return BadRequest($"Error reading clients: {ex.Message}");
         }
     }
 
@@ -31,8 +31,7 @@ public class ClientController : ControllerBase
     {
         try
         {
-            var clients = _clientService.ReadClientsFromJson();
-            var client = clients.FirstOrDefault(c => c.Id == id);
+            var client = _clientService.GetClientById(id);
             if (client == null)
             {
                 return NotFound($"Client with id {id} not found");
@@ -50,18 +49,7 @@ public class ClientController : ControllerBase
     {
         try
         {
-            var clients = _clientService.ReadClientsFromJson();
-
-
-            client.Id = _clientService.NextId();
-            client.CreatedAt = DateTime.Now;
-            client.UpdatedAt = DateTime.Now;
-
-            if(clients.Any(c => c.Id == client.Id))
-            {
-                return BadRequest($"Client with id {client.Id} already exists");
-            }
-
+            var clients = _clientService.GetAllClients();
             if(clients.Any(c => c.ContactEmail == client.ContactEmail))
             {
                 return BadRequest($"Client with Email {client.ContactEmail} already exists");
@@ -72,16 +60,12 @@ public class ClientController : ControllerBase
                 return BadRequest($"Client with Phone {client.ContactPhone} already exists");
             }
 
-            clients.Add(client);
-
-            _clientService.WriteClientsToJson(clients);
-
-            return Ok(client);
-
+            _clientService.AddClient(client);
+            return CreatedAtAction(nameof(GetClientById), new { id = client.Id }, client);
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error creating warehouse: {ex.Message}");
+            return BadRequest($"Error creating client: {ex.Message}");
         }
     }
 
@@ -90,7 +74,7 @@ public class ClientController : ControllerBase
     {
         try
         {
-            var clients = _clientService.ReadClientsFromJson();
+            var clients = _clientService.GetAllClients();
             var existingClient = clients.FirstOrDefault(c => c.Id == id);
             if (existingClient == null)
             {
@@ -107,20 +91,9 @@ public class ClientController : ControllerBase
                 return BadRequest($"Client with Phone {client.ContactPhone} already exists");
             }
 
-            existingClient.Name = client.Name;
-            existingClient.Address = client.Address;
-            existingClient.City = client.City;
-            existingClient.ZipCode = client.ZipCode;
-            existingClient.Province = client.Province;
-            existingClient.Country = client.Country;
-            existingClient.ContactName = client.ContactName;
-            existingClient.ContactEmail = client.ContactEmail;
-            existingClient.ContactPhone = client.ContactPhone;
-            existingClient.UpdatedAt = DateTime.Now;
-
-            _clientService.WriteClientsToJson(clients);
-
-            return Ok(existingClient);
+            client.Id = id;
+            _clientService.UpdateClient(client);
+            return Ok(client);
         }
         catch (Exception ex)
         {
@@ -133,15 +106,15 @@ public class ClientController : ControllerBase
     {
         try
         {
-            var clients = _clientService.ReadClientsFromJson();
-            var client = clients.FirstOrDefault(c => c.Id == id);
-            if (client == null)
+            var clients = _clientService.GetAllClients();
+            var existingClient = clients.FirstOrDefault(c => c.Id == id);
+            if (existingClient == null)
             {
                 return NotFound($"Client with id {id} not found");
             }
-            clients.Remove(client);
-            _clientService.WriteClientsToJson(clients);
-            return Ok(client);
+
+            _clientService.DeleteClient(id);
+            return Ok();
         }
         catch (Exception ex)
         {
