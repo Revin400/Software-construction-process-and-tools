@@ -1,0 +1,46 @@
+### GET all Clients
+GET http://localhost:5000/api/client
+
+###
+
+### Create a new Client
+POST http://localhost:5000/api/client
+Content-Type: application/json
+
+{
+    "name": "Acme Corporation",
+    "address": "123 Main Street",
+    "city": "Anytown",
+    "ZipCode": 12345,
+    "province": "Stateville",
+    "country": "United States",
+    "ContactName": "John Doe",
+    "ContactPhone": "+1 (555) 122-4567",
+    "ContactEmail": "john.doe2@acmecorp.com",
+    "created_at": "2024-04-24 10:30:00",
+    "updated_at": "2024-04-24 10:30:00"
+}
+
+###
+
+### Update an existing Client
+PUT http://localhost:5000/api/client/1
+Content-Type: application/json
+
+{
+    "name": "Updated - Acme Corporation",
+    "address": "123 Main Street",
+    "city": "Anytown",
+    "ZipCode": 12345,
+    "province": "Stateville",
+    "country": "United States",
+    "ContactName": "John Doe",
+    "ContactPhone": "+1 (123) 123-4567",
+    "ContactEmail": "updatedJohn.doe2@acmecorp.com",
+    "created_at": "2024-04-24 10:30:00",
+    "updated_at": "2024-04-24 10:30:00"
+}
+
+###
+### Delete an existing Warehouse
+DELETE http://localhost:5000/api/warehouse/1
