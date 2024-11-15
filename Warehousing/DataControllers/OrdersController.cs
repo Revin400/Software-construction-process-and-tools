@@ -9,7 +9,7 @@ using System.Text.Json;
 [ApiController]
 public class OrdersController : ControllerBase
 {
-    private readonly string dataPath;
+    //private readonly string dataPath;
     private readonly OrderService _orderService;
 
     public OrdersController(OrderService orderService)
@@ -95,16 +95,32 @@ public class OrdersController : ControllerBase
     [HttpPut("{orderId}")]
     public ActionResult UpdateOrder(int orderId, [FromBody] Order order)
     {
-        var data = _orderService.ReadOrdersFromJson();
-        var existingOrder = data.FirstOrDefault(o => o.Id == orderId);
-        if (existingOrder == null)
+        try
         {
-            return NotFound();
+            var inventories = _orderService.ReadOrdersFromJson();
+            var existingInventory = inventories.FirstOrDefault(w => w.Id == orderId);
+            if (existingInventory == null)
+            {
+                return NotFound($"Order with id {orderId} not found");
+            }
+            existingInventory.Id = order.Id;
+
+            if (inventories.Any(w => w.Id == order.Id && w.Id != orderId))
+            {
+                return BadRequest($"Order with id {order.Id} already exists.");
+            }
+     
+            existingInventory.OrderDate = order.OrderDate;
+     
+            existingInventory.UpdatedAt = DateTime.Now;
+
+            _orderService.WriteOrdersToJson(inventories);
+            return Ok(existingInventory);
         }
-        order.UpdatedAt = DateTime.UtcNow;
-        data[data.IndexOf(existingOrder)] = order;
-        Save();
-        return NoContent();
+        catch (Exception ex)
+        {
+            return BadRequest($"Error updating inventory: {ex.Message}");
+        }
     }
 
     [HttpPut("{orderId}/items")]
@@ -149,17 +165,26 @@ public class OrdersController : ControllerBase
     [HttpDelete("{orderId}")]
     public ActionResult RemoveOrder(int orderId)
     {
-        var data = _orderService.ReadOrdersFromJson();
-        var order = data.FirstOrDefault(o => o.Id == orderId);
-        if (order == null)
+        try
         {
-            return NotFound();
+            var orders = _orderService.ReadOrdersFromJson();
+            var order = orders.FirstOrDefault(w => w.Id == orderId);
+            if (order == null)
+            {
+                return NotFound($"Order with id {orderId} not found");
+            }
+            orders.Remove(order);
+            _orderService.WriteOrdersToJson(orders);
+            return Ok(order);
         }
-        data.Remove(order);
-        Save();
-        return NoContent();
+        catch (Exception ex)
+        {
+            return BadRequest($"Error deleting order: {ex.Message}");
+        }
     }
+}
 
+/*
     private void Save()
     {
         using (var writer = new StreamWriter(dataPath))
@@ -170,3 +195,4 @@ public class OrdersController : ControllerBase
         }
     }
 }
+*/

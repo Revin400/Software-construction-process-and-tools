@@ -51,7 +51,7 @@ Content-Type: application/json
 {
     "id": 1,
     "sourceId": 101,
-    "orderDate": "2024-05-01T13:45:00Z",
+    "orderDate": "2023-05-01T13:45:00Z",
     "requestDate": "2024-05-05T00:00:00Z",
     "reference": "ORD001",
     "referenceExtra": "First bulk order",
@@ -63,9 +63,9 @@ Content-Type: application/json
     "shipTo": 1,
     "billTo": 2,
     "shipmentId": 1,
-    "totalAmount": 5000.00,
+    "totalAmount": 100.00,
     "totalDiscount": 100.00,
-    "totalTax": 475.00,
+    "totalTax": 45.00,
     "totalSurcharge": 30.00,
     "items": [
         {
