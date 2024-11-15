@@ -95,6 +95,7 @@ public class OrdersController : ControllerBase
     [HttpPut("{orderId}")]
     public ActionResult UpdateOrder(int orderId, [FromBody] Order order)
     {
+        var data = _orderService.ReadOrdersFromJson();
         var existingOrder = data.FirstOrDefault(o => o.Id == orderId);
         if (existingOrder == null)
         {
@@ -109,6 +110,7 @@ public class OrdersController : ControllerBase
     [HttpPut("{orderId}/items")]
     public ActionResult UpdateItemsInOrder(int orderId, [FromBody] List<OrderItems> items)
     {
+        var data = _orderService.ReadOrdersFromJson();
         var order = data.FirstOrDefault(o => o.Id == orderId);
         if (order == null)
         {
@@ -122,6 +124,7 @@ public class OrdersController : ControllerBase
     [HttpPut("shipment/{shipmentId}")]
     public ActionResult UpdateOrdersInShipment(int shipmentId, [FromBody] List<int> orders)
     {
+        var data = _orderService.ReadOrdersFromJson();
         var packedOrders = data.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id).ToList();
         foreach (var orderId in packedOrders)
         {
@@ -146,6 +149,7 @@ public class OrdersController : ControllerBase
     [HttpDelete("{orderId}")]
     public ActionResult RemoveOrder(int orderId)
     {
+        var data = _orderService.ReadOrdersFromJson();
         var order = data.FirstOrDefault(o => o.Id == orderId);
         if (order == null)
         {
@@ -160,6 +164,7 @@ public class OrdersController : ControllerBase
     {
         using (var writer = new StreamWriter(dataPath))
         {
+            var data = _orderService.ReadOrdersFromJson();
             var json = JsonSerializer.Serialize(data);
             writer.Write(json);
         }
