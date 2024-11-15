@@ -10,19 +10,28 @@ using System.Text.Json;
 public class OrdersController : ControllerBase
 {
     private readonly string dataPath;
-    private List<Order> data;
+    private readonly OrderService _orderService;
 
-    public OrdersController(string rootPath, bool isDebug = false)
+    public OrdersController(OrderService orderService)
     {
-        dataPath = Path.Combine(rootPath, "orders.json");
+        _orderService = orderService;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Order>> GetOrders()
+    public IActionResult GetOrders()
     {
-        return Ok(data);
+        try
+        {
+            var orders = _orderService.ReadOrdersFromJson();
+            return Ok(orders);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error reading orders: {ex.Message}");
+        }
     }
 
+/* 
     [HttpGet("{orderId}")]
     public ActionResult<Order> GetOrder(int orderId)
     {
@@ -33,11 +42,13 @@ public class OrdersController : ControllerBase
         }
         return Ok(order);
     }
+*/
 
     [HttpGet("{orderId}/items")]
     public ActionResult<IEnumerable<OrderItems>> GetItemsInOrder(int orderId)
     {
-        var order = data.FirstOrDefault(o => o.Id == orderId);
+        var orders = _orderService.ReadOrdersFromJson();
+        var order = orders.FirstOrDefault(o => o.Id == orderId);
         if (order == null)
         {
             return NotFound();
@@ -48,25 +59,37 @@ public class OrdersController : ControllerBase
     [HttpGet("shipment/{shipmentId}")]
     public ActionResult<IEnumerable<int>> GetOrdersInShipment(int shipmentId)
     {
-        var orders = data.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id);
-        return Ok(orders);
+        var orders = _orderService.ReadOrdersFromJson();
+        var order = orders.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id);
+        return Ok(order);
     }
 
     [HttpGet("client/{clientId}")]
     public ActionResult<IEnumerable<Order>> GetOrdersForClient(int clientId)
     {
-        var orders = data.Where(o => o.ShipTo == clientId || o.BillTo == clientId);
-        return Ok(orders);
+        var orders = _orderService.ReadOrdersFromJson();
+        var order = orders.Where(o => o.ShipTo == clientId || o.BillTo == clientId);
+        return Ok(order);
     }
 
     [HttpPost]
     public ActionResult AddOrder([FromBody] Order order)
     {
-        order.CreatedAt = DateTime.UtcNow;
-        order.UpdatedAt = DateTime.UtcNow;
-        data.Add(order);
-        Save();
-        return CreatedAtAction(nameof(GetOrder), new { orderId = order.Id }, order);
+        try
+        {
+            var orders = _orderService.ReadOrdersFromJson();
+            order.Id = _orderService.NextId();
+            order.CreatedAt = DateTime.Now;
+            order.UpdatedAt = DateTime.Now;
+            orders.Add(order);
+            
+            _orderService.WriteOrdersToJson(orders);
+            return Ok(order);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error creating order: {ex.Message}");
+        }
     }
 
     [HttpPut("{orderId}")]

@@ -30,16 +30,16 @@ public class InventoriesController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetInventoryById(int id)
+    [HttpGet("{inventoryId}")]
+    public IActionResult GetInventoryById(int inventoryId)
     {
         try
         {
             var inventories = _inventoryService.ReadInventoriesFromJson();
-            var inventory = inventories.FirstOrDefault(w => w.Id == id);
+            var inventory = inventories.FirstOrDefault(w => w.Id == inventoryId);
             if (inventory == null)
             {
-                return NotFound($"Inventory with id {id} not found");
+                return NotFound($"Inventory with id {inventoryId} not found");
             }
             return Ok(inventory);
         }
@@ -104,25 +104,24 @@ public class InventoriesController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public IActionResult UpdateInventory(int id, [FromBody] Inventory inventory)
+    [HttpPut("{inventoryId}")]
+    public IActionResult UpdateInventory(int inventoryId, [FromBody] Inventory inventory)
     {
         try
         {
             var inventories = _inventoryService.ReadInventoriesFromJson();
-            var existingInventory = inventories.FirstOrDefault(w => w.Id == id);
+            var existingInventory = inventories.FirstOrDefault(w => w.Id == inventoryId);
             if (existingInventory == null)
             {
-                return NotFound($"Inventory with id {id} not found");
+                return NotFound($"Inventory with id {inventoryId} not found");
             }
             existingInventory.Id = inventory.Id;
 
-            if (inventories.Any(w => w.Id == inventory.Id && w.Id != id))
+            if (inventories.Any(w => w.Id == inventory.Id && w.Id != inventoryId))
             {
                 return BadRequest($"Inventory with id {inventory.Id} already exists.");
             }
      
-            existingInventory.Id = inventory.Id;
             existingInventory.ItemId = inventory.ItemId;
             existingInventory.Description = inventory.Description;
             existingInventory.ItemReference = inventory.ItemReference;
@@ -132,38 +131,36 @@ public class InventoriesController : ControllerBase
             existingInventory.TotalOrdered = inventory.TotalOrdered;
             existingInventory.TotalAllocated = inventory.TotalAllocated;
             existingInventory.TotalAvailable = inventory.TotalAvailable;
+
+            existingInventory.UpdatedAt = DateTime.Now;
+
             _inventoryService.WriteInventoriesToJson(inventories);
             return Ok(existingInventory);
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error updating warehouse: {ex.Message}");
+            return BadRequest($"Error updating inventory: {ex.Message}");
         }
     }
 
     [HttpDelete("{inventoryId}")]
-    public IActionResult RemoveInventory(int id)
+    public IActionResult RemoveInventory(int inventoryId)
     {
         try
         {
-            var warehouses = _inventoryService.ReadInventoriesFromJson();
-            var warehouse = warehouses.FirstOrDefault(w => w.Id == id);
-            if (warehouse == null)
+            var inventories = _inventoryService.ReadInventoriesFromJson();
+            var inventory = inventories.FirstOrDefault(w => w.Id == inventoryId);
+            if (inventory == null)
             {
-                return NotFound($"Warehouse with id {id} not found");
+                return NotFound($"Inventory with id {inventoryId} not found");
             }
-            warehouses.Remove(warehouse);
-            _inventoryService.WriteInventoriesToJson(warehouses);
-            return Ok(warehouse);
+            inventories.Remove(inventory);
+            _inventoryService.WriteInventoriesToJson(inventories);
+            return Ok(inventory);
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error deleting warehouse: {ex.Message}");
+            return BadRequest($"Error deleting inventory: {ex.Message}");
         }
-    }
-
-    private DateTime GetTimestamp()
-    {
-        return DateTime.UtcNow;
     }
 }
