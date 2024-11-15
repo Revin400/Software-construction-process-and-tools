@@ -1,0 +1,65 @@
+### Get all shipments
+GET http://localhost:5000/api/shipment
+
+### Get a shipment by ID
+GET http://localhost:5000/api/shipment/1
+
+### Get items from a shipment
+GET http://localhost:5000/api/shipment/1/items
+
+### Add a new shipment
+POST http://localhost:5000/api/shipment
+Content-Type: application/json
+
+{
+    "OrderId": 123,
+    "SourceId": 456,
+    "OrderDate": "2023-10-01T00:00:00Z",
+    "RequestDate": "2023-10-05T00:00:00Z",
+    "ShipmentType": "Standard",
+    "ShipmentStatus": "Pending",
+    "Notes": "Handle with care",
+    "CarrierCode": "UPS",
+    "CarrierDescription": "United Parcel Service",
+    "ServiceCode": "Ground",
+    "PaymentType": "Prepaid",
+    "TransferMode": "Air",
+    "TotalPackageCount": 3,
+    "TotalPackageWeight": 15.5,
+    "Items": 
+    [
+        {
+            "id": 1,
+            "amount": 1
+        }
+    
+    ]
+}
+
+### Update a shipment
+PUT http://localhost:5000/api/shipment/1
+Content-Type: application/json
+
+{
+    "Id": 1,
+    "OrderId": 123,
+    "SourceId": 456,
+    "OrderDate": "2023-10-01T00:00:00Z",
+    "RequestDate": "2023-10-05T00:00:00Z",
+    "ShipmentType": "Express",
+    "ShipmentStatus": "Shipped",
+    "Notes": "Handle with care",
+    "CarrierCode": "UPS",
+    "CarrierDescription": "United Parcel Service --update",
+    "ServiceCode": "NextDay",
+    "PaymentType": "Prepaid",
+    "TransferMode": "Air",
+    "TotalPackageCount": 3,
+    "TotalPackageWeight": 15.5,
+    "CreatedAt": "2023-10-01T00:00:00Z",
+    "UpdatedAt": "2023-10-02T00:00:00Z",
+    "Items": []
+}
+
+### Delete a shipment
+DELETE http://localhost:5000/api/shipment/1
