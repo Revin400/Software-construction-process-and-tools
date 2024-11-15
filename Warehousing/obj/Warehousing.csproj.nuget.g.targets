@@ -4,15 +4,6 @@
     <Import Project="$(NuGetPackageRoot)xunit.core\2.9.2\build\xunit.core.targets" Condition="Exists('$(NuGetPackageRoot)xunit.core\2.9.2\build\xunit.core.targets')" />
     <Import Project="$(NuGetPackageRoot)system.text.json\9.0.0\buildTransitive\net8.0\System.Text.Json.targets" Condition="Exists('$(NuGetPackageRoot)system.text.json\9.0.0\buildTransitive\net8.0\System.Text.Json.targets')" />
     <Import Project="$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.10\buildTransitive\net8.0\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.10\buildTransitive\net8.0\SQLitePCLRaw.lib.e_sqlite3.targets')" />
-<<<<<<< HEAD
-    <Import Project="$(NuGetPackageRoot)mstest.testframework\3.6.3\build\net8.0\MSTest.TestFramework.targets" Condition="Exists('$(NuGetPackageRoot)mstest.testframework\3.6.3\build\net8.0\MSTest.TestFramework.targets')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.testing.platform.msbuild\1.4.3\buildTransitive\net8.0\Microsoft.Testing.Platform.MSBuild.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.testing.platform.msbuild\1.4.3\buildTransitive\net8.0\Microsoft.Testing.Platform.MSBuild.targets')" />
-    <Import Project="$(NuGetPackageRoot)mstest.testadapter\3.6.3\build\net8.0\MSTest.TestAdapter.targets" Condition="Exists('$(NuGetPackageRoot)mstest.testadapter\3.6.3\build\net8.0\MSTest.TestAdapter.targets')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.codecoverage\17.11.1\build\netstandard2.0\Microsoft.CodeCoverage.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.codecoverage\17.11.1\build\netstandard2.0\Microsoft.CodeCoverage.targets')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.net.test.sdk\17.11.1\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.net.test.sdk\17.11.1\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.targets')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.extensions.options\9.0.0\buildTransitive\net8.0\Microsoft.Extensions.Options.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.options\9.0.0\buildTransitive\net8.0\Microsoft.Extensions.Options.targets')" />
-=======
->>>>>>> 5cb60c29b7615b8900d6a6d878f7883c0bd32339
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.logging.abstractions\9.0.0\buildTransitive\net8.0\Microsoft.Extensions.Logging.Abstractions.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.logging.abstractions\9.0.0\buildTransitive\net8.0\Microsoft.Extensions.Logging.Abstractions.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.codecoverage\17.11.1\build\netstandard2.0\Microsoft.CodeCoverage.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.codecoverage\17.11.1\build\netstandard2.0\Microsoft.CodeCoverage.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.net.test.sdk\17.11.1\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.net.test.sdk\17.11.1\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.targets')" />
