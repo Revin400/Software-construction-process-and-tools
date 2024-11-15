@@ -10,13 +10,15 @@ public class OrderService
 
     public OrderService()
     {
-        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "orders.json");;
+        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "orders.json");
     }
 
     public List<Order> ReadOrdersFromJson()
     {
         if (!File.Exists(_filePath))
         {
+            File.WriteAllText(_filePath, "[]");  
+
             return new List<Order>();
         }
 

@@ -10,13 +10,15 @@ public class InventoryService
 
     public InventoryService()
     {
-        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "inventories.json");;
+        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "inventories.json");
     }
 
     public List<Inventory> ReadInventoriesFromJson()
     {
         if (!File.Exists(_filePath))
         {
+            File.WriteAllText(_filePath, "[]");  
+            
             return new List<Inventory>();
         }
 

@@ -10,9 +10,12 @@ using System.Text.Json;
 public class TransfersController : ControllerBase
 {
     private readonly string dataPath;
-    private List<Transfer> data;
+    private readonly TransferService _transferService;
 
-    public TransfersController(string rootPath, bool isDebug = false)
+    public TransfersController(TransferService transferService)
+    {
+        _transferService = transferService;
+        dataPath = Path.Combine(_transferService.RootPath, "transfers.json");
     {
         dataPath = Path.Combine(rootPath, "transfers.json");
     }
