@@ -2,7 +2,7 @@
 
 In this course, you will learn to automate software development processes as a software engineer. Working with your team, you will document and test existing software, and implement CI/CD to ensure continuous functionality after modifications. You will then expand or optimize the software.
 
-## Git Repositories
+### Git Repositories
 
 | Repository | Description |
 | :-------- | :------------------------- |
