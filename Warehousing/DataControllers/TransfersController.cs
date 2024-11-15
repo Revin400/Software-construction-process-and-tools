@@ -32,7 +32,7 @@ public class TransfersController : ControllerBase
     }
 
     [HttpGet("{transferId}")]
-    public ActionResult<Transfer> GetTransfer(int transferId)
+    public ActionResult<Transfer> GetTransferById(int transferId)
     {
         var transfers = _transferService.ReadTransfersFromJson();
         var transfer = transfers.FirstOrDefault(t => t.Id == transferId);

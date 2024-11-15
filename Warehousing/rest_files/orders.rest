@@ -13,6 +13,7 @@ POST http://localhost:5000/api/orders
 Content-Type: application/json
 
 {
+    "Id": 1,	
     "sourceId": 101,
     "orderDate": "2024-05-01T13:45:00Z",
     "requestDate": "2024-05-05T00:00:00Z",
@@ -82,4 +83,4 @@ Content-Type: application/json
 ###
 
 ### Delete an Order
-DELETE http://localhost:5000/api/orders/1
+DELETE http://localhost:5000/api/orders/2

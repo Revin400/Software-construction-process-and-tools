@@ -31,12 +31,12 @@ public class InventoriesController : ControllerBase
     }
 
     [HttpGet("{inventoryId}")]
-    public IActionResult GetInventoryById(int inventoryId)
+    public ActionResult<Inventory> GetInventoryById(int inventoryId)
     {
         try
         {
             var inventories = _inventoryService.ReadInventoriesFromJson();
-            var inventory = inventories.FirstOrDefault(w => w.Id == inventoryId);
+            var inventory = inventories.FirstOrDefault(t => t.Id == inventoryId);
             if (inventory == null)
             {
                 return NotFound($"Inventory with id {inventoryId} not found");

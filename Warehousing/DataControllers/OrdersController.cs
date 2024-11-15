@@ -31,6 +31,18 @@ public class OrdersController : ControllerBase
         }
     }
 
+    [HttpGet("{orderId}")]
+    public ActionResult<Order> GetOrderById(int orderId)
+    {
+        var orders = _orderService.ReadOrdersFromJson();
+        var order = orders.FirstOrDefault(t => t.Id == orderId);
+        if (order == null)
+        {
+            return NotFound();
+        }
+        return Ok(order);
+    }
+
 /* 
     [HttpGet("{orderId}")]
     public ActionResult<Order> GetOrder(int orderId)

@@ -1,19 +1,5 @@
 [
   {
-    "Id": 1,
-    "ItemId": 1,
-    "Description": "Sample Inventory",
-    "ItemReference": "ITEM001",
-    "LocationId": 1,
-    "TotalOnHand": 150,
-    "TotalExpected": 150,
-    "TotalOrdered": 70,
-    "TotalAllocated": 40,
-    "TotalAvailable": 40,
-    "CreatedAt": "2024-11-15T03:47:09.6269598+01:00",
-    "UpdatedAt": "2024-11-15T03:48:05.3160176+01:00"
-  },
-  {
     "Id": 2,
     "ItemId": 2,
     "Description": "Sample Inventory",
@@ -54,5 +40,19 @@
     "TotalAvailable": 20,
     "CreatedAt": "2024-11-15T03:47:28.1447977+01:00",
     "UpdatedAt": "2024-11-15T03:47:28.1447987+01:00"
+  },
+  {
+    "Id": 5,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20,
+    "CreatedAt": "2024-11-15T04:12:02.6362415+01:00",
+    "UpdatedAt": "2024-11-15T04:12:02.6362445+01:00"
   }
 ]
