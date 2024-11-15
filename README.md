@@ -18,7 +18,7 @@ In this course, you will learn to automate software development processes as a s
 | `xunit.runner.visualstudio` | `dotnet add package xunit.runner.visualstudio` |
 | `Microsoft.NET.Test.Sdk` | `dotnet add package Microsoft.NET.Test.Sdk` |
 | `System.Net.Http.Json` | `dotnet add package System.Net.Http.Json` |
-| `MongoDB` | `dotnet add package MongoDB.Driver` |
+
 
 ## Additional Information
 
