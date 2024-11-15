@@ -4,6 +4,9 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xunit;
 
+
+
+// update en delete functies werken nog niet 100 volgens de unit tests
 public class Inventories_Unit_Tests
 {
     private readonly HttpClient _client;
