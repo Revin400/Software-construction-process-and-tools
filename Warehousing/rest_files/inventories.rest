@@ -1,0 +1,50 @@
+### GET all Inventories
+GET http://localhost:5000/api/inventories
+
+###
+
+### GET Inventories for a specific Item by Item ID
+GET http://localhost:5000/api/inventories/item/1
+
+###
+
+### Create a new Inventory
+POST http://localhost:5000/api/inventories
+Content-Type: application/json
+
+{
+    "Id": 1,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20
+}
+
+###
+
+### Update an existing Inventory
+PUT http://localhost:5000/api/inventories/1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "itemId": 1,
+    "description": "Sample Inventory",
+    "itemReference": "ITEM001",
+    "locationId": 1,
+    "totalOnHand": 150,
+    "totalExpected": 150,
+    "totalOrdered": 70,
+    "totalAllocated": 40,
+    "totalAvailable": 40
+}
+
+###
+
+### Delete an Inventory
+DELETE http://localhost:5000/api/inventories/1

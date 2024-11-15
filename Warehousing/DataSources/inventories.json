@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 2,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20,
+    "CreatedAt": "2024-11-15T03:47:24.2720805+01:00",
+    "UpdatedAt": "2024-11-15T03:47:24.2720829+01:00"
+  },
+  {
+    "Id": 3,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20,
+    "CreatedAt": "2024-11-15T03:47:27.4923334+01:00",
+    "UpdatedAt": "2024-11-15T03:47:27.4923343+01:00"
+  },
+  {
+    "Id": 4,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20,
+    "CreatedAt": "2024-11-15T03:47:28.1447977+01:00",
+    "UpdatedAt": "2024-11-15T03:47:28.1447987+01:00"
+  },
+  {
+    "Id": 5,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20,
+    "CreatedAt": "2024-11-15T04:12:02.6362415+01:00",
+    "UpdatedAt": "2024-11-15T04:12:02.6362445+01:00"
+  },
+  {
+    "Id": 6,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20,
+    "CreatedAt": "2024-11-15T10:04:03.7650656+01:00",
+    "UpdatedAt": "2024-11-15T10:04:03.7651107+01:00"
+  }
+]

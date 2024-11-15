@@ -2,7 +2,7 @@
 
 In this course, you will learn to automate software development processes as a software engineer. Working with your team, you will document and test existing software, and implement CI/CD to ensure continuous functionality after modifications. You will then expand or optimize the software.
 
-## Git Repositories
+### Git Repositories
 
 | Repository | Description |
 | :-------- | :------------------------- |
@@ -18,7 +18,7 @@ In this course, you will learn to automate software development processes as a s
 | `xunit.runner.visualstudio` | `dotnet add package xunit.runner.visualstudio` |
 | `Microsoft.NET.Test.Sdk` | `dotnet add package Microsoft.NET.Test.Sdk` |
 | `System.Net.Http.Json` | `dotnet add package System.Net.Http.Json` |
-| `MongoDB` | `dotnet add package MongoDB.Driver` |
+| `Moq` | `dotnet add package Moq` |
 
 ## Additional Information
 

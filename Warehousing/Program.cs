@@ -12,6 +12,12 @@ builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<LocationService>();
 
 
+builder.Services.AddScoped<InventoryService>();
+builder.Services.AddScoped<TransferService>();
+builder.Services.AddScoped<OrderService>();
+
+
+
 var app = builder.Build();
 
 app.Urls.Add("http://localhost:5000");
@@ -20,3 +26,5 @@ app.MapControllers();
 
 
 app.Run();
+
+Console.WriteLine("Starting up the application...");
