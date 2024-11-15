@@ -50,7 +50,19 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "MSTest.TestAdapter": {
+              "target": "Package",
+              "version": "[3.6.3, )"
+            },
+            "MSTest.TestFramework": {
+              "target": "Package",
+              "version": "[3.6.3, )"
+            },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.0, )"
             },
@@ -62,6 +74,8 @@
               "target": "Package",
               "version": "[17.11.1, )"
             },
+<<<<<<< HEAD
+=======
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[3.0.0, )"
@@ -70,6 +84,7 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+>>>>>>> 5cb60c29b7615b8900d6a6d878f7883c0bd32339
             "xunit": {
               "target": "Package",
               "version": "[2.9.2, )"
