@@ -12,6 +12,12 @@ builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<LocationService>();
 
 
+builder.Services.AddScoped<InventoryService>();
+builder.Services.AddScoped<TransferService>();
+builder.Services.AddScoped<OrderService>();
+
+
+
 var app = builder.Build();
 
 app.Urls.Add("http://localhost:5000");

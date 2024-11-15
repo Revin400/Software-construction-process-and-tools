@@ -1,0 +1,66 @@
+[
+  {
+    "Id": 1,
+    "SourceId": 101,
+    "OrderDate": "2024-05-01T13:45:00Z",
+    "RequestDate": "2024-05-05T00:00:00Z",
+    "Reference": "ORD001",
+    "ReferenceExtra": "First bulk order",
+    "OrderStatus": "Packed",
+    "Notes": "Please ensure timely delivery.",
+    "ShippingNotes": "Handle with care.",
+    "PickingNotes": "Verify items before dispatch.",
+    "WarehouseId": 3,
+    "ShipTo": 1,
+    "BillTo": 2,
+    "ShipmentId": 1,
+    "TotalAmount": 5000.00,
+    "TotalDiscount": 100.00,
+    "TotalTax": 475.00,
+    "TotalSurcharge": 30.00,
+    "CreatedAt": "2024-11-15T03:48:32.8057942+01:00",
+    "UpdatedAt": "2024-11-15T03:48:32.8058339+01:00",
+    "Items": [
+      {
+        "ItemId": 1,
+        "Amount": 50
+      },
+      {
+        "ItemId": 2,
+        "Amount": 30
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "SourceId": 101,
+    "OrderDate": "2024-05-01T13:45:00Z",
+    "RequestDate": "2024-05-05T00:00:00Z",
+    "Reference": "ORD001",
+    "ReferenceExtra": "First bulk order",
+    "OrderStatus": "Packed",
+    "Notes": "Please ensure timely delivery.",
+    "ShippingNotes": "Handle with care.",
+    "PickingNotes": "Verify items before dispatch.",
+    "WarehouseId": 3,
+    "ShipTo": 1,
+    "BillTo": 2,
+    "ShipmentId": 1,
+    "TotalAmount": 5000.00,
+    "TotalDiscount": 100.00,
+    "TotalTax": 475.00,
+    "TotalSurcharge": 30.00,
+    "CreatedAt": "2024-11-15T03:48:40.1939646+01:00",
+    "UpdatedAt": "2024-11-15T03:48:40.1939682+01:00",
+    "Items": [
+      {
+        "ItemId": 1,
+        "Amount": 50
+      },
+      {
+        "ItemId": 2,
+        "Amount": 30
+      }
+    ]
+  }
+]
