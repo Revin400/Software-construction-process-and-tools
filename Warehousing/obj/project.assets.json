@@ -2711,23 +2711,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\31685\\.nuget\\packages\\": {},
+    "C:\\Users\\Thinkpad\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\31685\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
+      "projectUniqueName": "C:\\Users\\Thinkpad\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
       "projectName": "Warehousing",
-      "projectPath": "C:\\Users\\31685\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
-      "packagesPath": "C:\\Users\\31685\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\31685\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\obj\\",
+      "projectPath": "C:\\Users\\Thinkpad\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\Warehousing.csproj",
+      "packagesPath": "C:\\Users\\Thinkpad\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Thinkpad\\Documents\\GitHub\\Software-construction-process-and-tools\\Warehousing\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\31685\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Thinkpad\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2810,7 +2810,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

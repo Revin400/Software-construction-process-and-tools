@@ -54,5 +54,19 @@
     "TotalAvailable": 20,
     "CreatedAt": "2024-11-15T04:12:02.6362415+01:00",
     "UpdatedAt": "2024-11-15T04:12:02.6362445+01:00"
+  },
+  {
+    "Id": 6,
+    "ItemId": 2,
+    "Description": "Sample Inventory",
+    "ItemReference": "ITEM001",
+    "LocationId": 1,
+    "TotalOnHand": 100,
+    "TotalExpected": 100,
+    "TotalOrdered": 50,
+    "TotalAllocated": 30,
+    "TotalAvailable": 20,
+    "CreatedAt": "2024-11-15T10:04:03.7650656+01:00",
+    "UpdatedAt": "2024-11-15T10:04:03.7651107+01:00"
   }
 ]
