@@ -1,77 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 
 [ApiController]
-[Route("api/item")]
+[Route("api/items")]
 public class ItemsController : ControllerBase
 {
     private readonly ItemService _itemService;
 
-    public ItemsController()
+    public ItemsController(ItemService itemService)
     {
-        _itemService = new ItemService();
+        _itemService = itemService;
     }
 
     [HttpGet]
-    public ActionResult<List<Item>> GetItems()
-    {
-        return _itemService.GetItems();
-    }
+    public IActionResult GetAllItems() => Ok(_itemService.GetAllItems());
 
     [HttpGet("{id}")]
-    public ActionResult<Item> GetItem(int id)
+    public IActionResult GetItemById(int id)
     {
-        var item = _itemService.GetItem(id);
-        if (item == null)
-        {
-            return NotFound();
-        }
-        return item;
-    }
-
-    [HttpGet("itemLine/{itemLineId}")]
-    public ActionResult<List<int>> GetItemsForItemLine(int itemLineId)
-    {
-        return _itemService.GetItemsForItemLine(itemLineId);
-    }
-
-    [HttpGet("itemGroup/{itemGroupId}")]
-    public ActionResult<List<int>> GetItemsForItemGroup(int itemGroupId)
-    {
-        return _itemService.GetItemsForItemGroup(itemGroupId);
-    }
-
-    [HttpGet("itemType/{itemTypeId}")]
-    public ActionResult<List<int>> GetItemsForItemType(int itemTypeId)
-    {
-        return _itemService.GetItemsForItemType(itemTypeId);
-    }
-
-    [HttpGet("supplier/{supplierId}")]
-    public ActionResult<List<Item>> GetItemsForSupplier(int supplierId)
-    {
-        return _itemService.GetItemsForSupplier(supplierId);
+        var item = _itemService.GetItemById(id);
+        if (item == null) return NotFound();
+        return Ok(item);
     }
 
     [HttpPost]
-    public ActionResult AddItem(Item item)
+    public IActionResult AddItem([FromBody] Item item)
     {
         _itemService.AddItem(item);
-        return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item);
+        return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, item);
     }
 
     [HttpPut("{id}")]
-    public ActionResult UpdateItem(int id, Item item)
+    public IActionResult UpdateItem(int id, [FromBody] Item updatedItem)
     {
-        _itemService.UpdateItem(id, item);
+        _itemService.UpdateItem(id, updatedItem);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public ActionResult RemoveItem(int id)
+    public IActionResult DeleteItem(int id)
     {
-        _itemService.RemoveItem(id);
-        return NoContent();
+  
+        var action = _itemService.DeleteItem(id);
+        if (action) return Ok();
+        return NotFound(); 
     }
 }

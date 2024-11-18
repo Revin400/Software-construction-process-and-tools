@@ -1,88 +1,62 @@
-using System.Text.Json;
+using System.Collections.Generic;
+using System.Linq;
+
 
 public class ItemService
 {
-    private List<Item> _items;
-    private const string FilePath = "items.json";
+    private readonly WarehousingContext _context;
 
-
-    public ItemService()
+    public ItemService(WarehousingContext context)
     {
-        _items = LoadItems();
+        _context = context;
+        _context.Database.EnsureCreated();
+
     }
 
-    private List<Item> LoadItems()
-    {
-        if (!File.Exists(FilePath))
-        {
-            return new List<Item>();
-        }
+    public IEnumerable<Item> GetAllItems() => _context.Items.ToList();
 
-        var json = File.ReadAllText(FilePath);
-        return JsonSerializer.Deserialize<List<Item>>(json) ?? new List<Item>();
-    }
+    public Item GetItemById(int id) => _context.Items.FirstOrDefault(x => x.Id == id);
 
-    private void SaveItems()
-    {
-        var json = JsonSerializer.Serialize(_items, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(FilePath, json);
-    }
+    public IEnumerable<Item> GetItemsByItemLine(int itemLineId) =>
+        _context.Items.Where(x => x.ItemLineId == itemLineId).ToList();
 
-    public List<Item> GetItems()
-    {
-        return _items;
-    }
-    public Item GetItem(int id)
-    {
-        return _items.FirstOrDefault(x => x.Id == id);
-    }
+    public IEnumerable<Item> GetItemsByItemGroup(int itemGroupId) =>
+        _context.Items.Where(x => x.ItemGroupId == itemGroupId).ToList();
 
-    public List<int> GetItemsForItemLine(int itemLineId)
-    {
-        return _items.Where(x => x.ItemLineId == itemLineId).Select(x => x.Id).ToList();
-    }
+    public IEnumerable<Item> GetItemsByItemType(int itemTypeId) =>
+        _context.Items.Where(x => x.ItemTypeId == itemTypeId).ToList();
 
-    public List<int> GetItemsForItemGroup(int itemGroupId)
-    {
-        return _items.Where(x => x.ItemGroupId == itemGroupId).Select(x => x.Id).ToList();
-    }
-
-    public List<int> GetItemsForItemType(int itemTypeId)
-    {
-        return _items.Where(x => x.ItemTypeId == itemTypeId).Select(x => x.Id).ToList();
-    }
-
-    public List<Item> GetItemsForSupplier(int supplierId)
-    {
-        return _items.Where(x => x.SupplierId == supplierId).ToList();
-    }
+    public IEnumerable<Item> GetItemsBySupplier(int supplierId) =>
+        _context.Items.Where(x => x.SupplierId == supplierId).ToList();
 
     public void AddItem(Item item)
     {
-        item.CreatedAt = DateTime.UtcNow;
-        item.UpdatedAt = DateTime.UtcNow;
-        _items.Add(item);
-        SaveItems();
+        item.CreatedAt = item.UpdatedAt = DateTime.UtcNow;
+        _context.Items.Add(item);
+        _context.SaveChanges();
     }
 
-    public void UpdateItem(int id, Item item)
+    public void UpdateItem(int id, Item updatedItem)
     {
-        var existingItem = _items.FirstOrDefault(x => x.Id == id);
-        if (existingItem != null)
-        {
-            item.UpdatedAt = DateTime.UtcNow;
-            _items[_items.IndexOf(existingItem)] = item;
-            SaveItems();
-        }
+        var existingItem = _context.Items.FirstOrDefault(x => x.Id == id);
+        if (existingItem == null) return;
+
+        updatedItem.Id = id;
+        updatedItem.CreatedAt = existingItem.CreatedAt;
+        updatedItem.UpdatedAt = DateTime.UtcNow;
+        _context.Entry(existingItem).CurrentValues.SetValues(updatedItem);
+        _context.SaveChanges();
     }
 
-    public void RemoveItem(int id)
+    public bool DeleteItem(int id)
     {
-        var item = _items.FirstOrDefault(x => x.Id == id);
+        var item = _context.Items.FirstOrDefault(x => x.Id == id);
         if (item != null)
         {
-            _items.Remove(item);
-            SaveItems();
+            _context.Items.Remove(item);
+            _context.SaveChanges();
+            return true;
         }
+        return false;
     }
 }

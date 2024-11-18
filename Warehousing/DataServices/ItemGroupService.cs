@@ -1,69 +1,45 @@
 
-using System.Text.Json;
 
 public class ItemGroupService
 {
-    private const string FilePath = "itemgroup.json";
-    private List<ItemGroup> _data;
+    private readonly WarehousingContext _context;
 
-    public ItemGroupService()
+    public ItemGroupService(WarehousingContext context)
     {
-        _data = Load();
+        _context = context;
+        _context.Database.EnsureCreated();
     }
 
-    public List<ItemGroup> GetItemGroups()
-    {
-        return _data;
-    }
+    public IEnumerable<ItemGroup> GetAllItemGroups() => _context.ItemGroups.ToList();
 
-    public ItemGroup GetItemGroup(int itemGroupId)
-    {
-        return _data.Find(x => x.Id == itemGroupId);
-    }
+    public ItemGroup GetItemGroupById(int id) => _context.ItemGroups.FirstOrDefault(x => x.Id == id);
 
     public void AddItemGroup(ItemGroup itemGroup)
     {
-        itemGroup.CreatedAt = DateTime.UtcNow;
-        itemGroup.UpdatedAt = DateTime.UtcNow;
-        _data.Add(itemGroup);
-        Save();
+        itemGroup.CreatedAt = itemGroup.UpdatedAt = DateTime.UtcNow;
+        _context.ItemGroups.Add(itemGroup);
+        _context.SaveChanges();
     }
 
-    public void UpdateItemGroup(int itemGroupId, ItemGroup itemGroup)
+    public void UpdateItemGroup(int id, ItemGroup updatedItemGroup)
     {
-        itemGroup.UpdatedAt = DateTime.UtcNow;
-        var index = _data.FindIndex(x => x.Id == itemGroupId);
-        if (index != -1)
-        {
-            _data[index] = itemGroup;
-            Save();
-        }
+        var existingItemGroup = _context.ItemGroups.FirstOrDefault(x => x.Id == id);
+        if (existingItemGroup == null) return;
+
+        updatedItemGroup.Id = id;
+        updatedItemGroup.CreatedAt = existingItemGroup.CreatedAt;
+        updatedItemGroup.UpdatedAt = DateTime.UtcNow;
+        _context.Entry(existingItemGroup).CurrentValues.SetValues(updatedItemGroup);
+        _context.SaveChanges();
     }
 
-    public void RemoveItemGroup(int itemGroupId)
+    public void DeleteItemGroup(int id)
     {
-        var itemGroup = _data.Find(x => x.Id == itemGroupId);
+        var itemGroup = _context.ItemGroups.FirstOrDefault(x => x.Id == id);
         if (itemGroup != null)
         {
-            _data.Remove(itemGroup);
-            Save();
+            _context.ItemGroups.Remove(itemGroup);
+            _context.SaveChanges();
         }
-    }
-
-    private List<ItemGroup> Load()
-    {
-        if (!File.Exists(FilePath))
-        {
-            return new List<ItemGroup>();
-        }
-
-        var json = File.ReadAllText(FilePath);
-        return JsonSerializer.Deserialize<List<ItemGroup>>(json) ?? new List<ItemGroup>();
-    }
-
-    private void Save()
-    {
-        var json = JsonSerializer.Serialize(_data,  new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(FilePath, json);
     }
 }
