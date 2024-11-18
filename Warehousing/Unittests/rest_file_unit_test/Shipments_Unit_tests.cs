@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 
-/*
+
 public class Shipments_Unit_Tests
 {
     private readonly HttpClient _client;
@@ -25,8 +25,7 @@ public class Shipments_Unit_Tests
         Assert.False(string.IsNullOrEmpty(shipments));
     }
 
-    [Fact]
-    public async Task GetShipmentById_ShouldReturnSuccess()
+    [Fact]    public async Task GetShipmentById_ShouldReturnSuccess()
     {
         var response = await _client.GetAsync("shipment/1");
         response.EnsureSuccessStatusCode();
@@ -48,6 +47,7 @@ public class Shipments_Unit_Tests
     [Fact]
     public async Task AddNewShipment_ShouldReturnSuccess()
     {
+        
         var newShipment = new
         {
             OrderId = 123,
@@ -59,7 +59,15 @@ public class Shipments_Unit_Tests
             Notes = "Handle with care",
             CarrierCode = "UPS",
             CarrierDescription = "United Parcel Service",
-            ServiceCode = "Ground"
+            ServiceCode = "Ground",
+            PaymentType = "Prepaid",
+            TransferMode = "Air",
+            TotalPackageCount = 3,
+            TotalPackageWeight = 15.5,
+            Items = new[]
+            {
+                new { id = 1, amount = 1 }
+            }
         };
 
         var response = await _client.PostAsJsonAsync("shipment", newShipment);
@@ -67,7 +75,7 @@ public class Shipments_Unit_Tests
 
         var createdShipment = await response.Content.ReadAsStringAsync();
         Assert.False(string.IsNullOrEmpty(createdShipment));
+        
     }
 }
 
-*/
