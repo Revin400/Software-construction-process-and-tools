@@ -1,0 +1,30 @@
+### Get all item groups
+GET http://localhost:5000/api/itemgroups
+Content-Type: application/json
+
+### Get a specific item group by ID
+GET http://localhost:5000/api/itemgroups/1
+Content-Type: application/json
+
+### Add a new item group
+POST http://localhost:5000/api/itemgroups
+Content-Type: application/json
+
+{
+    "name": "Software",
+    "description": "All software and related tools"
+}
+
+### Update an existing item group
+PUT http://localhost:5000/api/itemgroups/1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Updated Electronics",
+    "description": "Updated description for electronics"
+}
+
+### Delete an item group
+DELETE http://localhost:5000/api/itemgroups/1
+Content-Type: application/json
