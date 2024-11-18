@@ -36,7 +36,7 @@ public class ShipmentController : ControllerBase
         shipment.Id = _shipmentService.NextId();
         shipments.Add(shipment);
         _shipmentService.WriteShipmentsToJson(shipments);
-        return Ok();
+        return CreatedAtAction(nameof(GetShipment), new { id = shipment.Id }, shipment);
     }
 
     [HttpPut("{id}")]
