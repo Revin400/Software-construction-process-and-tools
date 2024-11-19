@@ -10,23 +10,32 @@ using System.Text.Json;
 public class TransfersController : ControllerBase
 {
     private readonly string dataPath;
-    private List<Transfer> data;
+    private readonly TransferService _transferService;
 
-    public TransfersController(string rootPath, bool isDebug = false)
+    public TransfersController(TransferService transferService)
     {
-        dataPath = Path.Combine(rootPath, "transfers.json");
+        _transferService = transferService;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Transfer>> GetTransfers()
+    public IActionResult GetTransfers()
     {
-        return Ok(data);
+        try
+        {
+            var transfers = _transferService.ReadTransfersFromJson();
+            return Ok(transfers);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error reading transfers: {ex.Message}");
+        }
     }
 
     [HttpGet("{transferId}")]
-    public ActionResult<Transfer> GetTransfer(int transferId)
+    public ActionResult<Transfer> GetTransferById(int transferId)
     {
-        var transfer = data.FirstOrDefault(t => t.Id == transferId);
+        var transfers = _transferService.ReadTransfersFromJson();
+        var transfer = transfers.FirstOrDefault(t => t.Id == transferId);
         if (transfer == null)
         {
             return NotFound();
@@ -35,47 +44,82 @@ public class TransfersController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult AddTransfer([FromBody] Transfer transfer)
+    public IActionResult AddTransfer([FromBody] Transfer transfer)
     {
-        transfer.CreatedAt = DateTime.UtcNow;
-        transfer.UpdatedAt = DateTime.UtcNow;
-        data.Add(transfer);
-        Save();
-        return CreatedAtAction(nameof(GetTransfer), new { transferId = transfer.Id }, transfer);
+        try
+        {
+            var locations = _transferService.ReadTransfersFromJson();
+            transfer.Id = _transferService.NextId();
+            transfer.CreatedAt = DateTime.Now;
+            transfer.UpdatedAt = DateTime.Now;
+            locations.Add(transfer);
+            
+            _transferService.WriteTransfersToJson(locations);
+            return Ok(transfer);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error creating location: {ex.Message}");
+        }
     }
 
     [HttpPut("{transferId}")]
     public ActionResult UpdateTransfer(int transferId, [FromBody] Transfer transfer)
     {
-        var existingTransfer = data.FirstOrDefault(t => t.Id == transferId);
-        if (existingTransfer == null)
+        try
         {
-            return NotFound();
+            var transfers = _transferService.ReadTransfersFromJson();
+            var existingTransfer = transfers.Find(l => l.Id == transferId);
+
+            if (existingTransfer == null)
+            {
+                return NotFound($"Transfer with id {transferId} not found");
+            }
+
+            existingTransfer.Reference = transfer.Reference;
+            existingTransfer.TransferFrom = transfer.TransferFrom;
+            existingTransfer.TransferTo = transfer.TransferTo;
+            existingTransfer.TransferStatus = transfer.TransferStatus;
+
+            existingTransfer.UpdatedAt = DateTime.Now;
+
+            _transferService.WriteTransfersToJson(transfers);
+            return Ok(existingTransfer);
         }
-        transfer.UpdatedAt = DateTime.UtcNow;
-        data[data.IndexOf(existingTransfer)] = transfer;
-        Save();
-        return NoContent();
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error updating transfer: {ex.Message}");
+        }
     }
 
     [HttpDelete("{transferId}")]
     public ActionResult RemoveTransfer(int transferId)
     {
-        var transfer = data.FirstOrDefault(t => t.Id == transferId);
-        if (transfer == null)
+        try
         {
-            return NotFound();
+            var transfers = _transferService.ReadTransfersFromJson();
+            var transfer = transfers.Find(l => l.Id == transferId);
+
+            if (transfer == null)
+            {
+                return NotFound($"Transfer with id {transferId} not found");
+            }
+
+            transfers.Remove(transfer);
+            _transferService.WriteTransfersToJson(transfers);
+            return Ok(transfer);
         }
-        data.Remove(transfer);
-        Save();
-        return NoContent();
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error deleting transfer: {ex.Message}");
+        }
     }
 
     private void Save()
     {
         using (var writer = new StreamWriter(dataPath))
         {
-            var json = JsonSerializer.Serialize(data);
+            var json = JsonSerializer.Serialize(_transferService);
             writer.Write(json);
         }
     }

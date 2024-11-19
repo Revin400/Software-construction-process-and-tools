@@ -5,10 +5,21 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<ClientDbContext>();
+builder.Services.AddDbContext<WarehousingContext>();
+
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<WarehouseService>();
 builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<LocationService>();
+builder.Services.AddScoped<ItemService>();
+builder.Services.AddScoped<ItemGroupService>();
+
+builder.Services.AddScoped<InventoryService>();
+builder.Services.AddScoped<TransferService>();
+builder.Services.AddScoped<OrderService>();
+
 
 
 var app = builder.Build();
