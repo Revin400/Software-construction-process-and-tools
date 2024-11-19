@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "Id": 1,
+    "Code": "WH001",
+    "Name": "Main Warehouse",
+    "Address": "1234 Warehouse St",
+    "Zip": "12345",
+    "City": "Warehouse City",
+    "Province": "Warehouse Province",
+    "Country": "Warehouse Country",
+    "Contact": {
+      "Name": "John Doe",
+      "Phone": "123-456-7890",
+      "Email": "john.doe@example.com"
+    },
+    "CreatedAt": "2024-11-06T15:33:02.1197598+01:00",
+    "UpdatedAt": "2024-11-06T15:33:02.1197655+01:00"
+  }
+]

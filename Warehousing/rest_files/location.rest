@@ -1,0 +1,31 @@
+### GET all Locations
+GET http://localhost:5000/api/location
+
+###
+
+### Create a new Location
+POST http://localhost:5000/api/location
+Content-Type: application/json
+
+{
+    "code": "A.1.0",
+    "name": "Row: A, Rack: 1, Shelf: 0",
+    "warehouse_id": 1
+}
+
+###
+
+### Update a Location
+PUT http://localhost:5000/api/location/1
+Content-Type: application/json
+
+{
+    "code": "A.1.1",
+    "name": "Row: A, Rack: 1, Shelf: 1",
+    "warehouse_id": 1
+}
+
+###
+
+### Delete a Location
+DELETE http://localhost:5000/api/location/1
