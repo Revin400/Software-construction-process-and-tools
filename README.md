@@ -23,3 +23,8 @@ In this course, you will learn to automate software development processes as a s
 ## Additional Information
 
 Be sure to have the above packages and extensions installed to ensure full functionality of the project. For testing purposes, xUnit and related testing tools are required.
+
+
+## Guide to start our program
+
+
