@@ -29,8 +29,11 @@ Be sure to have the above packages and extensions installed to ensure full funct
 Follow these steps to run the program:
 
 1.Check Requirements: Ensure all necessary extensions and packages are installed.
+
 2.Open the Terminal: Navigate to the project folder and open an integrated terminal in the same directory as Program.cs.
+
 3.Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
+
 4.Run the Program: Execute dotnet run to start the application.
 
 Make sure all dependencies are correctly installed before running the program.
