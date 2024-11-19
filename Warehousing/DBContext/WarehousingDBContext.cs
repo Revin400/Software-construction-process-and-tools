@@ -3,10 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 public class WarehousingContext : DbContext
 {
-    // Constructor for dependency injection
     public WarehousingContext(DbContextOptions<WarehousingContext> options) : base(options) { }
 
-    // Parameterless constructor for fallback configuration
     public WarehousingContext() { }
 
     public DbSet<Item> Items { get; set; }
@@ -19,7 +17,7 @@ public class WarehousingContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // Use a default SQLite database if no options are provided
+        // Use default SQLite database if no options
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlite("Data Source=DataSources/Warehousing.db");
