@@ -8,6 +8,7 @@ Follow these steps to run the program:
 3. Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
 
 4. Run the Program: Execute dotnet run to start the application.
+
 Make sure all dependencies are correctly installed before running the program.
 
 
