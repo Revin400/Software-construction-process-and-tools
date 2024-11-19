@@ -1,16 +1,14 @@
 ## Guide to Start the Program
 Follow these steps to run the program:
 
-1.Check Requirements: Ensure all necessary extensions and packages are installed.
+1. Check Requirements: Ensure all necessary extensions and packages are installed.
 
-2.Open the Terminal: Navigate to the project folder and open an integrated terminal in the same directory as Program.cs.
+2. Open the Terminal: Navigate to the project folder and open an integrated terminal in the same directory as Program.cs.
 
-3.Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
+3. Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
 
-4.Run the Program: Execute dotnet run to start the application.
-
+4. Run the Program: Execute dotnet run to start the application.
 Make sure all dependencies are correctly installed before running the program.
-
 
 
 ## Git Repositories
@@ -34,7 +32,4 @@ Make sure all dependencies are correctly installed before running the program.
 ## Additional Information
 
 Be sure to have the above packages and extensions installed to ensure full functionality of the project. For testing purposes, xUnit and related testing tools are required.
-
-
-
 
