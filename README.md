@@ -1,8 +1,19 @@
-# Software Construction Process and Tools
+## Guide to Start the Program
+Follow these steps to run the program:
 
-In this course, you will learn to automate software development processes as a software engineer. Working with your team, you will document and test existing software, and implement CI/CD to ensure continuous functionality after modifications. You will then expand or optimize the software.
+1.Check Requirements: Ensure all necessary extensions and packages are installed.
 
-### Git Repositories
+2.Open the Terminal: Navigate to the project folder and open an integrated terminal in the same directory as Program.cs.
+
+3.Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
+
+4.Run the Program: Execute dotnet run to start the application.
+
+Make sure all dependencies are correctly installed before running the program.
+
+
+
+##Git Repositories
 
 | Repository | Description |
 | :-------- | :------------------------- |
@@ -25,16 +36,5 @@ In this course, you will learn to automate software development processes as a s
 Be sure to have the above packages and extensions installed to ensure full functionality of the project. For testing purposes, xUnit and related testing tools are required.
 
 
-## Guide to Start the Program
-Follow these steps to run the program:
 
-1.Check Requirements: Ensure all necessary extensions and packages are installed.
-
-2.Open the Terminal: Navigate to the project folder and open an integrated terminal in the same directory as Program.cs.
-
-3.Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
-
-4.Run the Program: Execute dotnet run to start the application.
-
-Make sure all dependencies are correctly installed before running the program.
 
