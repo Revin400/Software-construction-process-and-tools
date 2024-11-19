@@ -1,71 +1,54 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using System.Linq;
 
 public class ItemTypeService
 {
-    private const string FilePath = "item_types.json";
-    private List<ItemType> _data;
+    private readonly WarehousingContext _context;
 
-    public ItemTypeService()
+    public ItemTypeService(WarehousingContext context)
     {
-        _data = Load();
+        _context = context;
+        _context.Database.EnsureCreated();
     }
 
-    public List<ItemType> GetItemTypes()
+    public IEnumerable<ItemType> GetAllItemTypes()
     {
-        return _data;
+        return _context.ItemTypes.ToList();
     }
 
-    public ItemType GetItemType(int itemTypeId)
+    public ItemType GetItemTypeById(int id)
     {
-        return _data.Find(x => x.Id == itemTypeId);
+        return _context.ItemTypes.FirstOrDefault(it => it.Id == id);
     }
 
     public void AddItemType(ItemType itemType)
     {
         itemType.CreatedAt = DateTime.UtcNow;
         itemType.UpdatedAt = DateTime.UtcNow;
-        _data.Add(itemType);
-        Save();
+        _context.ItemTypes.Add(itemType);
+        _context.SaveChanges();
     }
 
-    public void UpdateItemType(int itemTypeId, ItemType itemType)
+    public void UpdateItemType(int id, ItemType updatedItemType)
     {
-        itemType.UpdatedAt = DateTime.UtcNow;
-        var index = _data.FindIndex(x => x.Id == itemTypeId);
-        if (index != -1)
-        {
-            _data[index] = itemType;
-            Save();
-        }
-    }
-
-    public void RemoveItemType(int itemTypeId)
-    {
-        var itemType = _data.Find(x => x.Id == itemTypeId);
+        var itemType = _context.ItemTypes.FirstOrDefault(it => it.Id == id);
         if (itemType != null)
         {
-            _data.Remove(itemType);
-            Save();
+            itemType.Name = updatedItemType.Name;
+            itemType.Description = updatedItemType.Description;
+            itemType.UpdatedAt = DateTime.UtcNow;
+            _context.SaveChanges();
         }
     }
 
-    private List<ItemType> Load()
+    public void DeleteItemType(int id)
     {
-        if (!File.Exists(FilePath))
+        var itemType = _context.ItemTypes.FirstOrDefault(it => it.Id == id);
+        if (itemType != null)
         {
-            return new List<ItemType>();
+            _context.ItemTypes.Remove(itemType);
+            _context.SaveChanges();
         }
-
-        var json = File.ReadAllText(FilePath);
-        return JsonSerializer.Deserialize<List<ItemType>>(json) ?? new List<ItemType>();
-    }
-
-    private void Save()
-    {
-        var json = JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(FilePath, json);
     }
 }

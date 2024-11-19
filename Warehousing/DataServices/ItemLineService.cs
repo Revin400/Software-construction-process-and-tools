@@ -1,72 +1,48 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-
+using System.Linq;
 
 public class ItemLineService
 {
-    private const string FilePath = "item_lines.json";
-    private List<ItemLine> _data;
+    private readonly WarehousingContext _context;
 
-    public ItemLineService()
+    public ItemLineService(WarehousingContext context)
     {
-        _data = Load();
+        _context = context;
+        _context.Database.EnsureCreated();
     }
 
-    public List<ItemLine> GetItemLines()
-    {
-        return _data;
-    }
+    public IEnumerable<ItemLine> GetAllItemLines() => _context.ItemLines.ToList();
 
-    public ItemLine GetItemLine(int itemLineId)
-    {
-        return _data.Find(x => x.Id == itemLineId);
-    }
+    public ItemLine GetItemLineById(int id) => _context.ItemLines.FirstOrDefault(il => il.Id == id);
 
     public void AddItemLine(ItemLine itemLine)
     {
         itemLine.CreatedAt = DateTime.UtcNow;
         itemLine.UpdatedAt = DateTime.UtcNow;
-        _data.Add(itemLine);
-        Save();
+        _context.ItemLines.Add(itemLine);
+        _context.SaveChanges();
     }
 
-    public void UpdateItemLine(int itemLineId, ItemLine itemLine)
+    public void UpdateItemLine(int id, ItemLine updatedItemLine)
     {
-        itemLine.UpdatedAt = DateTime.UtcNow;
-        var index = _data.FindIndex(x => x.Id == itemLineId);
-        if (index != -1)
+        var existing = GetItemLineById(id);
+        if (existing != null)
         {
-            _data[index] = itemLine;
-            Save();
+            existing.Name = updatedItemLine.Name;
+            existing.Description = updatedItemLine.Description;
+            existing.UpdatedAt = DateTime.UtcNow;
+            _context.SaveChanges();
         }
     }
 
-    public void RemoveItemLine(int itemLineId)
+    public void RemoveItemLine(int id)
     {
-        var itemLine = _data.Find(x => x.Id == itemLineId);
+        var itemLine = GetItemLineById(id);
         if (itemLine != null)
         {
-            _data.Remove(itemLine);
-            Save();
+            _context.ItemLines.Remove(itemLine);
+            _context.SaveChanges();
         }
-    }
-
-    private List<ItemLine> Load()
-    {
-        if (!File.Exists(FilePath))
-        {
-            return new List<ItemLine>();
-        }
-
-        var json = File.ReadAllText(FilePath);
-        return JsonSerializer.Deserialize<List<ItemLine>>(json) ?? new List<ItemLine>();
-    }
-
-    private void Save()
-    {
-        var json = JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(FilePath, json);
     }
 }
+
