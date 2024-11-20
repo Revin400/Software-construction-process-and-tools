@@ -1,48 +1,52 @@
 using Microsoft.AspNetCore.Mvc;
+using Warehousing.DataServices_v1;
 
 
-[ApiController]
-[Route("api/items")]
-public class ItemsController : ControllerBase
+namespace Warehousing.DataControllers_v1
 {
-    private readonly ItemService _itemService;
-
-    public ItemsController(ItemService itemService)
+    [ApiController]
+    [Route("api/items")]
+    public class ItemsController : ControllerBase
     {
-        _itemService = itemService;
-    }
+        private readonly ItemService _itemService;
 
-    [HttpGet]
-    public IActionResult GetAllItems() => Ok(_itemService.GetAllItems());
+        public ItemsController(ItemService itemService)
+        {
+            _itemService = itemService;
+        }
 
-    [HttpGet("{id}")]
-    public IActionResult GetItemById(int id)
-    {
-        var item = _itemService.GetItemById(id);
-        if (item == null) return NotFound();
-        return Ok(item);
-    }
+        [HttpGet]
+        public IActionResult GetAllItems() => Ok(_itemService.GetAllItems());
 
-    [HttpPost]
-    public IActionResult AddItem([FromBody] Item item)
-    {
-        _itemService.AddItem(item);
-        return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, item);
-    }
+        [HttpGet("{id}")]
+        public IActionResult GetItemById(int id)
+        {
+            var item = _itemService.GetItemById(id);
+            if (item == null) return NotFound();
+            return Ok(item);
+        }
 
-    [HttpPut("{id}")]
-    public IActionResult UpdateItem(int id, [FromBody] Item updatedItem)
-    {
-        _itemService.UpdateItem(id, updatedItem);
-        return NoContent();
-    }
+        [HttpPost]
+        public IActionResult AddItem([FromBody] Item item)
+        {
+            _itemService.AddItem(item);
+            return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, item);
+        }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteItem(int id)
-    {
-  
-        var action = _itemService.DeleteItem(id);
-        if (action) return Ok();
-        return NotFound(); 
+        [HttpPut("{id}")]
+        public IActionResult UpdateItem(int id, [FromBody] Item updatedItem)
+        {
+            _itemService.UpdateItem(id, updatedItem);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteItem(int id)
+        {
+
+            var action = _itemService.DeleteItem(id);
+            if (action) return Ok();
+            return NotFound();
+        }
     }
 }

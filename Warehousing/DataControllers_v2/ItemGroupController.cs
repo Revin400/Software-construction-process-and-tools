@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Warehousing.DataServices_v2;
 
 
+namespace Warehousing.DataControllers_v2
+{
 [ApiController]
 [Route("api/itemgroups")]
 public class ItemGroupsController : ControllerBase
@@ -44,4 +47,4 @@ public class ItemGroupsController : ControllerBase
         return NoContent();
     }
 }
-
+}

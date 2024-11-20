@@ -1,47 +1,50 @@
 using Microsoft.AspNetCore.Mvc;
+using Warehousing.DataServices_v1;
 
 
-[ApiController]
-[Route("api/itemgroups")]
-public class ItemGroupsController : ControllerBase
+namespace Warehousing.DataControllers_v1
 {
-    private readonly ItemGroupService _itemGroupService;
-
-    public ItemGroupsController(ItemGroupService itemGroupService)
+    [ApiController]
+    [Route("api/itemgroups")]
+    public class ItemGroupsController : ControllerBase
     {
-        _itemGroupService = itemGroupService;
-    }
+        private readonly ItemGroupService _itemGroupService;
 
-    [HttpGet]
-    public IActionResult GetAllItemGroups() => Ok(_itemGroupService.GetAllItemGroups());
+        public ItemGroupsController(ItemGroupService itemGroupService)
+        {
+            _itemGroupService = itemGroupService;
+        }
 
-    [HttpGet("{id}")]
-    public IActionResult GetItemGroupById(int id)
-    {
-        var itemGroup = _itemGroupService.GetItemGroupById(id);
-        if (itemGroup == null) return NotFound();
-        return Ok(itemGroup);
-    }
+        [HttpGet]
+        public IActionResult GetAllItemGroups() => Ok(_itemGroupService.GetAllItemGroups());
 
-    [HttpPost]
-    public IActionResult AddItemGroup([FromBody] ItemGroup itemGroup)
-    {
-        _itemGroupService.AddItemGroup(itemGroup);
-        return CreatedAtAction(nameof(GetItemGroupById), new { id = itemGroup.Id }, itemGroup);
-    }
+        [HttpGet("{id}")]
+        public IActionResult GetItemGroupById(int id)
+        {
+            var itemGroup = _itemGroupService.GetItemGroupById(id);
+            if (itemGroup == null) return NotFound();
+            return Ok(itemGroup);
+        }
 
-    [HttpPut("{id}")]
-    public IActionResult UpdateItemGroup(int id, [FromBody] ItemGroup updatedItemGroup)
-    {
-        _itemGroupService.UpdateItemGroup(id, updatedItemGroup);
-        return NoContent();
-    }
+        [HttpPost]
+        public IActionResult AddItemGroup([FromBody] ItemGroup itemGroup)
+        {
+            _itemGroupService.AddItemGroup(itemGroup);
+            return CreatedAtAction(nameof(GetItemGroupById), new { id = itemGroup.Id }, itemGroup);
+        }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteItemGroup(int id)
-    {
-        _itemGroupService.DeleteItemGroup(id);
-        return NoContent();
+        [HttpPut("{id}")]
+        public IActionResult UpdateItemGroup(int id, [FromBody] ItemGroup updatedItemGroup)
+        {
+            _itemGroupService.UpdateItemGroup(id, updatedItemGroup);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteItemGroup(int id)
+        {
+            _itemGroupService.DeleteItemGroup(id);
+            return NoContent();
+        }
     }
 }
-
