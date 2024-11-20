@@ -1,5 +1,9 @@
 #ignore pycaches
 
 **/__pycache__/
+/bin/
+/obj/
 bin/
 obj/
+*bin/
+*obj/
