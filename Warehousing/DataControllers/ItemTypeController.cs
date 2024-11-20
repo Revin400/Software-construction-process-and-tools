@@ -2,51 +2,48 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 [ApiController]
-[Route("api/itemtype")]
-public class ItemTypesController : ControllerBase
+[Route("api/itemtypes")]
+public class ItemTypeController : ControllerBase
 {
     private readonly ItemTypeService _service;
 
-    public ItemTypesController()
+    public ItemTypeController(ItemTypeService service)
     {
-        _service = new ItemTypeService();
+        _service = service;
     }
 
     [HttpGet]
-    public ActionResult<List<ItemType>> GetItemTypes()
+    public ActionResult<IEnumerable<ItemType>> GetAllItemTypes()
     {
-        return _service.GetItemTypes();
+        return Ok(_service.GetAllItemTypes());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<ItemType> GetItemType(int id)
+    public ActionResult<ItemType> GetItemTypeById(int id)
     {
-        var itemType = _service.GetItemType(id);
-        if (itemType == null)
-        {
-            return NotFound();
-        }
-        return itemType;
+        var itemType = _service.GetItemTypeById(id);
+        if (itemType == null) return NotFound();
+        return Ok(itemType);
     }
 
     [HttpPost]
-    public ActionResult AddItemType(ItemType itemType)
+    public ActionResult AddItemType([FromBody] ItemType newItemType)
     {
-        _service.AddItemType(itemType);
-        return Ok();
+        _service.AddItemType(newItemType);
+        return CreatedAtAction(nameof(GetItemTypeById), new { id = newItemType.Id }, newItemType);
     }
 
     [HttpPut("{id}")]
-    public ActionResult UpdateItemType(int id, ItemType itemType)
+    public IActionResult UpdateItemType(int id, [FromBody] ItemType updatedItemType)
     {
-        _service.UpdateItemType(id, itemType);
-        return Ok();
+        _service.UpdateItemType(id, updatedItemType);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public ActionResult RemoveItemType(int id)
+    public IActionResult DeleteItemType(int id)
     {
-        _service.RemoveItemType(id);
-        return Ok();
+        _service.DeleteItemType(id);
+        return NoContent();
     }
 }

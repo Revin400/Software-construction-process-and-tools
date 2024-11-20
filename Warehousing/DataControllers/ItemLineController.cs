@@ -1,51 +1,52 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+
+
 
 [ApiController]
-[Route("api/itemline")]
+[Route("api/ItemLine")]
 public class ItemLineController : ControllerBase
 {
     private readonly ItemLineService _service;
 
-    public ItemLineController()
+    public ItemLineController(ItemLineService service)
     {
-        _service = new ItemLineService();
+        _service = service;
     }
 
     [HttpGet]
-    public ActionResult<List<ItemLine>> GetItemLines()
+    public ActionResult<IEnumerable<ItemLine>> GetAllItemLines()
     {
-        return _service.GetItemLines();
+        return Ok(_service.GetAllItemLines());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<ItemLine> GetItemLine(int id)
+    public ActionResult<ItemLine> GetItemLineById(int id)
     {
-        var itemLine = _service.GetItemLine(id);
+        var itemLine = _service.GetItemLineById(id);
         if (itemLine == null)
-        {
             return NotFound();
-        }
-        return itemLine;
+        return Ok(itemLine);
     }
 
     [HttpPost]
-    public ActionResult AddItemLine(ItemLine itemLine)
+    public IActionResult AddItemLine([FromBody] ItemLine itemLine)
     {
         _service.AddItemLine(itemLine);
-        return Ok();
+        return CreatedAtAction(nameof(GetItemLineById), new { id = itemLine.Id }, itemLine);
     }
 
     [HttpPut("{id}")]
-    public ActionResult UpdateItemLine(int id, ItemLine itemLine)
+    public IActionResult UpdateItemLine(int id, [FromBody] ItemLine updatedItemLine)
     {
-        _service.UpdateItemLine(id, itemLine);
-        return Ok();
+        _service.UpdateItemLine(id, updatedItemLine);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public ActionResult RemoveItemLine(int id)
+    public IActionResult RemoveItemLine(int id)
     {
         _service.RemoveItemLine(id);
-        return Ok();
+        return NoContent();
     }
 }

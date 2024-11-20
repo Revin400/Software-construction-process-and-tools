@@ -16,6 +16,8 @@ builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<ItemService>();
 builder.Services.AddScoped<ItemGroupService>();
+builder.Services.AddScoped<ItemTypeService>();
+builder.Services.AddScoped<ItemLineService>();
 
 builder.Services.AddScoped<InventoryService>();
 builder.Services.AddScoped<TransferService>();
