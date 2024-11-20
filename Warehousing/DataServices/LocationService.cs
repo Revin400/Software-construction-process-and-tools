@@ -4,34 +4,47 @@ using System.Text.Json;
 
 public class LocationService
 {
-    private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "locations.json");
+    private readonly WarehousingContext _context;
 
-    public List<Location> ReadLocationsFromJson()
+    public LocationService(WarehousingContext context)
     {
-        if (!File.Exists(_filePath))
-        {
-            File.WriteAllText(_filePath, "[]");  
-            return new List<Location>(); 
-        }
-
-        var jsonData = File.ReadAllText(_filePath);
-
-        if (string.IsNullOrWhiteSpace(jsonData))
-        {
-            return new List<Location>();
-        }
-        return JsonSerializer.Deserialize<List<Location>>(jsonData) ?? new List<Location>();
+        _context = context;
+        _context.Database.EnsureCreated();
     }
 
-    public void WriteLocationsToJson(List<Location> locations)
+    public List<Location> GetAllLocations()
     {
-        var jsonData = JsonSerializer.Serialize(locations, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, jsonData);
+        return _context.Locations.ToList();
     }
 
-    public int NextId()
+    public Location GetLocationById(int id)
     {
-        var locations = ReadLocationsFromJson();
-        return locations.Any() ? locations.Max(l => l.Id) + 1 : 1; 
+        return _context.Locations.FirstOrDefault(l => l.Id == id);
+    }
+
+    public void CreateLocation(Location location)
+    {
+        location.CreatedAt = System.DateTime.Now;
+        location.UpdatedAt = System.DateTime.Now;
+        _context.Locations.Add(location);
+        _context.SaveChanges();
+    }
+
+    public void UpdateLocation(Location location)
+    {
+        _context.ChangeTracker.Clear();
+        location.UpdatedAt = System.DateTime.Now;
+        _context.Locations.Update(location);
+        _context.SaveChanges();
+    }
+
+    public void DeleteLocation(int id)
+    {
+        var location = _context.Locations.FirstOrDefault(l => l.Id == id);
+        if (location != null)
+        {
+            _context.Locations.Remove(location);
+            _context.SaveChanges();
+        }
     }
 }

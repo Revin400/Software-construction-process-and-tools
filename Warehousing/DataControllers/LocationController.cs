@@ -13,86 +13,79 @@ public class LocationController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllLocations()
+    public IActionResult Get()
     {
-        try
-        {
-            var locations = _locationService.ReadLocationsFromJson();
-            return Ok(locations);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Error reading locations: {ex.Message}");
-        }
+        return Ok(_locationService.GetAllLocations()); 
     }
 
 
     [HttpGet("{id}")]
-    public IActionResult GetLocationBywarehouseId(int id)
+    public IActionResult Get(int id)
     {
-        try
+        var location = _locationService.GetLocationById(id);
+        if (location == null)
         {
-            var locations = _locationService.ReadLocationsFromJson();
-            var location = locations.Find(l => l.Id == id);
-
-            if (location == null)
-            {
-                return NotFound($"Location with warehouse id {id} not found");
-            }
-
-            return Ok(location);
+            return NotFound();
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Error reading location: {ex.Message}");
-        }
+        return Ok(location);
     }
 
     [HttpPost]
-    public IActionResult CreateLocation([FromBody] Location location)
+    public IActionResult Post([FromBody] Location location)
     {
         try
         {
-            var locations = _locationService.ReadLocationsFromJson();
-            location.Id = _locationService.NextId();
-            location.CreatedAt = DateTime.Now;
-            location.UpdatedAt = DateTime.Now;
-            locations.Add(location);
-            
-            _locationService.WriteLocationsToJson(locations);
-            return Ok(location);
+            var locations = _locationService.GetAllLocations();
+            if (locations.Any(l => l.Code == location.Code))
+            {
+                return BadRequest($"Location with code {location.Code} already exists");
+            }
+
+            if (locations.Any(l => l.Name == location.Name))
+            {
+                return BadRequest($"Location with name {location.Name} already exists");
+            }
+
+            _locationService.CreateLocation(location);
+            return CreatedAtAction(nameof(Get), new { id = location.Id }, location);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Error creating location: {ex.Message}");
+            return BadRequest($"Error creating location: {ex.Message}");
         }
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateLocation(int id, [FromBody] Location location)
+    public IActionResult Put(int id, [FromBody] Location location)
     {
         try
         {
-            var locations = _locationService.ReadLocationsFromJson();
-            var existingLocation = locations.Find(l => l.Id == id);
-
+            var locations = _locationService.GetAllLocations();
+            var existingLocation = locations.FirstOrDefault(l => l.Id == id);
             if (existingLocation == null)
             {
                 return NotFound($"Location with id {id} not found");
             }
 
-            existingLocation.Code = location.Code;
-            existingLocation.Name = location.Name;
-            existingLocation.Warehouse_id = location.Warehouse_id;
-            existingLocation.UpdatedAt = DateTime.Now;
+            if (locations.Any(l => l.Code == location.Code && l.Id != id))
+            {
+                return BadRequest($"Location with code {location.Code} already exists");
+            }
 
-            _locationService.WriteLocationsToJson(locations);
-            return Ok(existingLocation);
+            if (locations.Any(l => l.Name == location.Name && l.Id != id))
+            {
+                return BadRequest($"Location with name {location.Name} already exists");
+            }
+
+            location.Id = id;
+            _locationService.UpdateLocation(location);
+            return Ok(location);
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Error updating location: {ex.Message}");
+            return BadRequest($"Error updating location: {ex.Message}");
         }
+
     }
 
     [HttpDelete("{id}")]
@@ -100,21 +93,16 @@ public class LocationController : ControllerBase
     {
         try
         {
-            var locations = _locationService.ReadLocationsFromJson();
-            var location = locations.Find(l => l.Id == id);
-
-            if (location == null)
+            if (_locationService.GetLocationById(id) == null)
             {
-                return NotFound($"Location with id {id} not found");
+                return NotFound();
             }
-
-            locations.Remove(location);
-            _locationService.WriteLocationsToJson(locations);
-            return Ok(location);
+            _locationService.DeleteLocation(id);
+            return Ok();
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Error deleting location: {ex.Message}");
+            return BadRequest($"Error deleting location: {ex.Message}");
         }
     }
 

@@ -4,9 +4,9 @@ using System.Linq;
 
 public class ClientService
 {
-    private readonly ClientDbContext _context;
+    private readonly WarehousingContext _context;
 
-    public ClientService(ClientDbContext context)
+    public ClientService(WarehousingContext context)
     {
         _context = context;
         _context.Database.EnsureCreated();
