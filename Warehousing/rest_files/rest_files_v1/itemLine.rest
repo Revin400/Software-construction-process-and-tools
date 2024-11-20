@@ -1,0 +1,26 @@
+### Get All ItemLines
+GET http://localhost:5000/api/ItemLine
+
+### Get ItemLine by ID
+GET http://localhost:5000/api/ItemLine/1
+
+### Add a New ItemLine
+POST http://localhost:5000/api/ItemLine
+Content-Type: application/json
+
+{
+  "name": "Test Line",
+  "description": "Test description"
+}
+
+### Update an ItemLine
+PUT http://localhost:5000/api/ItemLine/1
+Content-Type: application/json
+
+{
+  "name": "Updated Line",
+  "description": "Updated description"
+}
+
+### Delete an ItemLine
+DELETE http://localhost:5000/api/ItemLine/1
