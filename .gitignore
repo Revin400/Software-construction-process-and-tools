@@ -1,5 +1,18 @@
-#ignore pycaches
-
+# Ignore Python cache directories
 **/__pycache__/
+*.py[cod]
+
+# Ignore .NET build directories
 bin/
 obj/
+
+# Ignore npm cache directories
+node_modules/
+
+# Ignore macOS cache files
+.DS_Store
+
+# Ignore other common cache directories
+.cache/
+*.log
+*.tmp
