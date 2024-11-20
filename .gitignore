@@ -17,12 +17,8 @@ node_modules/
 *.log
 *.tmp
 Warehousing/obj/Debug/net8.0/Warehousing.assets.cache
-Warehousing/obj/Debug/net8.0/Warehousing.assets.cache
 Warehousing/obj/Debug/net8.0/Warehousing.GeneratedMSBuildEditorConfig.editorconfig
 Warehousing/obj/project.nuget.cache
 Warehousing/obj/Warehousing.csproj.nuget.dgspec.json
 Warehousing/obj/Debug/net8.0/Warehousing.csproj.AssemblyReference.cache
-Warehousing/obj/Debug/net8.0/Warehousing.GeneratedMSBuildEditorConfig.editorconfig
-Warehousing/obj/project.nuget.cache
 *.props
-Warehousing/obj/Warehousing.csproj.nuget.dgspec.json
