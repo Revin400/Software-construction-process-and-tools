@@ -28,8 +28,19 @@ jobs:
       run: dotnet publish -c Release -o ./publish
       env:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+        
+# artifact
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: dotnet-app
         path: ./publish
+
+#github action page
+# github repo
+  # Eerst build and daarna test
+  # code coverage
+  # artifact 
+  # deploy
+  # auto publish VPS
+  
