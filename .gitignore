@@ -3,3 +3,7 @@
 **/__pycache__/
 /bin/
 /obj/
+bin/
+obj/
+*bin/
+*obj/
