@@ -9,7 +9,7 @@ using Warehousing.DataServices_v2;
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/inventories")]
+    [Route("api/inventories/v2")]
     [ApiController]
     public class InventoriesController : ControllerBase
     {

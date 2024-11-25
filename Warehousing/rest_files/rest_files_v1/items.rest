@@ -1,13 +1,13 @@
 ### Get all items
-GET http://localhost:5000/api/items
+GET http://localhost:5000/api/v1/items
 Content-Type: application/json
 
 ### Get a specific item by ID
-GET http://localhost:5000/api/items/2
+GET http://localhost:5000/api/v1/items/1
 Content-Type: application/json
 
 ### Add a new item
-POST http://localhost:5000/api/items
+POST http://localhost:5000/api/v1/items
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Update an existing item
-PUT http://localhost:5000/api/items/5
+PUT http://localhost:5000/api/v1/items/1
 Content-Type: application/json
 
 {
@@ -52,5 +52,5 @@ Content-Type: application/json
 }
 
 ### Delete an item
-DELETE http://localhost:5000/api/items/1
+DELETE http://localhost:5000/api/v1/items/1
 Content-Type: application/json

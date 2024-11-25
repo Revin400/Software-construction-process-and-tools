@@ -1,15 +1,15 @@
 ### GET all Warehouses
-GET http://localhost:5000/api/warehouse
+GET http://localhost:5000/api/v1/warehouses
 
 ###
 
 ### GET Warehouse by ID
-GET http://localhost:5000/api/warehouse/1
+GET http://localhost:5000/api/v1/warehouses/1
 
 ###
 
 ### Create a new Warehouse
-POST http://localhost:5000/api/warehouse
+POST http://localhost:5000/api/v1/warehouses
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 
 ### Update an existing Warehouse
-PUT http://localhost:5000/api/warehouse/3
+PUT http://localhost:5000/api/v1/warehouses/1
 Content-Type: application/json
 
 {
@@ -55,4 +55,4 @@ Content-Type: application/json
 ###
 
 ### Delete an existing Warehouse
-DELETE http://localhost:5000/api/warehouse/1
+DELETE http://localhost:5000/api/v1/warehouses/1

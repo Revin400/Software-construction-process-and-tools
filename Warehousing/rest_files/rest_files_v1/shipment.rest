@@ -1,14 +1,14 @@
 ### Get all shipments
-GET http://localhost:5000/api/shipment
+GET http://localhost:5000/api/v1/shipment
 
 ### Get a shipment by ID
-GET http://localhost:5000/api/shipment/1
+GET http://localhost:5000/api/v1/shipment/1
 
 ### Get items from a shipment
-GET http://localhost:5000/api/shipment/1/items
+GET http://localhost:5000/api/v1/shipment/1/items
 
 ### Add a new shipment
-POST http://localhost:5000/api/shipment
+POST http://localhost:5000/api/v1/shipment
 Content-Type: application/json
 
 {
@@ -37,7 +37,7 @@ Content-Type: application/json
 }
 
 ### Update a shipment
-PUT http://localhost:5000/api/shipment/1
+PUT http://localhost:5000/api/v1/shipment/1
 Content-Type: application/json
 
 {
@@ -62,4 +62,4 @@ Content-Type: application/json
 }
 
 ### Delete a shipment
-DELETE http://localhost:5000/api/shipment/1
+DELETE http://localhost:5000/api/v1/shipment/1

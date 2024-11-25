@@ -4,8 +4,8 @@ using Warehousing.DataServices_v1;
 
 namespace Warehousing.DataControllers_v1
 {
-    [Route("api/warehouse")]
     [ApiController]
+    [Route("api/v1/[controller]")]
     public class WarehousesController : ControllerBase
     {
         private readonly WarehouseService _warehouseService;

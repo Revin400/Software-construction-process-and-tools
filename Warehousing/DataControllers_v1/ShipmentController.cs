@@ -6,7 +6,7 @@ using Warehousing.DataServices_v1;
 namespace Warehousing.DataControllers_v1
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
 
     public class ShipmentController : ControllerBase
     {

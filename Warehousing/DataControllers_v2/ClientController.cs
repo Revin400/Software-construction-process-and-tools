@@ -3,7 +3,7 @@ using Warehousing.DataServices_v2;
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/client")]
+    [Route("api/client/v2")]
     [ApiController]
     public class ClientController : ControllerBase
     {
