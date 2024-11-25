@@ -8,8 +8,8 @@ namespace Warehousing.DataControllers_v1
 
 
 
-    [Route("api/client")]
     [ApiController]
+    [Route("api/v1/[controller]")]
     public class ClientController : ControllerBase
     {
         private readonly ClientService _clientService;

@@ -10,8 +10,8 @@ using Warehousing.DataServices_v1;
 
 namespace Warehousing.DataControllers_v1
 {
-    [Route("api/inventories")]
     [ApiController]
+    [Route("api/v1/[controller]")]
     public class InventoriesController : ControllerBase
     {
         private readonly InventoryService _inventoryService;

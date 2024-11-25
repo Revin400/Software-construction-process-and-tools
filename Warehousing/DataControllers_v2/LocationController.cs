@@ -3,7 +3,7 @@ using Warehousing.DataServices_v2;
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/location")]
+    [Route("api/location/v2")]
     [ApiController]
 
     public class LocationController : ControllerBase

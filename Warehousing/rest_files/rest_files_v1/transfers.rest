@@ -1,15 +1,15 @@
 ### GET all Transfers
-GET http://localhost:5000/api/transfers
+GET http://localhost:5000/api/v1/transfers
 
 ###
 
 ### GET a specific Transfer by ID
-GET http://localhost:5000/api/transfers/1
+GET http://localhost:5000/api/v1/transfers/1
 
 ###
 
 ### Create a new Transfer
-POST http://localhost:5000/api/transfers
+POST http://localhost:5000/api/v1/transfers
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 
 ### Update an existing Transfer
-PUT http://localhost:5000/api/transfers/1
+PUT http://localhost:5000/api/v1/transfers/1
 Content-Type: application/json
 
 {
@@ -40,7 +40,7 @@ Content-Type: application/json
     "reference": "TRANS001",
     "transferFrom": 1,
     "transferTo": 2,
-    "transferStatus": "Completed",
+    "transferStatus": "Completed --updated",
     "items": [
         {
             "itemId": 1,
@@ -56,4 +56,4 @@ Content-Type: application/json
 ###
 
 ### Delete a Transfer
-DELETE http://localhost:5000/api/transfers/1
+DELETE http://localhost:5000/api/v1/transfers/1

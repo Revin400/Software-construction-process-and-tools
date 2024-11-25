@@ -1,13 +1,13 @@
 ### Get all item groups
-GET http://localhost:5000/api/itemgroups
+GET http://localhost:5000/api/v1/itemgroups
 Content-Type: application/json
 
 ### Get a specific item group by ID
-GET http://localhost:5000/api/itemgroups/1
+GET http://localhost:5000/api/v1/itemgroups/1
 Content-Type: application/json
 
 ### Add a new item group
-POST http://localhost:5000/api/itemgroups
+POST http://localhost:5000/api/v1/itemgroups
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ### Update an existing item group
-PUT http://localhost:5000/api/itemgroups/1
+PUT http://localhost:5000/api/v1/itemgroups/1
 Content-Type: application/json
 
 {
@@ -26,5 +26,5 @@ Content-Type: application/json
 }
 
 ### Delete an item group
-DELETE http://localhost:5000/api/itemgroups/1
+DELETE http://localhost:5000/api/v1/itemgroups/1
 Content-Type: application/json

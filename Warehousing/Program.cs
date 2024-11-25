@@ -7,30 +7,42 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<WarehousingContext>();
 
-
 builder.Services.AddControllers();
-builder.Services.AddScoped<ClientService>();
+builder.Services.AddScoped<Warehousing.DataServices_v1.ClientService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.ClientService>();
 
-builder.Services.AddScoped<WarehouseService>();
-builder.Services.AddScoped<ClientService>();
-builder.Services.AddScoped<LocationService>();
-builder.Services.AddScoped<ItemService>();
-builder.Services.AddScoped<ItemGroupService>();
-builder.Services.AddScoped<ItemTypeService>();
-builder.Services.AddScoped<ItemLineService>();
+builder.Services.AddScoped<Warehousing.DataServices_v1.WarehouseService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.WarehouseService>();
 
-builder.Services.AddScoped<InventoryService>();
-builder.Services.AddScoped<TransferService>();
-builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<Warehousing.DataServices_v1.LocationService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.LocationService>();
 
+builder.Services.AddScoped<Warehousing.DataServices_v1.ItemService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.ItemService>();
 
+builder.Services.AddScoped<Warehousing.DataServices_v1.ItemGroupService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.ItemGroupService>();
+
+builder.Services.AddScoped<Warehousing.DataServices_v1.ItemTypeService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.ItemTypeService>();
+
+builder.Services.AddScoped<Warehousing.DataServices_v1.ItemLineService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.ItemLineService>();
+
+builder.Services.AddScoped<Warehousing.DataServices_v1.InventoryService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.InventoryService>();
+
+builder.Services.AddScoped<Warehousing.DataServices_v1.TransferService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.TransferService>();
+
+builder.Services.AddScoped<Warehousing.DataServices_v1.OrderService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.OrderService>();
 
 var app = builder.Build();
 
 app.Urls.Add("http://localhost:5000");
 
 app.MapControllers();
-
 
 app.Run();
 

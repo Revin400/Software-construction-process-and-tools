@@ -1,15 +1,15 @@
 ### GET all Inventories
-GET http://localhost:5000/api/inventories
+GET http://localhost:5000/api/v1/inventories
 
 ###
 
 ### GET Inventories for a specific Item by Item ID
-GET http://localhost:5000/api/inventories/item/1
+GET http://localhost:5000/api/v1/inventories/item/1
 
 ###
 
 ### Create a new Inventory
-POST http://localhost:5000/api/inventories
+POST http://localhost:5000/api/v1/inventories
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 ###
 
 ### Update an existing Inventory
-PUT http://localhost:5000/api/inventories/1
+PUT http://localhost:5000/api/v1/inventories/1
 Content-Type: application/json
 
 {
@@ -47,4 +47,4 @@ Content-Type: application/json
 ###
 
 ### Delete an Inventory
-DELETE http://localhost:5000/api/inventories/1
+DELETE http://localhost:5000/api/v1/inventories/1

@@ -8,7 +8,7 @@ using Warehousing.DataServices_v2;
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/transfers")]
+    [Route("api/transfers/v2")]
     [ApiController]
     public class TransfersController : ControllerBase
     {

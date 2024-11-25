@@ -9,8 +9,8 @@ using Warehousing.DataServices_v1;
 
 namespace Warehousing.DataControllers_v1
 {
-    [Route("api/transfers")]
     [ApiController]
+    [Route("api/v1/[controller]")]
     public class TransfersController : ControllerBase
     {
         private readonly string dataPath;

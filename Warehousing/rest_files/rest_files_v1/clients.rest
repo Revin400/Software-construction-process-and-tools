@@ -1,10 +1,10 @@
 ### GET all Clients
-GET http://localhost:5000/api/client
+GET http://localhost:5000/api/v1/client
 
 ###
 
 ### Create a new Client
-POST http://localhost:5000/api/client
+POST http://localhost:5000/api/v1/client
 Content-Type: application/json
 
 {
@@ -24,7 +24,7 @@ Content-Type: application/json
 ###
 
 ### Update an existing Client
-PUT http://localhost:5000/api/client/1
+PUT http://localhost:5000/api/v1/client/1
 Content-Type: application/json
 
 {
@@ -42,5 +42,6 @@ Content-Type: application/json
 }
 
 ###
-### Delete an existing Warehouse
-DELETE http://localhost:5000/api/warehouse/1
+
+### Delete an existing Client
+DELETE http://localhost:5000/api/v1/client/1

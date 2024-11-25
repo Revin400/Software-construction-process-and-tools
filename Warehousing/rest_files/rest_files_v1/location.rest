@@ -1,10 +1,10 @@
 ### GET all Locations
-GET http://localhost:5000/api/location
+GET http://localhost:5000/api/v1/location
 
 ###
 
 ### Create a new Location
-POST http://localhost:5000/api/location
+POST http://localhost:5000/api/v1/location
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 ###
 
 ### Update a Location
-PUT http://localhost:5000/api/location/1
+PUT http://localhost:5000/api/v1/location/3
 Content-Type: application/json
 
 {
@@ -28,4 +28,4 @@ Content-Type: application/json
 ###
 
 ### Delete a Location
-DELETE http://localhost:5000/api/location/1
+DELETE http://localhost:5000/api/v1/location/3

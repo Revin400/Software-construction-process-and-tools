@@ -1,17 +1,17 @@
 # Get All Item Types
-GET http://localhost:5000/api/itemtypes
+GET http://localhost:5000/api/v1/itemtype
 Accept: application/json
 
 ###
 
 # Get Item Type by ID
-GET http://localhost:5000/api/itemtypes/1
+GET http://localhost:5000/api/v1/itemtype/1
 Accept: application/json
 
 ###
 
 # Add New Item Type
-POST http://localhost:5000/api/itemtypes
+POST http://localhost:5000/api/v1/itemtype
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 ###
 
 # Update Existing Item Type
-PUT http://localhost:5000/api/itemtypes/1
+PUT http://localhost:5000/api/v1/itemtype/1
 Content-Type: application/json
 
 {
@@ -33,4 +33,4 @@ Content-Type: application/json
 ###
 
 # Delete Item Type
-DELETE http://localhost:5000/api/itemtypes/1
+DELETE http://localhost:5000/api/v1/itemtype/1
