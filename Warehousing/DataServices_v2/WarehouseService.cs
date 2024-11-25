@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
+
+
+namespace Warehousing.DataServices_v2
+{
 public class WarehouseService
 {
     private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "warehouses.json");
@@ -34,4 +38,5 @@ public class WarehouseService
         var warehouses = ReadWarehousesFromJson();
         return warehouses.Any() ? warehouses.Max(w => w.Id) + 1 : 1; 
     }
+}
 }

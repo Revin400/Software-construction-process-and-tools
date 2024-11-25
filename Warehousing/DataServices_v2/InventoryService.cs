@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
+
+namespace Warehousing.DataServices_v2
+{
 public class InventoryService
 {
     private readonly string _filePath;
@@ -42,4 +45,5 @@ public class InventoryService
         var inventories = ReadInventoriesFromJson();
         return inventories.Any() ? inventories.Max(i => i.Id) + 1 : 1;
     }
+}
 }

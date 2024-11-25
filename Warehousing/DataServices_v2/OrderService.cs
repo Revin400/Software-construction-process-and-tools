@@ -4,6 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
+
+
+namespace Warehousing.DataServices_v2
+{
 public class OrderService
 {
     private readonly string _filePath;
@@ -42,4 +46,5 @@ public class OrderService
         var orders = ReadOrdersFromJson();
         return orders.Any() ? orders.Max(o => o.Id) + 1 : 1;
     }
+}
 }

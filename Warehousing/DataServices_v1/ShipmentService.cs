@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
+
+
+namespace Warehousing.DataServices_v1
+{
 public class ShipmentService
 {
     private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "Shipment.json");
@@ -35,4 +39,5 @@ public class ShipmentService
         return shipments.Any() ? shipments.Max(w => w.Id) + 1 : 1; 
     }
     
+}
 }

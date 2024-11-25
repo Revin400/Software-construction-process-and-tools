@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
+
+namespace Warehousing.DataServices_v2
+{
 public class LocationService
 {
     private readonly WarehousingContext _context;
@@ -47,4 +50,6 @@ public class LocationService
             _context.SaveChanges();
         }
     }
+}
+
 }

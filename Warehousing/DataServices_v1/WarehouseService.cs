@@ -2,36 +2,41 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-public class WarehouseService
+
+
+namespace Warehousing.DataServices_v1
 {
-    private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "warehouses.json");
-
-    public List<Warehouse> ReadWarehousesFromJson()
+    public class WarehouseService
     {
-        if (!File.Exists(_filePath))
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "warehouses.json");
+
+        public List<Warehouse> ReadWarehousesFromJson()
         {
-            File.WriteAllText(_filePath, "[]");  
-            return new List<Warehouse>(); 
+            if (!File.Exists(_filePath))
+            {
+                File.WriteAllText(_filePath, "[]");
+                return new List<Warehouse>();
+            }
+
+            var jsonData = File.ReadAllText(_filePath);
+
+            if (string.IsNullOrWhiteSpace(jsonData))
+            {
+                return new List<Warehouse>();
+            }
+            return JsonSerializer.Deserialize<List<Warehouse>>(jsonData) ?? new List<Warehouse>();
         }
 
-        var jsonData = File.ReadAllText(_filePath);
-
-        if (string.IsNullOrWhiteSpace(jsonData))
+        public void WriteWarehousesToJson(List<Warehouse> warehouses)
         {
-            return new List<Warehouse>();
+            var jsonData = JsonSerializer.Serialize(warehouses, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, jsonData);
         }
-        return JsonSerializer.Deserialize<List<Warehouse>>(jsonData) ?? new List<Warehouse>();
-    }
 
-    public void WriteWarehousesToJson(List<Warehouse> warehouses)
-    {
-        var jsonData = JsonSerializer.Serialize(warehouses, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, jsonData);
-    }
-
-    public int NextId()
-    {
-        var warehouses = ReadWarehousesFromJson();
-        return warehouses.Any() ? warehouses.Max(w => w.Id) + 1 : 1; 
+        public int NextId()
+        {
+            var warehouses = ReadWarehousesFromJson();
+            return warehouses.Any() ? warehouses.Max(w => w.Id) + 1 : 1;
+        }
     }
 }

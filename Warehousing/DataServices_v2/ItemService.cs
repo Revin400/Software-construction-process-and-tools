@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-
+namespace Warehousing.DataServices_v2
+{
 public class ItemService
 {
     private readonly WarehousingContext _context;
@@ -59,4 +60,5 @@ public class ItemService
         }
         return false;
     }
+}
 }

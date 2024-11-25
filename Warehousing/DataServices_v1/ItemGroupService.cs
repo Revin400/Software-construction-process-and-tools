@@ -1,4 +1,5 @@
-
+namespace Warehousing.DataServices_v1
+{
 
 public class ItemGroupService
 {
@@ -42,4 +43,5 @@ public class ItemGroupService
             _context.SaveChanges();
         }
     }
+}
 }
