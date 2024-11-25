@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+
+namespace Warehousing.DataServices_v1
+{
 public class ItemTypeService
 {
     private readonly WarehousingContext _context;
@@ -51,4 +54,5 @@ public class ItemTypeService
             _context.SaveChanges();
         }
     }
+}
 }

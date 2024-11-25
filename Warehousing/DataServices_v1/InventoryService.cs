@@ -4,42 +4,48 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-public class InventoryService
+
+
+namespace Warehousing.DataServices_v1
 {
-    private readonly string _filePath;
-
-    public InventoryService()
+    public class InventoryService
     {
-        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "inventories.json");
-    }
+        private readonly string _filePath;
 
-    public List<Inventory> ReadInventoriesFromJson()
-    {
-        if (!File.Exists(_filePath))
+        public InventoryService()
         {
-            File.WriteAllText(_filePath, "[]");  
-            
-            return new List<Inventory>();
+            _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "inventories.json");
         }
 
-        var jsonData = File.ReadAllText(_filePath);
-
-        if (string.IsNullOrWhiteSpace(jsonData))
+        public List<Inventory> ReadInventoriesFromJson()
         {
-            return new List<Inventory>();
+            if (!File.Exists(_filePath))
+            {
+                File.WriteAllText(_filePath, "[]");
+
+                return new List<Inventory>();
+            }
+
+            var jsonData = File.ReadAllText(_filePath);
+
+            if (string.IsNullOrWhiteSpace(jsonData))
+            {
+                return new List<Inventory>();
+            }
+            return JsonSerializer.Deserialize<List<Inventory>>(jsonData) ?? new List<Inventory>();
         }
-        return JsonSerializer.Deserialize<List<Inventory>>(jsonData) ?? new List<Inventory>();
-    }
 
-    public void WriteInventoriesToJson(List<Inventory> inventories)
-    {
-        var jsonData = JsonSerializer.Serialize(inventories, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, jsonData);
-    }
+        public void WriteInventoriesToJson(List<Inventory> inventories)
+        {
+            var jsonData = JsonSerializer.Serialize(inventories, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, jsonData);
+        }
 
-    public int NextId()
-    {
-        var inventories = ReadInventoriesFromJson();
-        return inventories.Any() ? inventories.Max(i => i.Id) + 1 : 1;
+        public int NextId()
+        {
+            var inventories = ReadInventoriesFromJson();
+            return inventories.Any() ? inventories.Max(i => i.Id) + 1 : 1;
+        }
+
     }
 }

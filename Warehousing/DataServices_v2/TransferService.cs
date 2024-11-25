@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
+
+namespace Warehousing.DataServices_v2
+{
 public class TransferService
 {
     private readonly string _filePath;
@@ -41,4 +44,5 @@ public class TransferService
         var transfers = ReadTransfersFromJson();
         return transfers.Any() ? transfers.Max(t => t.Id) + 1 : 1;
     }
+}
 }

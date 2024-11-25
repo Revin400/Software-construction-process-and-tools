@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
+namespace Warehousing.DataServices_v2
+{
 public class ItemLineService
 {
     private readonly WarehousingContext _context;
@@ -46,3 +49,4 @@ public class ItemLineService
     }
 }
 
+}
