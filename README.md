@@ -17,8 +17,8 @@ Make sure all dependencies are correctly installed before running the program.
 | Repository | Description |
 | :-------- | :------------------------- |
 | `Software-construction-process-and-tools` | Updated version of the original warehouse project. |
-| `Project C (original Python code)` | First version of the code we had to refactor. See the original code [here](https://github.com/Revin400/Project_C_Warehousing_01). |
-| `Software-construction-process-and-tools (python sourch code new zip)` | This is the zip sourch code which was available 27-11-2024 [here](https://github.com/Revin400/Project_C_Warehousing_01). |
+| `CargoHub (original Python code)` | First version of the code we had to refactor. See the original code [here](https://github.com/Revin400/Project_C_Warehousing_01). |
+| `CargoHub (python sourch code new zip)` | This is the zip sourch code which was available 27-11-2024 [here](https://github.com/Revin400/Project_C_Warehousing_01). |
 
 ## Required Extensions and Packages
 
