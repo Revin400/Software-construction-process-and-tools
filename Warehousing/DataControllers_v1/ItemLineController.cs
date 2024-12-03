@@ -26,9 +26,7 @@ namespace Warehousing.DataControllers_v1
         [HttpGet("{id}")]
         public ActionResult<ItemLine> GetItemLineById(int id)
         {
-            var itemLine = _service.GetItemLineById(id);
-            if (itemLine == null)
-                return NotFound();
+            var itemLine = _service.GetItemLine(id);
             return Ok(itemLine);
         }
 
@@ -43,14 +41,14 @@ namespace Warehousing.DataControllers_v1
         public IActionResult UpdateItemLine(int id, [FromBody] ItemLine updatedItemLine)
         {
             _service.UpdateItemLine(id, updatedItemLine);
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult RemoveItemLine(int id)
         {
             _service.RemoveItemLine(id);
-            return NoContent();
+            return Ok();
         }
     }
 }

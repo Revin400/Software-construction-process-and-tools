@@ -1,51 +1,78 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 
 namespace Warehousing.DataServices_v1
 {
+    
     public class ItemLineService
     {
-        private readonly WarehousingContext _context;
+        private const string FilePath = "item_lines.json";
+        private List<ItemLine> _data;
 
-        public ItemLineService(WarehousingContext context)
+        public ItemLineService()
         {
-            _context = context;
-            _context.Database.EnsureCreated();
+            _data = Load();
         }
 
-        public IEnumerable<ItemLine> GetAllItemLines() => _context.ItemLines.ToList();
+        public List<ItemLine> GetAllItemLines()
+        {
+            return _data;
+        }
 
-        public ItemLine GetItemLineById(int id) => _context.ItemLines.FirstOrDefault(il => il.Id == id);
+        public ItemLine GetItemLine(int itemLineId)
+        {
+            return _data.Find(x => x.Id == itemLineId);
+        }
 
         public void AddItemLine(ItemLine itemLine)
         {
             itemLine.CreatedAt = DateTime.UtcNow;
             itemLine.UpdatedAt = DateTime.UtcNow;
-            _context.ItemLines.Add(itemLine);
-            _context.SaveChanges();
+            _data.Add(itemLine);
+            Save();
         }
 
-        public void UpdateItemLine(int id, ItemLine updatedItemLine)
+        public void UpdateItemLine(int itemLineId, ItemLine itemLine)
         {
-            var existing = GetItemLineById(id);
-            if (existing != null)
-            {
-                existing.Name = updatedItemLine.Name;
-                existing.Description = updatedItemLine.Description;
-                existing.UpdatedAt = DateTime.UtcNow;
-                _context.SaveChanges();
-            }
+            itemLine.UpdatedAt = DateTime.UtcNow;
+            var index = _data.FindIndex(x => x.Id == itemLineId);
+
+            _data[index] = itemLine;
+            Save();
         }
 
-        public void RemoveItemLine(int id)
+        public void RemoveItemLine(int itemLineId)
         {
-            var itemLine = GetItemLineById(id);
+            var itemLine = _data.Find(x => x.Id == itemLineId);
             if (itemLine != null)
             {
-                _context.ItemLines.Remove(itemLine);
-                _context.SaveChanges();
+                _data.Remove(itemLine);
+                Save();
             }
         }
+
+        private List<ItemLine> Load()
+        {
+            if (!File.Exists(FilePath))
+            {
+                return new List<ItemLine>();
+            }
+
+            var json = File.ReadAllText(FilePath);
+            return JsonSerializer.Deserialize<List<ItemLine>>(json) ?? new List<ItemLine>();
+        }
+
+        private void Save()
+        {
+            var json = JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(FilePath, json);
+        }
     }
+
 }
+
+
