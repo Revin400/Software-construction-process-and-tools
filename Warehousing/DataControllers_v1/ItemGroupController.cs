@@ -22,7 +22,6 @@ namespace Warehousing.DataControllers_v1
         public IActionResult GetItemGroupById(int id)
         {
             var itemGroup = _itemGroupService.GetItemGroupById(id);
-            if (itemGroup == null) return NotFound();
             return Ok(itemGroup);
         }
 
@@ -37,14 +36,14 @@ namespace Warehousing.DataControllers_v1
         public IActionResult UpdateItemGroup(int id, [FromBody] ItemGroup updatedItemGroup)
         {
             _itemGroupService.UpdateItemGroup(id, updatedItemGroup);
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteItemGroup(int id)
         {
             _itemGroupService.DeleteItemGroup(id);
-            return NoContent();
+            return Ok();
         }
     }
 }
