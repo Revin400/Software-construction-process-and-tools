@@ -22,9 +22,38 @@ namespace Warehousing.DataControllers_v1
         public IActionResult GetItemById(int id)
         {
             var item = _itemService.GetItemById(id);
-            if (item == null) return NotFound();
             return Ok(item);
         }
+
+        
+        [HttpGet("itemLine/{itemLineId}")]
+        public ActionResult<IEnumerable<Item>> GetItemsByItemLine(int itemLineId)
+        {
+            var items = _itemService.GetItemsByItemLine(itemLineId);
+            return Ok(items);
+        }
+
+        [HttpGet("itemGroup/{itemGroupId}")]
+        public ActionResult<IEnumerable<Item>> GetItemsByItemGroup(int itemGroupId)
+        {
+            var items = _itemService.GetItemsByItemGroup(itemGroupId);
+            return Ok(items);
+        }
+
+        [HttpGet("itemType/{itemTypeId}")]
+        public ActionResult<IEnumerable<Item>> GetItemsByItemType(int itemTypeId)
+        {
+            var items = _itemService.GetItemsByItemType(itemTypeId);
+            return Ok(items);
+        }
+
+        [HttpGet("supplier/{supplierId}")]
+        public ActionResult<IEnumerable<Item>> GetItemsBySupplier(int supplierId)
+        {
+            var items = _itemService.GetItemsBySupplier(supplierId);
+            return Ok(items);
+        }
+
 
         [HttpPost]
         public IActionResult AddItem([FromBody] Item item)
@@ -37,16 +66,15 @@ namespace Warehousing.DataControllers_v1
         public IActionResult UpdateItem(int id, [FromBody] Item updatedItem)
         {
             _itemService.UpdateItem(id, updatedItem);
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteItem(int id)
         {
 
-            var action = _itemService.DeleteItem(id);
-            if (action) return Ok();
-            return NotFound();
+            _itemService.DeleteItem(id);
+            return Ok();
         }
     }
 }
