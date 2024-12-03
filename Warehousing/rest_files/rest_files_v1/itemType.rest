@@ -1,36 +1,33 @@
-# Get All Item Types
-GET http://localhost:5000/api/v1/itemtype
-Accept: application/json
+### Get All Item Types
+GET http://localhost:5000/api/v1/ItemType
 
-###
+### Get Item Type by ID
+GET http://localhost:5000/api/v1/ItemType/1
 
-# Get Item Type by ID
-GET http://localhost:5000/api/v1/itemtype/1
-Accept: application/json
-
-###
-
-# Add New Item Type
-POST http://localhost:5000/api/v1/itemtype
+### Add New Item Type
+POST http://localhost:5000/api/v1/ItemType
 Content-Type: application/json
 
 {
-    "name": "New Item Type",
-    "description": "Description for new item type"
+    "id": 2,
+    "name": "M.2",
+    "description": "",
+    "created_at": "1970-08-09 15:03:12",
+    "updated_at": "1999-12-03 23:36:46"
 }
 
-###
-
-# Update Existing Item Type
-PUT http://localhost:5000/api/v1/itemtype/1
+### Update Existing Item Type
+PUT http://localhost:5000/api/v1/ItemType/1
 Content-Type: application/json
 
 {
-    "name": "Updated Type Name",
-    "description": "Updated type description"
+    "id": 1,
+    "name": "Updated External Hard Drive",
+    "description": "",
+    "created_at": "1970-08-09 15:03:12",
+    "updated_at": "1999-12-03 23:36:46"
 }
 
-###
 
-# Delete Item Type
-DELETE http://localhost:5000/api/v1/itemtype/1
+### Delete Item Type
+DELETE http://localhost:5000/api/v1/ItemType/1

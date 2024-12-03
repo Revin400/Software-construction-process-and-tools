@@ -16,7 +16,7 @@ public class ItemService
 
     public IEnumerable<Item> GetAllItems() => _context.Items.ToList();
 
-    public Item GetItemById(int id) => _context.Items.FirstOrDefault(x => x.Id == id);
+    public Item GetItemById(string id) => _context.Items.FirstOrDefault(x => x.Id == id);
 
     public IEnumerable<Item> GetItemsByItemLine(int itemLineId) =>
         _context.Items.Where(x => x.ItemLineId == itemLineId).ToList();
@@ -37,7 +37,7 @@ public class ItemService
         _context.SaveChanges();
     }
 
-    public void UpdateItem(int id, Item updatedItem)
+    public void UpdateItem(string id, Item updatedItem)
     {
         var existingItem = _context.Items.FirstOrDefault(x => x.Id == id);
         if (existingItem == null) return;
@@ -49,7 +49,7 @@ public class ItemService
         _context.SaveChanges();
     }
 
-    public bool DeleteItem(int id)
+    public bool DeleteItem(string id)
     {
         var item = _context.Items.FirstOrDefault(x => x.Id == id);
         if (item != null)

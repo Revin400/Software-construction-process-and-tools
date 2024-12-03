@@ -6,24 +6,41 @@ Content-Type: application/json
 GET http://localhost:5000/api/v1/items/1
 Content-Type: application/json
 
+### Get items by item line ID
+GET http://localhost:5000/api/v1/items/itemLine/3
+Content-Type: application/json
+
+### Get items by item group ID
+GET http://localhost:5000/api/v1/items/itemGroup/2
+Content-Type: application/json
+
+### Get items by item type ID
+GET http://localhost:5000/api/v1/items/itemType/1
+Content-Type: application/json
+
+### Get items by supplier ID
+GET http://localhost:5000/api/v1/items/supplier/3
+Content-Type: application/json
+
 ### Add a new item
 POST http://localhost:5000/api/v1/items
 Content-Type: application/json
 
 {
-    "code": "NEW123",
+    "id":"P111112",
+    "code": "NEW1234",
     "description": "Newly added item",
     "shortDescription": "New Item",
     "upcCode": "111111111111",
     "modelNumber": "NM-2024",
     "commodityCode": "GENERAL",
-    "itemLineId": 3,
-    "itemGroupId": 1,
-    "itemTypeId": 3,
+    "itemLineId": 1,
+    "itemGroupId": 3,
+    "itemTypeId": 2,
     "unitPurchaseQuantity": 1,
     "unitOrderQuantity": 1,
     "packOrderQuantity": 1,
-    "supplierId": 3,
+    "supplierId": 1,
     "supplierCode": "SUP003",
     "supplierPartNumber": "NM-2024-NEW"
 }
@@ -33,7 +50,7 @@ PUT http://localhost:5000/api/v1/items/1
 Content-Type: application/json
 
 {
-    "id": 1,
+    "Id": "P111111",
     "code": "UPDATED123",
     "description": "Updated item description",
     "shortDescription": "Updated Item",

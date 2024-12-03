@@ -1,0 +1,42 @@
+[
+  {
+    "Id": "P111111",
+    "Code": "UPDATED123",
+    "Description": "Updated item description",
+    "ShortDescription": "Updated Item",
+    "UpcCode": "123456789012",
+    "ModelNumber": "NM-2024-Updated",
+    "CommodityCode": "UPDATED-CODE",
+    "ItemLineId": 1,
+    "ItemGroupId": 1,
+    "ItemTypeId": 1,
+    "UnitPurchaseQuantity": 2,
+    "UnitOrderQuantity": 2,
+    "PackOrderQuantity": 2,
+    "SupplierId": 1,
+    "SupplierCode": "SUP001",
+    "SupplierPartNumber": "LT-2024-UPDATED",
+    "CreatedAt": "0001-01-01T00:00:00",
+    "UpdatedAt": "0001-01-01T00:00:00"
+  },
+  {
+    "Id": "P111112",
+    "Code": "NEW1234",
+    "Description": "Newly added item",
+    "ShortDescription": "New Item",
+    "UpcCode": "111111111111",
+    "ModelNumber": "NM-2024",
+    "CommodityCode": "GENERAL",
+    "ItemLineId": 1,
+    "ItemGroupId": 3,
+    "ItemTypeId": 2,
+    "UnitPurchaseQuantity": 1,
+    "UnitOrderQuantity": 1,
+    "PackOrderQuantity": 1,
+    "SupplierId": 1,
+    "SupplierCode": "SUP003",
+    "SupplierPartNumber": "NM-2024-NEW",
+    "CreatedAt": "0001-01-01T00:00:00",
+    "UpdatedAt": "0001-01-01T00:00:00"
+  }
+]
