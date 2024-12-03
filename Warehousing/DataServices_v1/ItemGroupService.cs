@@ -4,7 +4,7 @@ namespace Warehousing.DataServices_v1
 {
     public class ItemGroupService
     {
-        private const string FilePath = "itemgroup.json";
+        private const string FilePath = "item_group.json";
         private List<ItemGroup> _data;
 
         public ItemGroupService()

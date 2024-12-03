@@ -25,7 +25,7 @@ namespace Warehousing.DataServices_v1
 
         public ItemLine GetItemLine(int itemLineId)
         {
-            return _data.Find(x => x.Id == itemLineId);
+            return _data.FirstOrDefault(x => x.Id == itemLineId);
         }
 
         public void AddItemLine(ItemLine itemLine)
@@ -40,7 +40,6 @@ namespace Warehousing.DataServices_v1
         {
             itemLine.UpdatedAt = DateTime.UtcNow;
             var index = _data.FindIndex(x => x.Id == itemLineId);
-
             _data[index] = itemLine;
             Save();
         }
