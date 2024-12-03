@@ -1,56 +1,35 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-
+using System.IO;
+using System.Text.Json;
 
 namespace Warehousing.DataServices_v1
 {
     public class ClientService
     {
-        private readonly WarehousingContext _context;
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "clients.json");
 
-        public ClientService(WarehousingContext context)
+        public List<JsonElement> ReadClientsFromJson()
         {
-            _context = context;
-            _context.Database.EnsureCreated();
-        }
-
-        public List<Client> GetAllClients()
-        {
-            return _context.Clients.ToList();
-        }
-
-        public Client GetClientById(int id)
-        {
-            return _context.Clients.FirstOrDefault(c => c.Id == id);
-        }
-
-        public void CreateClient(Client client)
-        {
-            client.CreatedAt = DateTime.Now;
-            client.UpdatedAt = DateTime.Now;
-            _context.Clients.Add(client);
-            _context.SaveChanges();
-        }
-
-        public void UpdateClient(Client client)
-        {
-            _context.ChangeTracker.Clear();
-            client.UpdatedAt = DateTime.Now;
-            _context.Clients.Update(client);
-            _context.SaveChanges();
-        }
-
-        public void DeleteClient(int id)
-        {
-            var client = _context.Clients.FirstOrDefault(c => c.Id == id);
-            if (client != null)
+            if (!File.Exists(_filePath))
             {
-                _context.Clients.Remove(client);
-                _context.SaveChanges();
+                File.WriteAllText(_filePath, "[]");
+                return new List<JsonElement>();
             }
+
+            var jsonData = File.ReadAllText(_filePath);
+            if (string.IsNullOrWhiteSpace(jsonData))
+            {
+                return new List<JsonElement>();
+            }
+
+            var clients = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
+            return clients ?? new List<JsonElement>();
         }
 
-
+        public void WriteClientsToJson(List<JsonElement> clients)
+        {
+            var jsonData = JsonSerializer.Serialize(clients, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, jsonData);
+        }
     }
 }
