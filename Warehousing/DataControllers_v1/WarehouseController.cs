@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using Warehousing.DataServices_v1;
-
 
 namespace Warehousing.DataControllers_v1
 {
@@ -8,12 +8,8 @@ namespace Warehousing.DataControllers_v1
     [Route("api/v1/[controller]")]
     public class WarehousesController : ControllerBase
     {
-        private readonly WarehouseService _warehouseService;
-
-        public WarehousesController(WarehouseService warehouseService)
-        {
-            _warehouseService = warehouseService;
-        }
+        private readonly WarehouseService _warehouseService = new WarehouseService();
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "warehouses.json");
 
         [HttpGet]
         public IActionResult GetAllWarehouses()
@@ -35,12 +31,11 @@ namespace Warehousing.DataControllers_v1
             try
             {
                 var warehouses = _warehouseService.ReadWarehousesFromJson();
-                var warehouse = warehouses.FirstOrDefault(w => w.Id == id);
-                if (warehouse == null)
+                if (id < 0 || id >= warehouses.Count)
                 {
-                    return NotFound($"Warehouse with id {id} not found");
+                    return StatusCode(200, $"null");
                 }
-                return Ok(warehouse);
+                return Ok(warehouses[id]);
             }
             catch (Exception ex)
             {
@@ -49,29 +44,17 @@ namespace Warehousing.DataControllers_v1
         }
 
         [HttpPost]
-        [HttpPost]
-        public IActionResult CreateWarehouse([FromBody] Warehouse warehouse)
+        public IActionResult CreateWarehouse([FromBody] JsonElement warehouse)
         {
             try
             {
                 var warehouses = _warehouseService.ReadWarehousesFromJson();
 
-
-                warehouse.Id = _warehouseService.NextId();
-                warehouse.CreatedAt = DateTime.Now;
-                warehouse.UpdatedAt = DateTime.Now;
-
-
-                if (warehouses.Any(w => w.Code == warehouse.Code))
-                {
-                    return BadRequest($"Warehouse with code {warehouse.Code} already exists.");
-                }
-
-                warehouses.Add(warehouse);
+                var warehouseWithId = JsonSerializer.Serialize(warehouse);
+                warehouses.Add(JsonDocument.Parse(warehouseWithId).RootElement);
 
                 _warehouseService.WriteWarehousesToJson(warehouses);
-
-                return Ok(warehouse);
+                return StatusCode(201);
             }
             catch (Exception ex)
             {
@@ -79,35 +62,17 @@ namespace Warehousing.DataControllers_v1
             }
         }
 
-
         [HttpPut("{id}")]
-        public IActionResult UpdateWarehouse(int id, [FromBody] Warehouse warehouse)
+        public IActionResult UpdateWarehouse(int id, [FromBody] JsonElement warehouse)
         {
             try
             {
                 var warehouses = _warehouseService.ReadWarehousesFromJson();
-                var existingWarehouse = warehouses.FirstOrDefault(w => w.Id == id);
-                if (existingWarehouse == null)
-                {
-                    return NotFound($"Warehouse with id {id} not found");
-                }
-                existingWarehouse.Code = warehouse.Code;
+                var updatedWarehouse = JsonSerializer.Serialize(warehouse);
+                warehouses[id - 1] = JsonDocument.Parse(updatedWarehouse).RootElement;
 
-                if (warehouses.Any(w => w.Code == warehouse.Code && w.Id != id))
-                {
-                    return BadRequest($"Warehouse with code {warehouse.Code} already exists.");
-                }
-
-                existingWarehouse.Name = warehouse.Name;
-                existingWarehouse.Address = warehouse.Address;
-                existingWarehouse.Zip = warehouse.Zip;
-                existingWarehouse.City = warehouse.City;
-                existingWarehouse.Province = warehouse.Province;
-                existingWarehouse.Country = warehouse.Country;
-                existingWarehouse.Contact = warehouse.Contact;
-                existingWarehouse.UpdatedAt = DateTime.Now;
                 _warehouseService.WriteWarehousesToJson(warehouses);
-                return Ok(existingWarehouse);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -117,23 +82,11 @@ namespace Warehousing.DataControllers_v1
 
         [HttpDelete("{id}")]
         public IActionResult DeleteWarehouse(int id)
-        {
-            try
-            {
-                var warehouses = _warehouseService.ReadWarehousesFromJson();
-                var warehouse = warehouses.FirstOrDefault(w => w.Id == id);
-                if (warehouse == null)
-                {
-                    return NotFound($"Warehouse with id {id} not found");
-                }
-                warehouses.Remove(warehouse);
-                _warehouseService.WriteWarehousesToJson(warehouses);
-                return Ok(warehouse);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error deleting warehouse: {ex.Message}");
-            }
+        {          
+            System.IO.File.WriteAllText(_filePath, "[]");
+            return Ok();
+           
+            
         }
     }
 }

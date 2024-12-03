@@ -4,11 +4,11 @@ using System.Text.Json;
 
 namespace Warehousing.DataServices_v1
 {
-    public class ClientService
+    public class SupplierService
     {
-        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "clients.json");
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "suppliers.json");
 
-        public List<JsonElement> ReadClientsFromJson()
+        public List<JsonElement> ReadsuppliersFromJson()
         {
             if (!File.Exists(_filePath))
             {
@@ -22,13 +22,13 @@ namespace Warehousing.DataServices_v1
                 return new List<JsonElement>();
             }
 
-            var clients = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
-            return clients ?? new List<JsonElement>();
+            var suppliers = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
+            return suppliers ?? new List<JsonElement>();
         }
 
-        public void WriteClientsToJson(List<JsonElement> clients)
+        public void WritesuppliersToJson(List<JsonElement> suppliers)
         {
-            var jsonData = JsonSerializer.Serialize(clients, new JsonSerializerOptions { WriteIndented = true });
+            var jsonData = JsonSerializer.Serialize(suppliers, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_filePath, jsonData);
         }
     }
