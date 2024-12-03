@@ -3,15 +3,24 @@ GET http://localhost:5000/api/v1/location
 
 ###
 
+### Get a Location
+GET http://localhost:5000/api/v1/location/1
+
 ### Create a new Location
 POST http://localhost:5000/api/v1/location
 Content-Type: application/json
 
 {
+    "id": 1,
+    "warehouse_id": 1,
     "code": "A.1.0",
     "name": "Row: A, Rack: 1, Shelf: 0",
-    "warehouse_id": 1
+    "created_at": "1992-05-15 03:21:32",
+    "updated_at": "1992-05-15 03:21:32"
 }
+
+### Get location in a warehouse
+GET http://localhost:5000/api/v1/location/warehouse/1
 
 ###
 
@@ -20,9 +29,9 @@ PUT http://localhost:5000/api/v1/location/3
 Content-Type: application/json
 
 {
-    "code": "A.1.1",
-    "name": "Row: A, Rack: 1, Shelf: 1",
-    "warehouse_id": 1
+"code": "A.1.1",
+"name": "Row: A, Rack: 1, Shelf: 1",
+"warehouse_id": 1
 }
 
 ###

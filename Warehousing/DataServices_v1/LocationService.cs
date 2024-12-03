@@ -2,54 +2,35 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
-
-
 namespace Warehousing.DataServices_v1
 {
-public class LocationService
-{
-    private readonly WarehousingContext _context;
-
-    public LocationService(WarehousingContext context)
+    public class LocationService
     {
-        _context = context;
-        _context.Database.EnsureCreated();
-    }
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "locations.json");
 
-    public List<Location> GetAllLocations()
-    {
-        return _context.Locations.ToList();
-    }
-
-    public Location GetLocationById(int id)
-    {
-        return _context.Locations.FirstOrDefault(l => l.Id == id);
-    }
-
-    public void CreateLocation(Location location)
-    {
-        location.CreatedAt = System.DateTime.Now;
-        location.UpdatedAt = System.DateTime.Now;
-        _context.Locations.Add(location);
-        _context.SaveChanges();
-    }
-
-    public void UpdateLocation(Location location)
-    {
-        _context.ChangeTracker.Clear();
-        location.UpdatedAt = System.DateTime.Now;
-        _context.Locations.Update(location);
-        _context.SaveChanges();
-    }
-
-    public void DeleteLocation(int id)
-    {
-        var location = _context.Locations.FirstOrDefault(l => l.Id == id);
-        if (location != null)
+        public List<JsonElement> ReadLocationsFromJson()
         {
-            _context.Locations.Remove(location);
-            _context.SaveChanges();
+            if (!File.Exists(_filePath))
+            {
+                File.WriteAllText(_filePath, "[]");
+                return new List<JsonElement>();
+            }
+
+            var jsonData = File.ReadAllText(_filePath);
+            if (string.IsNullOrWhiteSpace(jsonData))
+            {
+                return new List<JsonElement>();
+            }
+
+            var locations = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
+            return locations ?? new List<JsonElement>();
         }
+
+        public void WriteLocationsToJson(List<JsonElement> locations)
+        {
+            var jsonData = JsonSerializer.Serialize(locations, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, jsonData);
+        }
+        
     }
-}
 }
