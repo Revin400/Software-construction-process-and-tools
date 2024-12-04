@@ -221,6 +221,94 @@ namespace Warehousing.DataControllers_v1
         }
     }
 }
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
+*//*
+    private void Save()
+    {
+        using (var writer = new StreamWriter(dataPath))
+        {
+            var data = _orderService.ReadOrdersFromJson();
+            var json = JsonSerializer.Serialize(data);
+            writer.Write(json);
+        }
+    }
+}
 */
 
 
