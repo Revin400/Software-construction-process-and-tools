@@ -6,7 +6,7 @@ namespace Warehousing.DataServices_v1
 {
     public class ShipmentService
     {
-        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "shipments.json");
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "Shipment.json");
 
         public List<JsonElement> ReadShipmentsFromJson()
         {
@@ -22,13 +22,13 @@ namespace Warehousing.DataServices_v1
                 return new List<JsonElement>();
             }
 
-            var shipment = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
-            return shipment ?? new List<JsonElement>();
+            var shipments = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
+            return shipments ?? new List<JsonElement>();
         }
 
-        public void WriteShipmentsToJson(List<JsonElement> shipment)
+        public void WriteShipmentsToJson(List<JsonElement> shipments)
         {
-            var jsonData = JsonSerializer.Serialize(shipment, new JsonSerializerOptions { WriteIndented = true });
+            var jsonData = JsonSerializer.Serialize(shipments, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_filePath, jsonData);
         }
     }

@@ -12,7 +12,7 @@ namespace Warehousing.DataControllers_v1
         private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "Shipment.json");
 
         [HttpGet]
-        public IActionResult GetAllShipments()
+        public IActionResult Get()
         {
             try
             {
@@ -25,13 +25,13 @@ namespace Warehousing.DataControllers_v1
             }
         }
 
-       [HttpGet("{id}")]
-        public IActionResult GetShupmentById(int id) 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id) 
         {
             try
             {
                 var shipments = _shipmentService.ReadShipmentsFromJson();
-                if (id < 0 || id >= shipments.Count || shipments.Count == 0)
+                if (id < 0 || id >= shipments.Count)
                 {
                     return StatusCode(200, $"null");
                 }
@@ -39,12 +39,31 @@ namespace Warehousing.DataControllers_v1
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error reading clients: {ex.Message}");
+                return BadRequest($"Error reading shipments: {ex.Message}");
+            }
+        }
+
+        [HttpGet("{id}/items")]
+
+        public IActionResult GetItems(int id)
+        {
+            try
+            {
+                var shipments = _shipmentService.ReadShipmentsFromJson();
+                if (id < 0 || id >= shipments.Count)
+                {
+                    return StatusCode(200, $"null");
+                }
+                return Ok(shipments[id - 1].GetProperty("Items"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error reading shipments: {ex.Message}");
             }
         }
 
         [HttpPost]
-        public IActionResult CreateShipments([FromBody] JsonElement shipment)
+        public IActionResult Post([FromBody] JsonElement shipment)
         {
             try
             {
@@ -63,7 +82,7 @@ namespace Warehousing.DataControllers_v1
         }
 
         [HttpPut("{id}")]
-        public IActionResult Updateshipment(int id, [FromBody] JsonElement shipment)
+        public IActionResult Put(int id, [FromBody] JsonElement shipment)
         {
             try
             {
@@ -76,13 +95,12 @@ namespace Warehousing.DataControllers_v1
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error updating shipment: {ex.Message}");
+                return BadRequest($"Error updating shipments: {ex.Message}");
             }
         }
-       
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteShipment(int id)
+        public IActionResult Delete(int id)
         {          
             System.IO.File.WriteAllText(_filePath, "[]");
             return Ok();
