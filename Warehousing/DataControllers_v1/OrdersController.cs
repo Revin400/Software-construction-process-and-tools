@@ -39,7 +39,7 @@ namespace Warehousing.DataControllers_v1
         public ActionResult<Order> GetOrderById(int orderId)
         {
             var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.FirstOrDefault(t => t.Id == orderId);
+            var order = orders.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(t => t.Id == orderId);
             if (order == null)
             {
                 return NotFound();
@@ -51,7 +51,7 @@ namespace Warehousing.DataControllers_v1
             [HttpGet("{orderId}")]
             public ActionResult<Order> GetOrder(int orderId)
             {
-                var order = data.FirstOrDefault(o => o.Id == orderId);
+                var order = data.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(o => o.Id == orderId);
                 if (order == null)
                 {
                     return NotFound();
@@ -64,7 +64,7 @@ namespace Warehousing.DataControllers_v1
         public ActionResult<IEnumerable<OrderItems>> GetItemsInOrder(int orderId)
         {
             var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.FirstOrDefault(o => o.Id == orderId);
+            var order = orders.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(o => o.Id == orderId);
             if (order == null)
             {
                 return NotFound();
@@ -72,19 +72,13 @@ namespace Warehousing.DataControllers_v1
             return Ok(order.Items);
         }
 
-        [HttpGet("shipment/{shipmentId}")]
-        public ActionResult<IEnumerable<int>> GetOrdersInShipment(int shipmentId)
+        [HttpGet("order/{orderId}")]
+        public ActionResult<IEnumerable<int>> GetOrdersInOrder(int orderID)
         {
             var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id);
-            return Ok(order);
-        }
-
-        [HttpGet("client/{clientId}")]
-        public ActionResult<IEnumerable<Order>> GetOrdersForClient(int clientId)
-        {
-            var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.Where(o => o.ShipTo == clientId || o.BillTo == clientId);
+            var order = orders.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText()))
+                              .Where(o => o.Id == orderID)
+                              .Select(o => o.Id);
             return Ok(order);
         }
 
@@ -97,7 +91,8 @@ namespace Warehousing.DataControllers_v1
                 order.Id = _orderService.NextId();
                 order.CreatedAt = DateTime.Now;
                 order.UpdatedAt = DateTime.Now;
-                orders.Add(order);
+                var orderJson = JsonSerializer.SerializeToElement(order);
+                orders.Add(orderJson);
 
                 _orderService.WriteOrdersToJson(orders);
                 return Ok(order);
@@ -115,9 +110,7 @@ namespace Warehousing.DataControllers_v1
                 var orders = _orderService.ReadOrdersFromJson();
 
                 var orderID = JsonSerializer.Serialize(order);
-                var newOrder = JsonSerializer.Deserialize<Order>(orderID);
-                orders.Add(newOrder);
-
+                orders.Add(JsonDocument.Parse(orderID).RootElement);
                 _orderService.WriteOrdersToJson(orders);
                 return StatusCode(201);
             }
@@ -132,29 +125,29 @@ namespace Warehousing.DataControllers_v1
         {
             try
             {
-                var inventories = _orderService.ReadOrdersFromJson();
-                var existingInventory = inventories.FirstOrDefault(w => w.Id == orderId);
-                if (existingInventory == null)
+                var orders = _orderService.ReadOrdersFromJson();
+                var existingOrders = orders.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(w => w.Id == orderId);
+                if (existingOrders == null)
                 {
                     return NotFound($"Order with id {orderId} not found");
                 }
-                existingInventory.Id = order.Id;
+                existingOrders.Id = order.Id;
 
-                if (inventories.Any(w => w.Id == order.Id && w.Id != orderId))
+                if (orders.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).Any(w => w.Id == order.Id && w.Id != orderId))
                 {
                     return BadRequest($"Order with id {order.Id} already exists.");
                 }
 
-                existingInventory.OrderDate = order.OrderDate;
+                existingOrders.OrderDate = order.OrderDate;
 
-                existingInventory.UpdatedAt = DateTime.Now;
+                existingOrders.UpdatedAt = DateTime.Now;
 
-                _orderService.WriteOrdersToJson(inventories);
-                return Ok(existingInventory);
+                _orderService.WriteOrdersToJson(orders);
+                return Ok(existingOrders);
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error updating inventory: {ex.Message}");
+                return BadRequest($"Error updating order: {ex.Message}");
             }
         }
 
@@ -162,7 +155,7 @@ namespace Warehousing.DataControllers_v1
         public ActionResult UpdateItemsInOrder(int orderId, [FromBody] List<OrderItems> items)
         {
             var data = _orderService.ReadOrdersFromJson();
-            var order = data.FirstOrDefault(o => o.Id == orderId);
+            var order = data.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(o => o.Id == orderId);
             if (order == null)
             {
                 return NotFound();
@@ -172,25 +165,28 @@ namespace Warehousing.DataControllers_v1
             return NoContent();
         }
 
-        [HttpPut("shipment/{shipmentId}")]
-        public ActionResult UpdateOrdersInShipment(int shipmentId, [FromBody] List<int> orders)
+        [HttpPut("order/{orderId}")]
+        public ActionResult UpdateOrdersInShipment(int Id, [FromBody] List<int> orders)
         {
             var data = _orderService.ReadOrdersFromJson();
-            var packedOrders = data.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id).ToList();
+            var packedOrders = data.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText()))
+                                    .Where(o => o.Id == Id)
+                                    .Select(o => o.Id)
+                                    .ToList();
             foreach (var orderId in packedOrders)
             {
                 if (!orders.Contains(orderId))
                 {
-                    var order = data.FirstOrDefault(o => o.Id == orderId);
-                    order.ShipmentId = -1;
+                    var order = data.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(o => o.Id == orderId);
+                    order.Id = -1;
                     order.OrderStatus = "Scheduled";
                     UpdateOrder(orderId, order);
                 }
             }
             foreach (var orderId in orders)
             {
-                var order = data.FirstOrDefault(o => o.Id == orderId);
-                order.ShipmentId = shipmentId;
+                var order = data.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(o => o.Id == orderId);
+                order.Id = orderId;
                 order.OrderStatus = "Packed";
                 UpdateOrder(orderId, order);
             }
@@ -203,12 +199,16 @@ namespace Warehousing.DataControllers_v1
             try
             {
                 var orders = _orderService.ReadOrdersFromJson();
-                var order = orders.FirstOrDefault(w => w.Id == orderId);
+                var order = orders.Select(o => JsonSerializer.Deserialize<Order>(o.GetRawText())).FirstOrDefault(w => w.Id == orderId);
                 if (order == null)
                 {
                     return NotFound($"Order with id {orderId} not found");
                 }
-                orders.Remove(order);
+                var orderElement = orders.FirstOrDefault(o => JsonSerializer.Deserialize<Order>(o.GetRawText()).Id == orderId);
+                if (orderElement.ValueKind != JsonValueKind.Undefined)
+                {
+                    orders.Remove(orderElement);
+                }
                 _orderService.WriteOrdersToJson(orders);
                 return Ok(order);
             }
@@ -219,7 +219,7 @@ namespace Warehousing.DataControllers_v1
         }
 
         [HttpDelete("{orderId}")]
-        public IActionResult DeleteTransfer(int id)
+        public IActionResult DeleteOrder(int id)
         {          
             System.IO.File.WriteAllText(_filepath, "[]");
             return Ok();
