@@ -13,7 +13,7 @@ namespace Warehousing.DataControllers_v1
     [Route("api/v1/[controller]")]
     public class TransfersController : ControllerBase
     {
-        private readonly string dataPath;
+        private readonly string _filepath = "transfers.json";
         private readonly TransferService _transferService;
 
         public TransfersController(TransferService transferService)
@@ -63,7 +63,26 @@ namespace Warehousing.DataControllers_v1
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error creating location: {ex.Message}");
+                return StatusCode(500, $"Error creating transfer: {ex.Message}");
+            }
+        }
+
+        public IActionResult CreateTransfer([FromBody] JsonElement transfer)
+        {
+            try
+            {
+                var transfers = _transferService.ReadTransfersFromJson();
+
+                var TransferID = JsonSerializer.Serialize(transfer);
+                var newTransfer = JsonSerializer.Deserialize<Transfer>(TransferID);
+                transfers.Add(newTransfer);
+
+                _transferService.WriteTransfersToJson(transfers);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error creating transfers: {ex.Message}");
             }
         }
 
@@ -119,13 +138,11 @@ namespace Warehousing.DataControllers_v1
             }
         }
 
-        private void Save()
-        {
-            using (var writer = new StreamWriter(dataPath))
-            {
-                var json = JsonSerializer.Serialize(_transferService);
-                writer.Write(json);
-            }
+        [HttpDelete("{transferId}")]
+        public IActionResult DeleteTransfer(int id)
+        {          
+            System.IO.File.WriteAllText(_filepath, "[]");
+            return Ok();
         }
     }
 }

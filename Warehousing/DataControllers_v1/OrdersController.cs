@@ -13,7 +13,7 @@ namespace Warehousing.DataControllers_v1
     [Route("api/v1/[controller]")]
     public class OrdersController : ControllerBase
     {
-        //private readonly string dataPath;
+        private readonly string _filepath = "orders.json";
         private readonly OrderService _orderService;
 
         public OrdersController(OrderService orderService)
@@ -108,6 +108,25 @@ namespace Warehousing.DataControllers_v1
             }
         }
 
+        public IActionResult CreateOrder([FromBody] JsonElement order)
+        {
+            try
+            {
+                var orders = _orderService.ReadOrdersFromJson();
+
+                var orderID = JsonSerializer.Serialize(order);
+                var newOrder = JsonSerializer.Deserialize<Order>(orderID);
+                orders.Add(newOrder);
+
+                _orderService.WriteOrdersToJson(orders);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error creating order: {ex.Message}");
+            }
+        }
+
         [HttpPut("{orderId}")]
         public ActionResult UpdateOrder(int orderId, [FromBody] Order order)
         {
@@ -197,6 +216,13 @@ namespace Warehousing.DataControllers_v1
             {
                 return BadRequest($"Error deleting order: {ex.Message}");
             }
+        }
+
+        [HttpDelete("{orderId}")]
+        public IActionResult DeleteTransfer(int id)
+        {          
+            System.IO.File.WriteAllText(_filepath, "[]");
+            return Ok();
         }
     }
 }
