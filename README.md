@@ -1,4 +1,4 @@
-## Guide to Start the Program
+## Guide to Start the Program.
 Follow these steps to run the program:
 
 1. Check Requirements: Ensure all necessary extensions and packages are installed.
@@ -12,7 +12,7 @@ Follow these steps to run the program:
 Make sure all dependencies are correctly installed before running the program.
 
 
-## Git Repositories
+## Git Repositories.
 
 | Repository | Description |
 | :-------- | :------------------------- |
@@ -20,7 +20,7 @@ Make sure all dependencies are correctly installed before running the program.
 | `CargoHub (original Python code)` | First version of the code we had to refactor. See the original code [here](https://github.com/Revin400/Project_C_Warehousing_01). |
 | `CargoHub (python sourch code new zip)` | This is the zip sourch code which was available 27-11-2024. See the original code [here](https://github.com/Revin400/CargoHub-python-sourch-code-new-zip). |
 
-## Required Extensions and Packages
+## Required Extensions and Packages.
 
 | Extension/Package | Installation Command |
 | :-------- | :------------------------- |
@@ -31,7 +31,7 @@ Make sure all dependencies are correctly installed before running the program.
 | `System.Net.Http.Json` | `dotnet add package System.Net.Http.Json` |
 | `Moq` | `dotnet add package Moq` |
 
-## Additional Information
+## Additional Information.
 
 Be sure to have the above packages and extensions installed to ensure full functionality of the project. For testing purposes, xUnit and related testing tools are required.
 
