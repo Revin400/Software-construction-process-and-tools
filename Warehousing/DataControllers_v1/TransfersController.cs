@@ -39,7 +39,7 @@ namespace Warehousing.DataControllers_v1
         public ActionResult<Transfer> GetTransferById(int transferId)
         {
             var transfers = _transferService.ReadTransfersFromJson();
-            var transfer = transfers.FirstOrDefault(t => t.Id == transferId);
+            var transfer = transfers.Select(t => JsonSerializer.Deserialize<Transfer>(t.GetRawText())).FirstOrDefault(t => t.Id == transferId);
             if (transfer == null)
             {
                 return NotFound();
@@ -56,7 +56,8 @@ namespace Warehousing.DataControllers_v1
                 transfer.Id = _transferService.NextId();
                 transfer.CreatedAt = DateTime.Now;
                 transfer.UpdatedAt = DateTime.Now;
-                locations.Add(transfer);
+                var transferJson = JsonSerializer.SerializeToElement(transfer);
+                locations.Add(transferJson);
 
                 _transferService.WriteTransfersToJson(locations);
                 return Ok(transfer);
@@ -74,8 +75,7 @@ namespace Warehousing.DataControllers_v1
                 var transfers = _transferService.ReadTransfersFromJson();
 
                 var TransferID = JsonSerializer.Serialize(transfer);
-                var newTransfer = JsonSerializer.Deserialize<Transfer>(TransferID);
-                transfers.Add(newTransfer);
+                transfers.Add(JsonDocument.Parse(TransferID).RootElement);
 
                 _transferService.WriteTransfersToJson(transfers);
                 return StatusCode(201);
@@ -92,7 +92,7 @@ namespace Warehousing.DataControllers_v1
             try
             {
                 var transfers = _transferService.ReadTransfersFromJson();
-                var existingTransfer = transfers.Find(l => l.Id == transferId);
+                var existingTransfer = transfers.Select(t => JsonSerializer.Deserialize<Transfer>(t.GetRawText())).FirstOrDefault(t => t.Id == transferId);
 
                 if (existingTransfer == null)
                 {
@@ -121,14 +121,18 @@ namespace Warehousing.DataControllers_v1
             try
             {
                 var transfers = _transferService.ReadTransfersFromJson();
-                var transfer = transfers.Find(l => l.Id == transferId);
+                var transfer = transfers.Select(t => JsonSerializer.Deserialize<Transfer>(t.GetRawText())).FirstOrDefault(t => t.Id == transferId);
 
                 if (transfer == null)
                 {
                     return NotFound($"Transfer with id {transferId} not found");
                 }
 
-                transfers.Remove(transfer);
+                var transferElement = transfers.FirstOrDefault(t => JsonSerializer.Deserialize<Transfer>(t.GetRawText()).Id == transferId);
+                if (transferElement.ValueKind != JsonValueKind.Undefined)
+                {
+                    transfers.Remove(transferElement);
+                }
                 _transferService.WriteTransfersToJson(transfers);
                 return Ok(transfer);
             }
