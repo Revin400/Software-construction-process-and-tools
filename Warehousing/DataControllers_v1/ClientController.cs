@@ -26,7 +26,7 @@ namespace Warehousing.DataControllers_v1
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetclientById(int id)
+        public IActionResult GetclientById(int id) 
         {
             try
             {

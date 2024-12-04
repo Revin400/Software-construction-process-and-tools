@@ -1,95 +1,111 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System.Text.Json;
 using Warehousing.DataServices_v1;
-
 
 namespace Warehousing.DataControllers_v1
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-
     public class ShipmentController : ControllerBase
     {
-        private readonly ShipmentService _shipmentService;
-
-        public ShipmentController()
-        {
-            _shipmentService = new ShipmentService();
-        }
+        private readonly ShipmentService _shipmentService = new ShipmentService();
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "Shipment.json");
 
         [HttpGet]
-        public IActionResult GetShipments()
+        public IActionResult Get()
         {
-            return Ok(_shipmentService.ReadshipmentsFromJson());
+            try
+            {
+                var shipments = _shipmentService.ReadShipmentsFromJson();
+                return Ok(shipments);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error reading shipments: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetShipment(int id)
+        public IActionResult Get(int id) 
         {
-            return Ok(_shipmentService.ReadshipmentsFromJson().Find(s => s.Id == id));
+            try
+            {
+                var shipments = _shipmentService.ReadShipmentsFromJson();
+                if (id < 0 || id >= shipments.Count)
+                {
+                    return StatusCode(200, $"null");
+                }
+                return Ok(shipments[id]);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error reading shipments: {ex.Message}");
+            }
         }
 
+        [HttpGet("{id}/items")]
 
+        public IActionResult GetItems(int id)
+        {
+            try
+            {
+                var shipments = _shipmentService.ReadShipmentsFromJson();
+                if (id < 0 || id >= shipments.Count)
+                {
+                    return StatusCode(200, $"null");
+                }
+                return Ok(shipments[id - 1].GetProperty("Items"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error reading shipments: {ex.Message}");
+            }
+        }
 
         [HttpPost]
-        public IActionResult AddShipment(Shipment shipment)
+        public IActionResult Post([FromBody] JsonElement shipment)
         {
+            try
+            {
+                var shipments = _shipmentService.ReadShipmentsFromJson();
 
-            var shipments = _shipmentService.ReadshipmentsFromJson();
-            shipment.Id = _shipmentService.NextId();
-            shipments.Add(shipment);
-            _shipmentService.WriteShipmentsToJson(shipments);
-            return CreatedAtAction(nameof(GetShipment), new { id = shipment.Id }, shipment);
+                var shipmentWithId = JsonSerializer.Serialize(shipment);
+                shipments.Add(JsonDocument.Parse(shipmentWithId).RootElement);
+
+                _shipmentService.WriteShipmentsToJson(shipments);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error creating shipment: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-
-        public IActionResult UpdateShipment(int id, Shipment shipment)
+        public IActionResult Put(int id, [FromBody] JsonElement shipment)
         {
-            var shipments = _shipmentService.ReadshipmentsFromJson();
-            var existingShipment = shipments.Find(s => s.Id == id);
-
-            if (existingShipment == null)
+            try
             {
-                return NotFound();
-            }
+                var shipments = _shipmentService.ReadShipmentsFromJson();
+                var updatedShipment = JsonSerializer.Serialize(shipment);
+                shipments[id - 1] = JsonDocument.Parse(updatedShipment).RootElement;
 
-            shipment.Id = existingShipment.Id;
-            shipments[shipments.IndexOf(existingShipment)] = shipment;
-            _shipmentService.WriteShipmentsToJson(shipments);
-            return Ok();
+                _shipmentService.WriteShipmentsToJson(shipments);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error updating shipments: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteShipment(int id)
-        {
-            var shipments = _shipmentService.ReadshipmentsFromJson();
-            var existingShipment = shipments.Find(s => s.Id == id);
-
-            if (existingShipment == null)
-            {
-                return NotFound();
-            }
-
-            shipments.Remove(existingShipment);
-            _shipmentService.WriteShipmentsToJson(shipments);
+        public IActionResult Delete(int id)
+        {          
+            System.IO.File.WriteAllText(_filePath, "[]");
             return Ok();
+           
+            
         }
-
-
-        [HttpGet("{id}/items")]
-        public IActionResult GetShipmentItems(int id)
-        {
-            var shipments = _shipmentService.ReadshipmentsFromJson();
-            var shipment = shipments.Find(s => s.Id == id);
-
-            if (shipment == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(shipment.Items);
-        }
-
     }
 }
