@@ -1,47 +1,33 @@
+using System.Text.Json;
+
 namespace Warehousing.DataServices_v1
 {
-
-public class ItemGroupService
-{
-    private readonly WarehousingContext _context;
-
-    public ItemGroupService(WarehousingContext context)
+    public class ItemGroupService
     {
-        _context = context;
-        _context.Database.EnsureCreated();
-    }
+        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "item_groups.json");
 
-    public IEnumerable<ItemGroup> GetAllItemGroups() => _context.ItemGroups.ToList();
-
-    public ItemGroup GetItemGroupById(int id) => _context.ItemGroups.FirstOrDefault(x => x.Id == id);
-
-    public void AddItemGroup(ItemGroup itemGroup)
-    {
-        itemGroup.CreatedAt = itemGroup.UpdatedAt = DateTime.UtcNow;
-        _context.ItemGroups.Add(itemGroup);
-        _context.SaveChanges();
-    }
-
-    public void UpdateItemGroup(int id, ItemGroup updatedItemGroup)
-    {
-        var existingItemGroup = _context.ItemGroups.FirstOrDefault(x => x.Id == id);
-        if (existingItemGroup == null) return;
-
-        updatedItemGroup.Id = id;
-        updatedItemGroup.CreatedAt = existingItemGroup.CreatedAt;
-        updatedItemGroup.UpdatedAt = DateTime.UtcNow;
-        _context.Entry(existingItemGroup).CurrentValues.SetValues(updatedItemGroup);
-        _context.SaveChanges();
-    }
-
-    public void DeleteItemGroup(int id)
-    {
-        var itemGroup = _context.ItemGroups.FirstOrDefault(x => x.Id == id);
-        if (itemGroup != null)
+        public List<JsonElement> ReadItemGroupsFromJson()
         {
-            _context.ItemGroups.Remove(itemGroup);
-            _context.SaveChanges();
+            if (!File.Exists(_filePath))
+            {
+                File.WriteAllText(_filePath, "[]");
+                return new List<JsonElement>();
+            }
+
+            var jsonData = File.ReadAllText(_filePath);
+            if (string.IsNullOrWhiteSpace(jsonData))
+            {
+                return new List<JsonElement>();
+            }
+
+            var itemGroups = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
+            return itemGroups ?? new List<JsonElement>();
+        }
+
+        public void WriteItemGroupsToJson(List<JsonElement> itemGroups)
+        {
+            var jsonData = JsonSerializer.Serialize(itemGroups, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, jsonData);
         }
     }
-}
 }

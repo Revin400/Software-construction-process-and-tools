@@ -19,7 +19,7 @@ namespace Warehousing.DataControllers_v2
         public IActionResult GetAllItems() => Ok(_itemService.GetAllItems());
 
         [HttpGet("{id}")]
-        public IActionResult GetItemById(int id)
+        public IActionResult GetItemById(string id)
         {
             var item = _itemService.GetItemById(id);
             if (item == null) return NotFound();
@@ -34,14 +34,14 @@ namespace Warehousing.DataControllers_v2
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateItem(int id, [FromBody] Item updatedItem)
+        public IActionResult UpdateItem(string id, [FromBody] Item updatedItem)
         {
             _itemService.UpdateItem(id, updatedItem);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteItem(int id)
+        public IActionResult DeleteItem(string id)
         {
 
             var action = _itemService.DeleteItem(id);

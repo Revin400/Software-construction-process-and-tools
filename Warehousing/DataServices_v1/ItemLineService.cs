@@ -1,51 +1,43 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 
 namespace Warehousing.DataServices_v1
 {
+    
     public class ItemLineService
     {
-        private readonly WarehousingContext _context;
 
-        public ItemLineService(WarehousingContext context)
+        private readonly string FilePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources","item_lines.json");
+
+        public List<JsonElement> ReadItemLinesFromJson()
         {
-            _context = context;
-            _context.Database.EnsureCreated();
-        }
-
-        public IEnumerable<ItemLine> GetAllItemLines() => _context.ItemLines.ToList();
-
-        public ItemLine GetItemLineById(int id) => _context.ItemLines.FirstOrDefault(il => il.Id == id);
-
-        public void AddItemLine(ItemLine itemLine)
-        {
-            itemLine.CreatedAt = DateTime.UtcNow;
-            itemLine.UpdatedAt = DateTime.UtcNow;
-            _context.ItemLines.Add(itemLine);
-            _context.SaveChanges();
-        }
-
-        public void UpdateItemLine(int id, ItemLine updatedItemLine)
-        {
-            var existing = GetItemLineById(id);
-            if (existing != null)
+            if (!File.Exists(FilePath))
             {
-                existing.Name = updatedItemLine.Name;
-                existing.Description = updatedItemLine.Description;
-                existing.UpdatedAt = DateTime.UtcNow;
-                _context.SaveChanges();
+                File.WriteAllText(FilePath, "[]");
+                return new List<JsonElement>();
             }
+
+            var jsonData = File.ReadAllText(FilePath);
+            if (string.IsNullOrWhiteSpace(jsonData))
+            {
+                return new List<JsonElement>();
+            }
+
+            var itemLines = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
+            return itemLines ?? new List<JsonElement>();
         }
 
-        public void RemoveItemLine(int id)
+        public void WriteItemLinesToJson(List<JsonElement> itemLines)
         {
-            var itemLine = GetItemLineById(id);
-            if (itemLine != null)
-            {
-                _context.ItemLines.Remove(itemLine);
-                _context.SaveChanges();
-            }
+            var jsonData = JsonSerializer.Serialize(itemLines, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(FilePath, jsonData);
         }
     }
+
 }
+
+

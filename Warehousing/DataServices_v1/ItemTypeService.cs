@@ -1,58 +1,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+
 
 
 namespace Warehousing.DataServices_v1
 {
-public class ItemTypeService
-{
-    private readonly WarehousingContext _context;
-
-    public ItemTypeService(WarehousingContext context)
+    public class ItemTypeService
     {
-        _context = context;
-        _context.Database.EnsureCreated();
-    }
+        private readonly string FilePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources","item_types.json");
 
-    public IEnumerable<ItemType> GetAllItemTypes()
-    {
-        return _context.ItemTypes.ToList();
-    }
-
-    public ItemType GetItemTypeById(int id)
-    {
-        return _context.ItemTypes.FirstOrDefault(it => it.Id == id);
-    }
-
-    public void AddItemType(ItemType itemType)
-    {
-        itemType.CreatedAt = DateTime.UtcNow;
-        itemType.UpdatedAt = DateTime.UtcNow;
-        _context.ItemTypes.Add(itemType);
-        _context.SaveChanges();
-    }
-
-    public void UpdateItemType(int id, ItemType updatedItemType)
-    {
-        var itemType = _context.ItemTypes.FirstOrDefault(it => it.Id == id);
-        if (itemType != null)
+        public List<JsonElement> ReadItemTypesFromJson()
         {
-            itemType.Name = updatedItemType.Name;
-            itemType.Description = updatedItemType.Description;
-            itemType.UpdatedAt = DateTime.UtcNow;
-            _context.SaveChanges();
+            if (!File.Exists(FilePath))
+            {
+                File.WriteAllText(FilePath, "[]");
+                return new List<JsonElement>();
+            }
+
+            var jsonData = File.ReadAllText(FilePath);
+            if (string.IsNullOrWhiteSpace(jsonData))
+            {
+                return new List<JsonElement>();
+            }
+
+            var itemTypes = JsonSerializer.Deserialize<List<JsonElement>>(jsonData);
+            return itemTypes ?? new List<JsonElement>();
+        }
+
+        public void WriteItemTypesToJson(List<JsonElement> itemTypes)
+        {
+            var jsonData = JsonSerializer.Serialize(itemTypes, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(FilePath, jsonData);
         }
     }
-
-    public void DeleteItemType(int id)
-    {
-        var itemType = _context.ItemTypes.FirstOrDefault(it => it.Id == id);
-        if (itemType != null)
-        {
-            _context.ItemTypes.Remove(itemType);
-            _context.SaveChanges();
-        }
-    }
-}
 }
