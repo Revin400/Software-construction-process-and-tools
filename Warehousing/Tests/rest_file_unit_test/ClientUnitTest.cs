@@ -19,6 +19,7 @@ public class ClientControllerTests
     [Fact]
     public void CreateClient()
     {
+        // Arrange
         var client = new Client
         {
             Id = 1,
@@ -31,10 +32,14 @@ public class ClientControllerTests
         var jsonDocument = JsonDocument.Parse(clientJson);
         var jsonElement = jsonDocument.RootElement;
 
+        // Act
         var result = _clientController.Createclient(jsonElement);
 
-        Assert.Equal(201, (result as StatusCodeResult).StatusCode);
+        // Assert
+        var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+        Assert.Equal(201, statusCodeResult.StatusCode);
     }
+
 
     [Fact]
     public void GetAllClients_ReturnsOkResult_WithListOfClients()
