@@ -19,7 +19,6 @@ public class ClientControllerTests
     [Fact]
     public void CreateClient()
     {
-        // Arrange
         var client = new Client
         {
             Id = 1,
