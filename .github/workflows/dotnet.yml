@@ -8,29 +8,30 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore Dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity detailed --logger:trx
-    - name: Upload Test Results
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-results
-        path: **/TestResults/*.trx
-    - name: Publish Artifact
-      run: dotnet publish -c Release -o ./publish
-      env:
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dotnet-app
-        path: ./publish
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      
+      - name: Restore Dependencies
+        run: dotnet restore
+      
+      - name: Build
+        run: dotnet build --no-restore
+      
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      
+      - name: Publish Artifact
+        run: dotnet publish -c Release -o ./publish
+        env:
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-app
+          path: ./publish
