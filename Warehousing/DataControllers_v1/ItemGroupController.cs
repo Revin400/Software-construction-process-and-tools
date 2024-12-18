@@ -2,22 +2,21 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Warehousing.DataServices_v1;
 
-
 namespace Warehousing.DataControllers_v1
 {
     [ApiController]
     [Route("api/v1/[controller]")]
     public class ItemGroupsController : ControllerBase
     {
+
         private readonly ItemGroupService _itemGroupService = new ItemGroupService();
-        private readonly string FilePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "item_groups.json");
 
         [HttpGet]
-        public IActionResult GetAllItemGroups() 
+        public IActionResult GetAllItemGroups()
         {
-            try 
+            try
             {
-                var itemGroups = _itemGroupService.ReadItemGroupsFromJson();
+                var itemGroups = _itemGroupService.GetAllItemGroups();
                 return Ok(itemGroups);
             }
             catch (Exception ex)
@@ -31,12 +30,12 @@ namespace Warehousing.DataControllers_v1
         {
             try
             {
-                var itemGroups = _itemGroupService.ReadItemGroupsFromJson();
-                if (id < 0 || id >= itemGroups.Count)
+                var itemGroup = _itemGroupService.GetItemGroupById(id);
+                if (itemGroup == null)
                 {
-                    return StatusCode(200, $"null");
+                    return NotFound($"Item group with ID {id} not found.");
                 }
-                return Ok(itemGroups[id-1]);
+                return Ok(itemGroup);
             }
             catch (Exception ex)
             {
@@ -49,9 +48,7 @@ namespace Warehousing.DataControllers_v1
         {
             try
             {
-                var itemGroups = _itemGroupService.ReadItemGroupsFromJson();
-                itemGroups.Add(itemGroup);
-                _itemGroupService.WriteItemGroupsToJson(itemGroups);
+                _itemGroupService.AddItemGroup(itemGroup);
                 return StatusCode(201);
             }
             catch (Exception ex)
@@ -65,10 +62,11 @@ namespace Warehousing.DataControllers_v1
         {
             try
             {
-                var itemGroups = _itemGroupService.ReadItemGroupsFromJson();
-                var updatedItemGroup = JsonSerializer.Serialize(itemGroup);
-                itemGroups[id - 1] = JsonDocument.Parse(updatedItemGroup).RootElement;
-                _itemGroupService.WriteItemGroupsToJson(itemGroups);
+                var success = _itemGroupService.UpdateItemGroup(id, itemGroup);
+                if (!success)
+                {
+                    return NotFound($"Item group with ID {id} not found.");
+                }
                 return Ok();
             }
             catch (Exception ex)
@@ -80,9 +78,19 @@ namespace Warehousing.DataControllers_v1
         [HttpDelete("{id}")]
         public IActionResult DeleteItemGroup(int id)
         {
-         
-            System.IO.File.WriteAllText(FilePath, "[]");
-            return Ok();
+            try
+            {
+                var success = _itemGroupService.DeleteItemGroup(id);
+                if (!success)
+                {
+                    return NotFound($"Item group with ID {id} not found.");
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error deleting item group: {ex.Message}");
+            }
         }
     }
 }
