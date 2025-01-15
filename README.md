@@ -3,7 +3,7 @@ Follow these steps to run the program:
 
 1. Download dotnet 8.0.401 ()
 
-2.Check Requirements: Ensure all necessary extensions and packages are installed. (See table: Required Extensions and Packages)
+2. Check Requirements: Ensure all necessary extensions and packages are installed. (See table: Required Extensions and Packages)
 
 3. Open the Terminal: Navigate to the project folder (Software-construction-process-and-tools\Warehousing) and open an integrated terminal in the same directory as Program.cs.
 
