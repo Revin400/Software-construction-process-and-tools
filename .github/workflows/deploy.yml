@@ -1,0 +1,70 @@
+name: CI/CD Pipeline for .NET Core
+
+on:
+  push:
+    branches:
+      - master  # Trigger pipeline on pushes to the master branch
+
+jobs:
+  # Step 1: Build the Application
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3  # Checkout the repository
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0'  # Specify the .NET version you are using
+
+      - name: Restore Dependencies
+        run: dotnet restore Warehousing/Warehousing.csproj  # Restore NuGet packages
+
+      - name: Build Application
+        run: dotnet build Warehousing/Warehousing.csproj --configuration Release
+
+  # Step 2: Run Unit Tests
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: build  # Run this job after the build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0'
+
+      - name: Run Unit Tests
+        run: dotnet test Warehousing/Unittests/rest_file_unit_test --no-build --verbosity normal
+
+  # Step 3: Deploy to Staging
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: unit-tests  # Run this job after unit tests pass
+    steps:
+      - name: Deploy to Staging
+        env:
+          STAGING_API_KEY: ${{ secrets.STAGING_API_KEY }}  # Use GitHub Secrets for sensitive information
+        run: |
+          echo "Deploying to Staging..."
+          # Replace with your staging deployment script/command
+          # Example: dotnet publish and deploy via SCP or other tool
+          dotnet publish Warehousing/Warehousing.csproj --configuration Release --output ./publish
+          scp -r ./publish/ user@staging-server:/var/www/warehousing
+
+  # Step 4: Deploy to Production
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging  # Run this job after staging deployment
+    steps:
+      - name: Deploy to Production
+        env:
+          PRODUCTION_API_KEY: ${{ secrets.PRODUCTION_API_KEY }}  # Use GitHub Secrets for sensitive information
+        run: |
+          echo "Deploying to Production..."
+          # Replace with your production deployment script/command
+          dotnet publish Warehousing/Warehousing.csproj --configuration Release --output ./publish
+          scp -r ./publish/ user@production-server:/var/www/warehousing
