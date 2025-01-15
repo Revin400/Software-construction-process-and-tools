@@ -1,13 +1,15 @@
 ## Guide to Start the Program
 Follow these steps to run the program:
 
-1. Check Requirements: Ensure all necessary extensions and packages are installed.
+1. Download dotnet 8.0.401 ()
 
-2. Open the Terminal: Navigate to the project folder and open an integrated terminal in the same directory as Program.cs.
+2.Check Requirements: Ensure all necessary extensions and packages are installed. (See table: Required Extensions and Packages)
 
-3. Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
+3. Open the Terminal: Navigate to the project folder (Software-construction-process-and-tools\Warehousing) and open an integrated terminal in the same directory as Program.cs.
 
-4. Run the Program: Execute dotnet run to start the application.
+4. Build the Project: Run dotnet build in the terminal to compile the project and check for errors.
+
+5. Run the Program: Execute dotnet run to start the application.
 
 Make sure all dependencies are correctly installed before running the program.
 
