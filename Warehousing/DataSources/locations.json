@@ -453,5 +453,13 @@
     "name": "Row: A, Rack: 1, Shelf: 0",
     "created_at": "1992-05-15 03:21:32",
     "updated_at": "1992-05-15 03:21:32"
+  },
+  {
+    "id": 1,
+    "warehouse_id": 1,
+    "code": "A.1.0",
+    "name": "Row: A, Rack: 1, Shelf: 0",
+    "created_at": "1992-05-15 03:21:32",
+    "updated_at": "1992-05-15 03:21:32"
   }
 ]

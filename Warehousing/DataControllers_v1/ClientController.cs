@@ -8,7 +8,12 @@ namespace Warehousing.DataControllers_v1
     [Route("api/v1/[controller]")]
     public class ClientController : ControllerBase
     {
-        private readonly ClientService _clientService = new ClientService();
+        private readonly IClientService _clientService;
+
+        public ClientController(IClientService clientService)
+        {
+            _clientService = clientService;
+        }
         private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "Clients.json");
 
         [HttpGet]
@@ -26,7 +31,7 @@ namespace Warehousing.DataControllers_v1
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetclientById(int id) 
+        public IActionResult GetclientById(int id)
         {
             try
             {
@@ -82,11 +87,11 @@ namespace Warehousing.DataControllers_v1
 
         [HttpDelete("{id}")]
         public IActionResult Deleteclient(int id)
-        {          
+        {
             System.IO.File.WriteAllText(_filePath, "[]");
             return Ok();
-           
-            
+
+
         }
     }
 }
