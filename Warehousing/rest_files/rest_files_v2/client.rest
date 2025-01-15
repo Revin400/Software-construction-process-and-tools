@@ -1,0 +1,47 @@
+### GET all Clients
+GET http://localhost:5000/api/v2/client
+
+###
+
+### Create a new Client
+POST http://localhost:5000/api/v2/client
+Content-Type: application/json
+
+{
+    "name": "Acme Corporation",
+    "address": "123 Main Street",
+    "city": "Anytown",
+    "ZipCode": 12345,
+    "province": "Stateville",
+    "country": "United States",
+    "ContactName": "John Doe",
+    "ContactPhone": "+1 (555) 123-4567",
+    "ContactEmail": "john.doe22@acmecorp.com",
+    "created_at": "2024-04-24 10:30:00",
+    "updated_at": "2024-04-24 10:30:00"
+}
+
+###
+
+### Update an existing Client
+PUT http://localhost:5000/api/v2/client/1
+Content-Type: application/json
+
+{
+    "name": "Updated - Acme Corporation",
+    "address": "123 Main Street",
+    "city": "Anytown",
+    "ZipCode": 12345,
+    "province": "Stateville",
+    "country": "United States",
+    "ContactName": "John Doe",
+    "ContactPhone": "+1 (123) 123-4567",
+    "ContactEmail": "updatedJohn.doe2@acmecorp.com",
+    "created_at": "2024-04-24 10:30:00",
+    "updated_at": "2024-04-24 10:30:00"
+}
+
+###
+
+### Delete an existing Client
+DELETE http://localhost:5000/api/v2/client/1
