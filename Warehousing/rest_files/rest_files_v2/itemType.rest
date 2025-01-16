@@ -1,0 +1,31 @@
+### Get All Item Types
+GET http://localhost:5000/api/v2/ItemType
+
+### Get Item Type by ID
+GET http://localhost:5000/api/v2/ItemType/1
+
+### Add New Item Type
+POST http://localhost:5000/api/v2/ItemType
+Content-Type: application/json
+
+{
+    "name": "M.1",
+    "description": "",
+    "created_at": "1970-08-09 15:03:12",
+    "updated_at": "1999-12-03 23:36:46"
+}
+
+### Update Existing Item Type
+PUT http://localhost:5000/api/v2/ItemType/4
+Content-Type: application/json
+
+{
+    "name": "Updated Edxternal Hard Drive",
+    "description": "",
+    "created_at": "1970-08-09 15:03:12",
+    "updated_at": "1999-12-03 23:36:46"
+}
+
+
+### Delete Item Type
+DELETE http://localhost:5000/api/v2/ItemType/1

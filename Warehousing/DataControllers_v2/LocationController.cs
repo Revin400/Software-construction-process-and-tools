@@ -3,7 +3,7 @@ using Warehousing.DataServices_v2;
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/location/v2")]
+    [Route("api/v2/[controller]")]
     [ApiController]
 
     public class LocationController : ControllerBase
@@ -101,7 +101,7 @@ namespace Warehousing.DataControllers_v2
                     return NotFound();
                 }
                 _locationService.DeleteLocation(id);
-                return Ok();
+                return Ok("Location deleted");
             }
             catch (Exception ex)
             {
