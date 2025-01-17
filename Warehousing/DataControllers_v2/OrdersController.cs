@@ -19,14 +19,18 @@ namespace Warehousing.DataControllers_v2
         private readonly ClientService _clientService;
         private readonly InventoryService _inventoryService;
 
-        public OrdersController(OrderService orderService, ShipmentService shipmentService, ClientService clientService, InventoryService inventoryService)
+        private readonly WarehouseService _warehouseService;
+
+        public OrdersController(OrderService orderService, ShipmentService shipmentService, ClientService clientService,
+        InventoryService inventoryService, WarehouseService warehouseService)
         {
             _orderService = orderService;
             _shipmentService = shipmentService;
             _clientService = clientService;
             _inventoryService = inventoryService;
+            _warehouseService = warehouseService;
         }
-    
+
 
         [HttpGet]
         public IActionResult Get()
@@ -83,9 +87,9 @@ namespace Warehousing.DataControllers_v2
         public ActionResult AddOrder([FromBody] Order order)
         {
             var orders = _orderService.GetOrders();
-            if (orders.Any(o => o.Id == order.Id))
+            if (orders.Any(o => o.Reference == order.Reference && o.Id != order.Id))
             {
-                return BadRequest($"Order with id {order.Id} already exists.");
+                return BadRequest("Order with the same reference already exists");
             }
 
             var clients = _clientService.GetAllClients();
@@ -103,6 +107,12 @@ namespace Warehousing.DataControllers_v2
                 }
             }
 
+            var warehouses = _warehouseService.GetAllWarehouses();
+            if (!warehouses.Any(w => w.Id == order.WarehouseId))
+            {
+                return BadRequest("Invalid warehouse id");
+            }
+
             order.CreatedAt = DateTime.Now;
             order.UpdatedAt = DateTime.Now;
             _orderService.AddOrder(order);
@@ -118,6 +128,11 @@ namespace Warehousing.DataControllers_v2
                 return NotFound();
             }
 
+            if (orders.Any(o => o.Reference == order.Reference && o.Id != order.Id))
+            {
+                return BadRequest("Order with the same reference already exists");
+            }
+
             var clients = _clientService.GetAllClients();
             if (!clients.Any(c => c.Id == order.ShipTo) || !clients.Any(c => c.Id == order.BillTo))
             {
@@ -129,61 +144,67 @@ namespace Warehousing.DataControllers_v2
             {
                 if (!inventories.Any(i => i.ItemId == item.ItemId))
                 {
-                    return BadRequest("Invalid item id");
+                    return BadRequest("Invalid item id \n these are the valid item ids: " + string.Join(", ", inventories.Select(i => i.ItemId)));
                 }
+            }
+
+            var warehouses = _warehouseService.GetAllWarehouses();
+            if (!warehouses.Any(w => w.Id == order.WarehouseId))
+            {
+                return BadRequest("Invalid warehouse id");
             }
 
             order.UpdatedAt = DateTime.Now;
             _orderService.UpdateOrder(orderId, order);
-            return Ok();
+            return Ok(order);
         }
 
         [HttpPut("{orderId}/items")]
         public ActionResult UpdateItemsInOrder(int orderId, [FromBody] List<OrderItems> items)
         {
-        var order = _orderService.GetOrderById(orderId);
-        if (order == null)
-        {
-            return NotFound();
-        }
-
-        var currentItems = order.Items;
-        foreach (var currentItem in currentItems)
-        {
-            var found = items.Any(i => i.ItemId == currentItem.ItemId);
-            if (!found)
+            var order = _orderService.GetOrderById(orderId);
+            if (order == null)
             {
-                var inventories = _inventoryService.GetInventoryByItemId(currentItem.ItemId);
-                var minInventory = inventories.OrderBy(i => i.TotalAllocated).FirstOrDefault();
-                if (minInventory != null)
+                return NotFound();
+            }
+
+            var currentItems = order.Items;
+            foreach (var currentItem in currentItems)
+            {
+                var found = items.Any(i => i.ItemId == currentItem.ItemId);
+                if (!found)
                 {
-                    minInventory.TotalAllocated -= currentItem.Amount;
-                    minInventory.TotalExpected = minInventory.TotalOnHand + minInventory.TotalOrdered;
-                    _inventoryService.UpdateInventory(minInventory);
+                    var inventories = _inventoryService.GetInventoryByItemId(currentItem.ItemId);
+                    var minInventory = inventories.OrderBy(i => i.TotalAllocated).FirstOrDefault();
+                    if (minInventory != null)
+                    {
+                        minInventory.TotalAllocated -= currentItem.Amount;
+                        minInventory.TotalExpected = minInventory.TotalOnHand + minInventory.TotalOrdered;
+                        _inventoryService.UpdateInventory(minInventory);
+                    }
                 }
             }
-        }
 
-        foreach (var currentItem in currentItems)
-        {
-            var newItem = items.FirstOrDefault(i => i.ItemId == currentItem.ItemId);
-            if (newItem != null)
+            foreach (var currentItem in currentItems)
             {
-                var inventories = _inventoryService.GetInventoryByItemId(currentItem.ItemId);
-                var minInventory = inventories.OrderBy(i => i.TotalAllocated).FirstOrDefault();
-                if (minInventory != null)
+                var newItem = items.FirstOrDefault(i => i.ItemId == currentItem.ItemId);
+                if (newItem != null)
                 {
-                    minInventory.TotalAllocated += newItem.Amount - currentItem.Amount;
-                    minInventory.TotalExpected = minInventory.TotalOnHand + minInventory.TotalOrdered;
-                    _inventoryService.UpdateInventory(minInventory);
+                    var inventories = _inventoryService.GetInventoryByItemId(currentItem.ItemId);
+                    var minInventory = inventories.OrderBy(i => i.TotalAllocated).FirstOrDefault();
+                    if (minInventory != null)
+                    {
+                        minInventory.TotalAllocated += newItem.Amount - currentItem.Amount;
+                        minInventory.TotalExpected = minInventory.TotalOnHand + minInventory.TotalOrdered;
+                        _inventoryService.UpdateInventory(minInventory);
+                    }
                 }
             }
-        }
 
-        order.Items = items;
-        _orderService.UpdateOrder(orderId, order);
-        return Ok();
-        
+            order.Items = items;
+            _orderService.UpdateOrder(orderId, order);
+            return Ok();
+
         }
 
         [HttpPut("shipment/{shipmentId}")]

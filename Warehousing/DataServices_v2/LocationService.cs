@@ -20,6 +20,11 @@ public class LocationService
         return _context.Locations.ToList();
     }
 
+    public List<Location> GetLocationsByWarehouseId(int warehouseId)
+    {
+        return _context.Locations.Where(l => l.Warehouse_id == warehouseId).ToList();
+    }
+
     public Location GetLocationById(int id)
     {
         return _context.Locations.FirstOrDefault(l => l.Id == id);

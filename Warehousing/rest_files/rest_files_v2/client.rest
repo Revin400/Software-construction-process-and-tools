@@ -16,9 +16,7 @@ Content-Type: application/json
     "country": "United States",
     "ContactName": "John Doe",
     "ContactPhone": "+1 (555) 123-4567",
-    "ContactEmail": "john.doe22@acmecorp.com",
-    "created_at": "2024-04-24 10:30:00",
-    "updated_at": "2024-04-24 10:30:00"
+    "ContactEmail": "john.doe22@acmecorp.com"
 }
 
 ###
@@ -36,9 +34,7 @@ Content-Type: application/json
     "country": "United States",
     "ContactName": "John Doe",
     "ContactPhone": "+1 (123) 123-4567",
-    "ContactEmail": "updatedJohn.doe2@acmecorp.com",
-    "created_at": "2024-04-24 10:30:00",
-    "updated_at": "2024-04-24 10:30:00"
+    "ContactEmail": "updatedJohn.doe2@acmecorp.com"
 }
 
 ###

@@ -55,11 +55,25 @@ namespace Warehousing.DataServices_v2
             var existingOrder = _context.Orders.FirstOrDefault(o => o.Id == id);
             if (existingOrder == null) return;
 
+            existingOrder.SourceId = order.SourceId;
+            existingOrder.OrderDate = order.OrderDate;
+            existingOrder.RequestDate = order.RequestDate;
+            existingOrder.Reference = order.Reference;
+            existingOrder.ReferenceExtra = order.ReferenceExtra;
+            existingOrder.OrderStatus = order.OrderStatus;
+            existingOrder.Notes = order.Notes;
+            existingOrder.ShippingNotes = order.ShippingNotes;
+            existingOrder.PickingNotes = order.PickingNotes;
+            existingOrder.WarehouseId = order.WarehouseId;
             existingOrder.ShipTo = order.ShipTo;
             existingOrder.BillTo = order.BillTo;
             existingOrder.ShipmentId = order.ShipmentId;
-            existingOrder.Items = order.Items;
+            existingOrder.TotalAmount = order.TotalAmount;
+            existingOrder.TotalDiscount = order.TotalDiscount;
+            existingOrder.TotalTax = order.TotalTax;
+            existingOrder.TotalSurcharge = order.TotalSurcharge;
             existingOrder.UpdatedAt = DateTime.Now;
+            existingOrder.Items = order.Items;
 
             _context.Orders.Update(existingOrder);
             _context.SaveChanges();

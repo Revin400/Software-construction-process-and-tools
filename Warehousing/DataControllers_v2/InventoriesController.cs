@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Warehousing.DataServices_v2;
+using SharpCompress.Readers;
 
 
 namespace Warehousing.DataControllers_v2
@@ -15,11 +16,13 @@ namespace Warehousing.DataControllers_v2
     {
         private readonly InventoryService _inventoryService;
         private readonly LocationService _locationService;
+        private readonly ItemService _itemService;
 
-        public InventoriesController(InventoryService inventoryService, LocationService locationService)
+        public InventoriesController(InventoryService inventoryService, LocationService locationService, ItemService itemService)
         {
             _inventoryService = inventoryService;
             _locationService = locationService;
+            _itemService = itemService;
         }
 
         [HttpGet]
@@ -84,6 +87,7 @@ namespace Warehousing.DataControllers_v2
         {
             var inventories = _inventoryService.GetAllInventories();
             var locations = _locationService.GetAllLocations();
+            var items = _itemService.GetAllItems();
 
             if (inventories.Any(i => i.Id == inventory.Id))
             {
@@ -93,6 +97,11 @@ namespace Warehousing.DataControllers_v2
             if(inventories.Any(i => i.ItemId == inventory.ItemId))
             {
                 return BadRequest($"Inventory with item id {inventory.ItemId} already exists.");
+            }
+
+            if(!items.Any(i => i.Id == inventory.ItemId))
+            {
+                return BadRequest("Item not found");
             }
 
             if(inventory.Locations.Any(lid => !locations.Any(lo => lo.Id == lid)))
@@ -112,15 +121,26 @@ namespace Warehousing.DataControllers_v2
         {
             var inventories = _inventoryService.GetAllInventories();
             var locations = _locationService.GetAllLocations();
+            var items = _itemService.GetAllItems();
 
             if (inventories.Any(i => i.Id != inventoryId))
             {
                 return NotFound($"Inventory with id {inventoryId} not found");
             }
 
+            if(inventories.Any(i => i.ItemId == inventory.ItemId && i.Id != inventoryId))
+            {
+                return BadRequest($"Inventory with item id {inventory.ItemId} already exists.");
+            }
+
             if(inventory.Locations.Any(lid => !locations.Any(lo => lo.Id == lid)))
             {
                 return BadRequest("Location not found");
+            }
+
+            if(!items.Any(i => i.Id == inventory.ItemId))
+            {
+                return BadRequest("Item not found");
             }
 
             inventory.Id = inventoryId;

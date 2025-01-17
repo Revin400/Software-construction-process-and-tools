@@ -8,123 +8,70 @@ using Warehousing.DataServices_v2;
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/transfers/v2")]
+    [Route("api/v2/[controller]")]
     [ApiController]
     public class TransfersController : ControllerBase
     {
-        private readonly string dataPath;
         private readonly TransferService _transferService;
+        private readonly ItemService _ItemService;
 
-        public TransfersController(TransferService transferService)
+        public TransfersController(TransferService transferService, ItemService itemService)
         {
             _transferService = transferService;
+            _ItemService = itemService;
         }
 
         [HttpGet]
-        public IActionResult GetTransfers()
-        {
-            try
-            {
-                var transfers = _transferService.ReadTransfersFromJson();
-                return Ok(transfers);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error reading transfers: {ex.Message}");
-            }
-        }
+        public IActionResult GetTransfers() => Ok(_transferService.GetAllTransfers());
 
         [HttpGet("{transferId}")]
         public ActionResult<Transfer> GetTransferById(int transferId)
         {
-            var transfers = _transferService.ReadTransfersFromJson();
-            var transfer = transfers.FirstOrDefault(t => t.Id == transferId);
-            if (transfer == null)
-            {
-                return NotFound();
-            }
+            var transfer = _transferService.GetTransferById(transferId);
+            if (transfer == null) return NotFound();
             return Ok(transfer);
         }
 
         [HttpPost]
         public IActionResult AddTransfer([FromBody] Transfer transfer)
         {
-            try
+            var transfers = _transferService.GetAllTransfers();
+            if(transfers.Any(t => t.Reference == transfer.Reference))
             {
-                var locations = _transferService.ReadTransfersFromJson();
-                transfer.Id = _transferService.NextId();
-                transfer.CreatedAt = DateTime.Now;
-                transfer.UpdatedAt = DateTime.Now;
-                locations.Add(transfer);
+                return BadRequest("Transfer with the same reference already exists");
+            }
 
-                _transferService.WriteTransfersToJson(locations);
-                return Ok(transfer);
-            }
-            catch (Exception ex)
+            var Items = _ItemService.GetAllItems();
+            foreach(var item in transfer.Items)
             {
-                return StatusCode(500, $"Error creating location: {ex.Message}");
+                if(!Items.Any(i => i.Id == item.ItemId))
+                {
+                    return BadRequest("Item with id " + item.ItemId + " does not exist");
+                }
             }
+            _transferService.AddTransfer(transfer);
+            return CreatedAtAction(nameof(GetTransferById), new { transferId = transfer.Id }, transfer);
+            
         }
 
         [HttpPut("{transferId}")]
-        public ActionResult UpdateTransfer(int transferId, [FromBody] Transfer transfer)
+        public ActionResult UpdateTransfer([FromBody] Transfer transfer)
         {
-            try
-            {
-                var transfers = _transferService.ReadTransfersFromJson();
-                var existingTransfer = transfers.Find(l => l.Id == transferId);
-
-                if (existingTransfer == null)
-                {
-                    return NotFound($"Transfer with id {transferId} not found");
-                }
-
-                existingTransfer.Reference = transfer.Reference;
-                existingTransfer.TransferFrom = transfer.TransferFrom;
-                existingTransfer.TransferTo = transfer.TransferTo;
-                existingTransfer.TransferStatus = transfer.TransferStatus;
-
-                existingTransfer.UpdatedAt = DateTime.Now;
-
-                _transferService.WriteTransfersToJson(transfers);
-                return Ok(existingTransfer);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error updating transfer: {ex.Message}");
-            }
+            var existingTransfer = _transferService.GetTransferById(transfer.Id);
+            if (existingTransfer == null) return NotFound();
+            _transferService.UpdateTransfer(transfer);
+            return Ok(transfer);
         }
 
         [HttpDelete("{transferId}")]
         public ActionResult RemoveTransfer(int transferId)
         {
-            try
-            {
-                var transfers = _transferService.ReadTransfersFromJson();
-                var transfer = transfers.Find(l => l.Id == transferId);
-
-                if (transfer == null)
-                {
-                    return NotFound($"Transfer with id {transferId} not found");
-                }
-
-                transfers.Remove(transfer);
-                _transferService.WriteTransfersToJson(transfers);
-                return Ok(transfer);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error deleting transfer: {ex.Message}");
-            }
+            var existingTransfer = _transferService.GetTransferById(transferId);
+            if (existingTransfer == null) return NotFound();
+            _transferService.DeleteTransfer(transferId);
+            return Ok();   
         }
 
-        private void Save()
-        {
-            using (var writer = new StreamWriter(dataPath))
-            {
-                var json = JsonSerializer.Serialize(_transferService);
-                writer.Write(json);
-            }
-        }
+    
     }
 }

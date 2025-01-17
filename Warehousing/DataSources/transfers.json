@@ -1,0 +1,21 @@
+[
+  {
+    "Id": 1,
+    "Reference": "TRANS001",
+    "TransferFrom": 1,
+    "TransferTo": 2,
+    "TransferStatus": "Processed",
+    "CreatedAt": "2025-01-17T18:47:25.4043089+01:00",
+    "UpdatedAt": "2025-01-17T18:47:25.4061811+01:00",
+    "Items": [
+      {
+        "ItemId": 1,
+        "Amount": 50
+      },
+      {
+        "ItemId": 2,
+        "Amount": 30
+      }
+    ]
+  }
+]
