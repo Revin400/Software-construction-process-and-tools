@@ -28,6 +28,7 @@ public class Order
 
 public class OrderItems
 {
-    public int ItemId { get; set; }
+    public int Id { get; set; }
+    public string ItemId { get; set; }
     public int Amount { get; set; }
 }

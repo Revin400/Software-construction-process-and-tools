@@ -55,7 +55,7 @@ namespace Warehousing.DataControllers_v1
         }
 
         [HttpGet("item/{itemId}")]
-        public ActionResult<Dictionary<string, decimal>> GetInventoriesForItem(int itemId)
+        public ActionResult<Dictionary<string, decimal>> GetInventoriesForItem(string itemId)
         {
             var result = new Dictionary<string, decimal>
         {
@@ -130,7 +130,7 @@ namespace Warehousing.DataControllers_v1
                 existingInventory.ItemId = inventory.ItemId;
                 existingInventory.Description = inventory.Description;
                 existingInventory.ItemReference = inventory.ItemReference;
-                existingInventory.LocationId = inventory.LocationId;
+                existingInventory.Locations = inventory.Locations;
                 existingInventory.TotalOnHand = inventory.TotalOnHand;
                 existingInventory.TotalExpected = inventory.TotalExpected;
                 existingInventory.TotalOrdered = inventory.TotalOrdered;

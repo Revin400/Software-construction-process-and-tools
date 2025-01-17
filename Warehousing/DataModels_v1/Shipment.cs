@@ -25,6 +25,6 @@ public class Shipment
 
 public class ShipmentItem
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public double Amount { get; set; }
 }

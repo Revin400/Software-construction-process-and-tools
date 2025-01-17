@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Acme Corporation",
+    "address": "123 Main Street",
+    "city": "Anytown",
+    "ZipCode": 12345,
+    "province": "Stateville",
+    "country": "United States",
+    "ContactName": "John Doe",
+    "ContactPhone": "\u002B1 (555) 122-4567",
+    "ContactEmail": "john.doe2@acmecorp.com",
+    "created_at": "2024-04-24 10:30:00",
+    "updated_at": "2024-04-24 10:30:00"
+  },
+  {
+    "name": "Acme Corporation",
+    "address": "123 Main Street",
+    "city": "Anytown",
+    "ZipCode": 12345,
+    "province": "Stateville",
+    "country": "United States",
+    "ContactName": "John Doe",
+    "ContactPhone": "\u002B1 (555) 122-4567",
+    "ContactEmail": "john.doe2@acmecorp.com",
+    "created_at": "2024-04-24 10:30:00",
+    "updated_at": "2024-04-24 10:30:00"
+  }
+]

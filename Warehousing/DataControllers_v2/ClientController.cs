@@ -102,7 +102,7 @@ namespace Warehousing.DataControllers_v2
                 }
 
                 _clientService.DeleteClient(id);
-                return Ok();
+                return Ok("Client deleted");
             }
             catch (Exception ex)
             {

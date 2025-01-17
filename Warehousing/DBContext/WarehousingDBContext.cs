@@ -12,8 +12,10 @@ public class WarehousingContext : DbContext
     public DbSet<ItemLine> ItemLines { get; set; }
     public DbSet<ItemType> ItemTypes { get; set; }
     public DbSet<Client> Clients { get; set; }
-
     public DbSet<Location> Locations { get; set; }
+    public DbSet<Inventory> Inventories { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Shipment> Shipments { get; set; }
 
     // Example of other tables that could be added
     // public DbSet<Location> Locations { get; set; }
