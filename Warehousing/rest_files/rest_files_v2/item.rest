@@ -2,16 +2,16 @@
 GET http://localhost:5000/api/v2/items
 
 ### Get a specific item by ID
-GET http://localhost:5000/api/v2/items/P111112
+GET http://localhost:5000/api/v2/items/P000002
 
 ### Get items by item line ID
 GET http://localhost:5000/api/v2/items/itemLine/1
 ### Get items by item group ID
-GET http://localhost:5000/api/v2/items/itemGroup/3
+GET http://localhost:5000/api/v2/items/itemGroup/1
 Content-Type: application/json
 
 ### Get items by item type ID
-GET http://localhost:5000/api/v2/items/itemType/2
+GET http://localhost:5000/api/v2/items/itemType/1
 Content-Type: application/json
 
 ### Get items by supplier ID
@@ -23,30 +23,30 @@ POST http://localhost:5000/api/v2/items
 Content-Type: application/json
 
 {
-    "Id":"P000001",
+    "Id":"P000003",
     "code": "NEW1234",
     "description": "Newly added item",
     "shortDescription": "New Item",
     "upcCode": "111111111111",
     "modelNumber": "NM-2024",
     "commodityCode": "GENERAL",
-    "itemLineId": 2,
-    "itemGroupId": 3,
-    "itemTypeId": 2,
+    "itemLineId": 1,
+    "itemGroupId": 1,
+    "itemTypeId": 1,
     "unitPurchaseQuantity": 1,
     "unitOrderQuantity": 1,
     "packOrderQuantity": 1,
     "supplierId": 1,
-    "supplierCode": "SUP003",
+    "supplierCode": "SUP001",
     "supplierPartNumber": "NM-2024-NEW"
 }
 
 ### Update an existing item
-PUT http://localhost:5000/api/v2/items/P111111
+PUT http://localhost:5000/api/v2/items/P000001
 Content-Type: application/json
 
 {
-    "Id": "P111111",
+    "Id": "P000001",
     "code": "UPDATED123",
     "description": "Updated item description",
     "shortDescription": "Updated Item",
@@ -65,5 +65,5 @@ Content-Type: application/json
 }
 
 ### Delete an item
-DELETE http://localhost:5000/api/v2/items/P111111
+DELETE http://localhost:5000/api/v2/items/P000001
 Content-Type: application/json

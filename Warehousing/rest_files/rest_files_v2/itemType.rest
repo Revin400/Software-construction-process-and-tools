@@ -10,9 +10,7 @@ Content-Type: application/json
 
 {
     "name": "M.1",
-    "description": "",
-    "created_at": "1970-08-09 15:03:12",
-    "updated_at": "1999-12-03 23:36:46"
+    "description": "A category for items related to personal hygiene and care products."
 }
 
 ### Update Existing Item Type
@@ -22,8 +20,6 @@ Content-Type: application/json
 {
     "name": "Updated Edxternal Hard Drive",
     "description": "",
-    "created_at": "1970-08-09 15:03:12",
-    "updated_at": "1999-12-03 23:36:46"
 }
 
 

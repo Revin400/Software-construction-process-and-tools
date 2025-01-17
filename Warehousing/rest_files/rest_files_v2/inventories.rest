@@ -36,7 +36,7 @@ PUT http://localhost:5000/api/v2/inventories/1
 Content-Type: application/json
 
 {
-    "itemid": "P000001",
+    "itemid": "P000006",
     "description": "Face-to-face clear-thinking complexity -- updated",
     "ItemReference": "sjQ23408K",
     "locations": [

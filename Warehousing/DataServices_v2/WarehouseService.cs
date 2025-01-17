@@ -1,42 +1,54 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-
-
 
 namespace Warehousing.DataServices_v2
 {
-public class WarehouseService
-{
-    private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "warehouses.json");
-
-    public List<Warehouse> ReadWarehousesFromJson()
+    public class WarehouseService
     {
-        if (!File.Exists(_filePath))
+
+        private readonly WarehousingContext _context;
+
+        public WarehouseService(WarehousingContext context)
         {
-            File.WriteAllText(_filePath, "[]");  
-            return new List<Warehouse>(); 
+            _context = context;
+            _context.Database.EnsureCreated();
         }
 
-        var jsonData = File.ReadAllText(_filePath);
+        public List<Warehouse> GetAllWarehouses() => _context.Warehouses.ToList();
 
-        if (string.IsNullOrWhiteSpace(jsonData))
+        public Warehouse GetWarehouseById(int id) => _context.Warehouses.FirstOrDefault(w => w.Id == id);
+
+        public void AddWarehouse(Warehouse warehouse)
         {
-            return new List<Warehouse>();
+            warehouse.CreatedAt = DateTime.Now;
+            warehouse.UpdatedAt = DateTime.Now;
+            _context.Warehouses.Add(warehouse);
+            _context.SaveChanges();
         }
-        return JsonSerializer.Deserialize<List<Warehouse>>(jsonData) ?? new List<Warehouse>();
-    }
 
-    public void WriteWarehousesToJson(List<Warehouse> warehouses)
-    {
-        var jsonData = JsonSerializer.Serialize(warehouses, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, jsonData);
-    }
+        public void UpdateWarehouse(Warehouse warehouse)
+        {
+            var existingWarehouse = GetWarehouseById(warehouse.Id);
+            if (existingWarehouse == null) return;
 
-    public int NextId()
-    {
-        var warehouses = ReadWarehousesFromJson();
-        return warehouses.Any() ? warehouses.Max(w => w.Id) + 1 : 1; 
+            existingWarehouse.Code = warehouse.Code;
+            existingWarehouse.Name = warehouse.Name;
+            existingWarehouse.Address = warehouse.Address;
+            existingWarehouse.Zip = warehouse.Zip;
+            existingWarehouse.City = warehouse.City;
+            existingWarehouse.Province = warehouse.Province;
+            existingWarehouse.Country = warehouse.Country;
+            existingWarehouse.Contact = warehouse.Contact;
+            existingWarehouse.UpdatedAt = DateTime.Now;
+    
+            _context.SaveChanges();
+        }
+
+        public void DeleteWarehouse(int id)
+        {
+            var warehouse = GetWarehouseById(id);
+            if (warehouse == null) return;
+
+            _context.Warehouses.Remove(warehouse);
+            _context.SaveChanges();
+        }
     }
-}
 }

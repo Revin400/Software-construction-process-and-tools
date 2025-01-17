@@ -12,12 +12,17 @@ namespace Warehousing.DataControllers_v2
         private readonly ItemService _itemService;
         private readonly ItemLineService _itemLineService;
         private readonly ItemGroupService _itemGroupService;
+        private readonly SupplierService _suplierService;
+        private readonly ItemTypeService _itemTypeService;
+        
 
-        public ItemsController(ItemService itemService, ItemLineService itemLineService, ItemGroupService itemGroupService)
+        public ItemsController(ItemService itemService, ItemLineService itemLineService, ItemGroupService itemGroupService, SupplierService supplierService, ItemTypeService itemTypeService)
         {
             _itemService = itemService;
             _itemLineService = itemLineService;
             _itemGroupService = itemGroupService;
+            _suplierService = supplierService;
+            _itemTypeService = itemTypeService;
 
         }
 
@@ -35,6 +40,21 @@ namespace Warehousing.DataControllers_v2
         [HttpPost]
         public IActionResult AddItem([FromBody] Item item)
         {
+            var suppliers = _suplierService.GetSuppliers();
+            if (!suppliers.Any(s => s.Id == item.SupplierId)) return BadRequest("Supplier not found");
+
+            var items = _itemService.GetAllItems();
+            if(items.Any(x => x.Id == item.Id)) return BadRequest("Item already exists");
+
+            var itemLines = _itemLineService.GetAllItemLines();
+            if (!itemLines.Any(x => x.Id == item.ItemLineId)) return BadRequest("ItemLine not found");
+
+            var itemGroups = _itemGroupService.GetAllItemGroups();
+            if (!itemGroups.Any(x => x.Id == item.ItemGroupId)) return BadRequest("ItemGroup not found");
+
+            var itemTypes = _itemTypeService.GetAllItemTypes();
+            if (!itemTypes.Any(x => x.Id == item.ItemTypeId)) return BadRequest("ItemType not found");
+
             _itemService.AddItem(item);
             return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, item);
         }
@@ -44,6 +64,7 @@ namespace Warehousing.DataControllers_v2
         {
             var items = _itemService.GetAllItems();
             if (!items.Any(x => x.Id == id)) return NotFound();
+
 
             if(items.Any(x => x.Code == updatedItem.Code && x.Id != updatedItem.Id)) return BadRequest("Code already exists");
 

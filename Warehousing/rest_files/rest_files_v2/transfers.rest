@@ -1,0 +1,59 @@
+### GET all Transfers
+GET http://localhost:5000/api/v2/transfers
+
+###
+
+### GET a specific Transfer by ID
+GET http://localhost:5000/api/v2/transfers/1
+
+###
+
+### Create a new Transfer
+POST http://localhost:5000/api/v2/transfers
+Content-Type: application/json
+
+{
+    "reference": "TRANS001",
+    "transferFrom": 1,
+    "transferTo": 2,
+    "transferStatus": "Processed",
+    "items": [
+        {
+            "ItemId": "P000001",
+            "Amount": 50
+        },
+        {
+            "ItemId": "P000002",
+            "Amount": 30
+        }
+    ]
+}
+
+###
+
+### Update an existing Transfer
+PUT http://localhost:5000/api/v2/transfers/1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "reference": "TRANS001",
+    "transferFrom": 1,
+    "transferTo": 2,
+    "transferStatus": "Completed --updated",
+    "items": [
+        {
+            "itemId": 1,
+            "amount": 50
+        },
+        {
+            "itemId": 2,
+            "amount": 30
+        }
+    ]
+}
+
+###
+
+### Delete a Transfer
+DELETE http://localhost:5000/api/v2/transfers/1

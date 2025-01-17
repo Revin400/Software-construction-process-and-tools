@@ -9,10 +9,8 @@ POST http://localhost:5000/api/v2/ItemGroups
 Content-Type: application/json
 
     {
-        "name": "Clothing",
-        "description": "",
-        "created_at": "1975-12-14 06:58:09",
-        "updated_at": "2011-12-04 21:16:55"
+        "name": "Makeup",
+        "description": "A category for makeup products."
     }
 
 ### Update an existing item group
