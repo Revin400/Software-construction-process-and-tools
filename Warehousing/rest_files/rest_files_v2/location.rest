@@ -11,7 +11,7 @@ POST http://localhost:5000/api/v2/location
 Content-Type: application/json
 
 {
-    "warehouse_id": 2,
+    "warehouse_id": 1,
     "code": "A.1.1",
     "name": "Row: A, Rack: 1, Shelf: 1"
 }
