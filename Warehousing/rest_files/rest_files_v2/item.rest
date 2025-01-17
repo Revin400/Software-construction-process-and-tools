@@ -23,7 +23,7 @@ POST http://localhost:5000/api/v2/items
 Content-Type: application/json
 
 {
-    "id":"P111111",
+    "Id":"P000001",
     "code": "NEW1234",
     "description": "Newly added item",
     "shortDescription": "New Item",

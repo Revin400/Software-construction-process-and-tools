@@ -1,0 +1,55 @@
+### GET all Inventories
+GET http://localhost:5000/api/v2/inventories
+
+###
+
+### Get Inventory by ID
+GET http://localhost:5000/api/v2/inventories/1
+
+### GET Inventories for a specific Item by Item ID
+GET http://localhost:5000/api/v2/inventories/item/P000001
+
+###
+
+### Create a new Inventory
+POST http://localhost:5000/api/v2/inventories
+Content-Type: application/json
+
+{
+    "itemid": "P000001",
+    "description": "Face-to-face clear-thinking complexity",
+    "ItemReference": "sjQ23408K",
+    "locations": [
+        1
+    ],
+    "totalOnHand"   : 262,
+    "totalExpected" : 0,
+    "totalOrdered"  : 80,
+    "totalAllocated": 41,
+    "totalAvailable": 141
+    }
+
+###
+
+### Update an existing Inventory
+PUT http://localhost:5000/api/v2/inventories/1
+Content-Type: application/json
+
+{
+    "itemid": "P000001",
+    "description": "Face-to-face clear-thinking complexity -- updated",
+    "ItemReference": "sjQ23408K",
+    "locations": [
+        1
+    ],
+    "totalOnHand": 264,
+    "totalExpected": 0,
+    "totalOrdered": 80,
+    "totalAllocated": 41,
+    "totalAvailable": 141
+    }
+
+###
+
+### Delete an Inventory
+DELETE http://localhost:5000/api/v2/inventories/1

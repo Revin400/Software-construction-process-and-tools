@@ -12,10 +12,8 @@ Content-Type: application/json
 
 {
     "warehouse_id": 1,
-    "code": "A.1.2",
-    "name": "Row: A, Rack: 1, Shelf: 2",
-    "created_at": "1992-05-15 03:21:32",
-    "updated_at": "1992-05-15 03:21:32"
+    "code": "A.1.1",
+    "name": "Row: A, Rack: 1, Shelf: 1"
 }
 
 ### Get location in a warehouse
