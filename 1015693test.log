@@ -1,0 +1,107 @@
+commit 46c96cd105341b6f04cbb385393fed616e5ffad5
+Merge: 6881d05 2c6ad88
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Jan 15 17:23:22 2025 +0100
+
+    Merge branch 'main' into ci-cd
+
+commit 6881d054d6586d7a97697996e29b8411b7cc0ed5
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Jan 15 17:23:15 2025 +0100
+
+    h
+
+commit 5e748138ba5d9d8e5b4cd7c06e7af829a1ad1a6a
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Dec 4 12:19:19 2024 +0100
+
+    d
+
+commit dcfe37e07bde8efeca7dc8519a7d0faa1ecfbfb4
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Dec 4 12:18:57 2024 +0100
+
+    Update OrdersController.cs
+
+commit 54a399163864f7de49642c8e9253cde2e0d525b4
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Dec 4 10:06:00 2024 +0100
+
+    changed orders to jsonelement
+
+commit 86865a194177d14e0bad838fe892c68cb5d261bc
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Dec 4 09:51:45 2024 +0100
+
+    changed transfers to jsonelement
+
+commit 4799252290df7f9f3ed62a45e86d7ff22d7acc36
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Fri Nov 15 04:33:53 2024 +0100
+
+    Delete Warehousing/DataSources/Shipment.json
+
+commit 265b5bcef513c19f4a1c845b743768ac1d86dc9d
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 14:17:25 2024 +0100
+
+    notworking
+
+commit f7d5b7d73be7a58568eabb386c15e360d2a463e2
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 11:56:15 2024 +0100
+
+    removed unnecessary code
+
+commit 6e8bbfb07c3418459e2eff16d0b798e7b87181d0
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 11:52:49 2024 +0100
+
+    small changes
+
+commit 6e82e672326c22beb305426bd8df82628ce7260a
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 11:46:50 2024 +0100
+
+    added service for order, inventory and transfer
+
+commit 200fb001f9ab5a47b63580036d55295a2abc8e1f
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 11:17:30 2024 +0100
+
+    added transfer
+    
+    transfer model and controller
+
+commit 23ac4b46e199ac3b27667eaede10dbd125285a1d
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 11:12:03 2024 +0100
+
+    small change
+
+commit 7681cefdf1c32556f7dac31a7b2846bee0c6fea2
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 11:10:31 2024 +0100
+
+    added orders.cs
+
+commit 698e806d9cfb35462751a14d1cbc6972cc240a5b
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 11:07:21 2024 +0100
+
+    small changes
+
+commit 6dc6bee5204fede7a564ce81a2307615645b1cd1
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Nov 6 10:43:06 2024 +0100
+
+    added inventoriescontroller.cs
+
+commit f0c89b847e1656ec78272b1b93de84f68724316b
+Merge: 7c00fee a8ee586
+Author: Yong <144024466+Yoyoclub@users.noreply.github.com>
+Date:   Wed Sep 25 15:33:47 2024 +0200
+
+    Merge pull request #1 from Revin400/JayTestB
+    
+    Create .gitignore for pycaches
