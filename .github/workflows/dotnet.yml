@@ -46,9 +46,6 @@ jobs:
         env:
           FULL_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_1 }}
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
-        run: |
-          echo "FULL_ACCESS_KEY=$FULL_ACCESS_KEY" >> $GITHUB_ENV
-          echo "GET_ACCESS_KEY=$GET_ACCESS_KEY" >> $GITHUB_ENV
       
       - name: Deploy Application
         run: |
