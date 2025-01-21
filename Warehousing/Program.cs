@@ -38,6 +38,12 @@ builder.Services.AddScoped<Warehousing.DataServices_v2.TransferService>();
 builder.Services.AddScoped<Warehousing.DataServices_v1.OrderService>();
 builder.Services.AddScoped<Warehousing.DataServices_v2.OrderService>();
 
+builder.Services.AddScoped<Warehousing.DataServices_v1.ShipmentService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.ShipmentService>();
+
+builder.Services.AddScoped<Warehousing.DataServices_v1.SupplierService>();
+builder.Services.AddScoped<Warehousing.DataServices_v2.SupplierService>();
+
 var app = builder.Build();
 
 app.Urls.Add("http://localhost:5000");

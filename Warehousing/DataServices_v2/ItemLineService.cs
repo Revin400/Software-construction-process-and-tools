@@ -27,16 +27,16 @@ public class ItemLineService
     }
 
     public void UpdateItemLine(int id, ItemLine updatedItemLine)
-    {
-        var existing = GetItemLineById(id);
-        if (existing != null)
         {
-            existing.Name = updatedItemLine.Name;
-            existing.Description = updatedItemLine.Description;
-            existing.UpdatedAt = DateTime.UtcNow;
+            var existingItemLine = GetItemLineById(id);
+            if (existingItemLine == null) return;
+
+            updatedItemLine.Id = id;
+            updatedItemLine.CreatedAt = existingItemLine.CreatedAt;
+            updatedItemLine.UpdatedAt = DateTime.UtcNow;
+            _context.Entry(existingItemLine).CurrentValues.SetValues(updatedItemLine);
             _context.SaveChanges();
         }
-    }
 
     public void RemoveItemLine(int id)
     {

@@ -1,0 +1,73 @@
+### GET all Orders
+GET http://localhost:5000/api/v2/orders
+
+###
+
+### GET a specific Order by ID
+GET http://localhost:5000/api/v2/orders/1
+
+###
+
+### Create a new Order
+POST http://localhost:5000/api/v2/orders
+Content-Type: application/json
+
+    {
+        "sourceId": 1,
+        "orderDate": "2019-04-03T11:33:15Z",
+        "requestDate": "2019-04-07T11:33:15Z",
+        "reference": "ORD00002",
+        "ReferenceExtra": "Bedreven arm straffen bureau.",
+        "OrderStatus": "Delivered",
+        "notes": "Voedsel vijf vork heel.",
+        "ShippingNotes": "Buurman betalen plaats bewolkt.",
+        "PickingNotes": "Ademen fijn volgorde scherp aardappel op leren.",
+        "warehouseId": 1,
+        "ShipTo": 1,
+        "BillTo": 1,
+        "shipmentId": 1,
+        "totalAmount": 9905.13,
+        "totalDiscount": 150.77,
+        "totalTax": 372.72,
+        "totalSurcharge": 77.6,
+        "Items": [
+            {
+                "ItemId": "P000001",
+                "amount": 25
+            }
+        ]
+    }
+
+###
+
+### Update an existing Order
+PUT http://localhost:5000/api/v2/orders/1
+Content-Type: application/json
+
+{
+    "sourceId": 1,
+    "orderDate": "2019-04-03T11:33:15Z",
+    "requestDate": "2019-04-07T11:33:15Z",
+    "reference": "ORD00001",
+    "ReferenceExtra": "Bedreven arm straffen bureau. -- updated",
+    "OrderStatus": "Delivered",
+    "notes": "Voedsel vijf vork heel.",
+    "ShippingNotes": "Buurman betalen plaats bewolkt.",
+    "PickingNotes": "Ademen fijn volgorde scherp aardappel op leren.",
+    "warehouseId": 18,
+    "ShipTo": 2,
+    "BillTo": 2,
+    "shipmentId": 1,
+    "totalAmount": 9905.13,
+    "totalDiscount": 150.77,
+    "totalTax": 372.72,
+    "totalSurcharge": 77.6,
+    "Items": [
+        
+    ]
+}
+
+###
+
+### Delete an Order
+DELETE http://localhost:5000/api/v2/orders/1

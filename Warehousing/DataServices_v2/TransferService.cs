@@ -2,47 +2,53 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 
 
 namespace Warehousing.DataServices_v2
 {
-public class TransferService
-{
-    private readonly string _filePath;
-
-    public TransferService()
+    public class TransferService
     {
-        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "transfers.json");
-    }
+        private readonly WarehousingContext _context;
 
-    public List<Transfer> ReadTransfersFromJson()
-    {
-        if (!File.Exists(_filePath))
+        public TransferService(WarehousingContext context)
         {
-            File.WriteAllText(_filePath, "[]");
-            return new List<Transfer>();
+            _context = context;
+            _context.Database.EnsureCreated();
         }
 
-        var jsonData = File.ReadAllText(_filePath);
+        public List<Transfer> GetAllTransfers() => _context.Transfers.ToList();
 
-        if (string.IsNullOrWhiteSpace(jsonData))
+        public Transfer GetTransferById(int id) => _context.Transfers.FirstOrDefault(t => t.Id == id);
+
+        public void AddTransfer(Transfer transfer)
         {
-            return new List<Transfer>();
+            transfer.CreatedAt = DateTime.Now;
+            transfer.UpdatedAt = DateTime.Now;
+            _context.Transfers.Add(transfer);
+            _context.SaveChanges();
         }
-        return JsonSerializer.Deserialize<List<Transfer>>(jsonData) ?? new List<Transfer>();
-    }
 
-    public void WriteTransfersToJson(List<Transfer> transfers)
-    {
-        var jsonData = JsonSerializer.Serialize(transfers, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, jsonData);
-    }
+        public void UpdateTransfer(Transfer transfer)
+        {
+            var existingTransfer = GetTransferById(transfer.Id);
+            if (existingTransfer == null) return;
 
-    public int NextId()
-    {
-        var transfers = ReadTransfersFromJson();
-        return transfers.Any() ? transfers.Max(t => t.Id) + 1 : 1;
+            existingTransfer.Reference = transfer.Reference;
+            existingTransfer.TransferFrom = transfer.TransferFrom;
+            existingTransfer.TransferTo = transfer.TransferTo;
+            existingTransfer.TransferStatus = transfer.TransferStatus;
+            existingTransfer.Items = transfer.Items;
+            existingTransfer.UpdatedAt = DateTime.Now;
+            _context.SaveChanges();
+        }
+
+        public void DeleteTransfer(int id)
+        {
+            var transfer = GetTransferById(id);
+            if (transfer == null) return;
+
+            _context.Transfers.Remove(transfer);
+            _context.SaveChanges();
+        }
     }
-}
 }

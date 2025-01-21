@@ -1,0 +1,37 @@
+### GET all Locations
+GET http://localhost:5000/api/v2/location
+
+###
+
+### Get a Location
+GET http://localhost:5000/api/v2/location/1
+
+### Create a new Location
+POST http://localhost:5000/api/v2/location
+Content-Type: application/json
+
+{
+    "warehouse_id": 1,
+    "code": "A.1.1",
+    "name": "Row: A, Rack: 1, Shelf: 1"
+}
+
+### Get location in a warehouse
+GET http://localhost:5000/api/v2/location/warehouse/2
+
+###
+
+### Update a Location
+PUT http://localhost:5000/api/v2/location/3
+Content-Type: application/json
+
+{
+"warehouse_id": 1,
+"code": "A.1.3",
+"name": "Row: A, Rack: 1, Shelf: 3"
+}
+
+###
+
+### Delete a Location
+DELETE http://localhost:5000/api/v2/location/3

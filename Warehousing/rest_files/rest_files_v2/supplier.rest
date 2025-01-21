@@ -1,0 +1,57 @@
+### GET all Suppliers
+GET http://localhost:5000/api/v2/supplier
+
+###
+
+### Get a Supplier by ID
+GET http://localhost:5000/api/v2/supplier/1
+
+### Create a new Supplier
+POST http://localhost:5000/api/v2/supplier
+Content-Type: application/json
+
+{
+"Code": "SUP0001",
+"Name": "Lee, Parks and Johnson",
+"Address": "5989 Sullivan Drives",
+"Address_extra": "Apt. 996",
+"City": "Port Anitaburgh",
+"ZipCode": 91688,
+"Province": "Illinois",
+"Country": "Czech Republic",
+"ContactName": "Toni Barnett",
+"ContactPhone": "363.541.7282x36825",
+"Reference": "LPaJ-SUP0001"
+}
+###
+
+### Update an existing Supplier
+PUT http://localhost:5000/api/v2/supplier/1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "code": "ABC123 -- Updated",
+    "description": "High-performance laptop -- Updated",
+    "short_description": "Laptop -- Updated",
+    "upc_code": "123456789012 -- Updated",
+    "model_number": "LT-2024 -- Updated",
+    "commodity_code": "IT-EQUIP -- Updated",
+    "item_line_id": 1,
+    "item_group_id": 1,
+    "item_type_id": 1,
+    "unit_purchase_quantity": 1,
+    "unit_order_quantity": 1,
+    "pack_order_quantity": 1,
+    "supplier_id": 1,
+    "supplier_code": "SUP001 -- Updated",
+    "supplier_part_number": "LT-2024-ABC",
+    "created_at": "2024-11-25T22:37:15.093959Z",
+    "updated_at": "2024-11-25T22:37:15.093959Z"
+}
+
+
+###
+
+### Delete an existing Supplier
+DELETE http://localhost:5000/api/v2/supplier/1

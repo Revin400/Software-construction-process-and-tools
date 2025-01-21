@@ -1,214 +1,136 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 using Warehousing.DataServices_v2;
-
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/orders/v2")]
+    [Route("api/v2/[controller]")]
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        //private readonly string dataPath;
         private readonly OrderService _orderService;
+        private readonly ShipmentService _shipmentService;
+        private readonly ClientService _clientService;
+        private readonly InventoryService _inventoryService;
+        private readonly WarehouseService _warehouseService;
 
-        public OrdersController(OrderService orderService)
+        public OrdersController(OrderService orderService, ShipmentService shipmentService, ClientService clientService,
+        InventoryService inventoryService, WarehouseService warehouseService)
         {
             _orderService = orderService;
+            _shipmentService = shipmentService;
+            _clientService = clientService;
+            _inventoryService = inventoryService;
+            _warehouseService = warehouseService;
         }
 
         [HttpGet]
-        public IActionResult GetOrders()
+        public IActionResult Get()
         {
-            try
-            {
-                var orders = _orderService.ReadOrdersFromJson();
-                return Ok(orders);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error reading orders: {ex.Message}");
-            }
+            return Ok(_orderService.GetOrders());
         }
 
         [HttpGet("{orderId}")]
-        public ActionResult<Order> GetOrderById(int orderId)
+        public ActionResult<Order> Get(int orderId)
         {
-            var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.FirstOrDefault(t => t.Id == orderId);
+            var order = _orderService.GetOrderById(orderId);
             if (order == null)
             {
                 return NotFound();
             }
-            return Ok(order);
-        }
-
-        /* 
-            [HttpGet("{orderId}")]
-            public ActionResult<Order> GetOrder(int orderId)
-            {
-                var order = data.FirstOrDefault(o => o.Id == orderId);
-                if (order == null)
-                {
-                    return NotFound();
-                }
-                return Ok(order);
-            }
-        */
-
-        [HttpGet("{orderId}/items")]
-        public ActionResult<IEnumerable<OrderItems>> GetItemsInOrder(int orderId)
-        {
-            var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.FirstOrDefault(o => o.Id == orderId);
-            if (order == null)
-            {
-                return NotFound();
-            }
-            return Ok(order.Items);
-        }
-
-        [HttpGet("shipment/{shipmentId}")]
-        public ActionResult<IEnumerable<int>> GetOrdersInShipment(int shipmentId)
-        {
-            var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id);
-            return Ok(order);
-        }
-
-        [HttpGet("client/{clientId}")]
-        public ActionResult<IEnumerable<Order>> GetOrdersForClient(int clientId)
-        {
-            var orders = _orderService.ReadOrdersFromJson();
-            var order = orders.Where(o => o.ShipTo == clientId || o.BillTo == clientId);
             return Ok(order);
         }
 
         [HttpPost]
         public ActionResult AddOrder([FromBody] Order order)
         {
-            try
+            var orders = _orderService.GetOrders();
+            if (orders.Any(o => o.Reference == order.Reference && o.Id != order.Id))
             {
-                var orders = _orderService.ReadOrdersFromJson();
-                order.Id = _orderService.NextId();
-                order.CreatedAt = DateTime.Now;
-                order.UpdatedAt = DateTime.Now;
-                orders.Add(order);
+                return BadRequest("Order with the same reference already exists");
+            }
 
-                _orderService.WriteOrdersToJson(orders);
-                return Ok(order);
-            }
-            catch (Exception ex)
+            var clients = _clientService.GetAllClients();
+            if (!clients.Any(c => c.Id == order.ShipTo) || !clients.Any(c => c.Id == order.BillTo))
             {
-                return StatusCode(500, $"Error creating order: {ex.Message}");
+                return BadRequest("Invalid client id");
             }
+
+            var inventories = _inventoryService.GetAllInventories();
+            foreach (var item in order.Items)
+            {
+                var inventory = inventories.FirstOrDefault(i => i.ItemId == item.ItemId);
+                if (inventory == null)
+                {
+                    return BadRequest("Invalid item id \n these are the valid item ids: " + string.Join(", ", inventories.Select(i => i.ItemId)));
+                }
+
+                // Subtract the ordered amount from the inventory
+                inventory.TotalOnHand -= item.Amount;
+                inventory.TotalAvailable -= item.Amount;
+                inventory.TotalOrdered += item.Amount;
+                _inventoryService.UpdateInventory(inventory);
+            }
+
+            var warehouses = _warehouseService.GetAllWarehouses();
+            if (!warehouses.Any(w => w.Id == order.WarehouseId))
+            {
+                return BadRequest("Invalid warehouse id");
+            }
+
+            order.CreatedAt = DateTime.Now;
+            order.UpdatedAt = DateTime.Now;
+            _orderService.AddOrder(order);
+            return CreatedAtAction(nameof(Get), new { orderId = order.Id }, order);
         }
 
         [HttpPut("{orderId}")]
         public ActionResult UpdateOrder(int orderId, [FromBody] Order order)
         {
-            try
-            {
-                var inventories = _orderService.ReadOrdersFromJson();
-                var existingInventory = inventories.FirstOrDefault(w => w.Id == orderId);
-                if (existingInventory == null)
-                {
-                    return NotFound($"Order with id {orderId} not found");
-                }
-                existingInventory.Id = order.Id;
-
-                if (inventories.Any(w => w.Id == order.Id && w.Id != orderId))
-                {
-                    return BadRequest($"Order with id {order.Id} already exists.");
-                }
-
-                existingInventory.OrderDate = order.OrderDate;
-
-                existingInventory.UpdatedAt = DateTime.Now;
-
-                _orderService.WriteOrdersToJson(inventories);
-                return Ok(existingInventory);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error updating inventory: {ex.Message}");
-            }
-        }
-
-        [HttpPut("{orderId}/items")]
-        public ActionResult UpdateItemsInOrder(int orderId, [FromBody] List<OrderItems> items)
-        {
-            var data = _orderService.ReadOrdersFromJson();
-            var order = data.FirstOrDefault(o => o.Id == orderId);
-            if (order == null)
+            var existingOrder = _orderService.GetOrderById(orderId);
+            if (existingOrder == null)
             {
                 return NotFound();
             }
-            order.Items = items;
-            UpdateOrder(orderId, order);
-            return NoContent();
-        }
 
-        [HttpPut("shipment/{shipmentId}")]
-        public ActionResult UpdateOrdersInShipment(int shipmentId, [FromBody] List<int> orders)
-        {
-            var data = _orderService.ReadOrdersFromJson();
-            var packedOrders = data.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id).ToList();
-            foreach (var orderId in packedOrders)
+            var inventories = _inventoryService.GetAllInventories();
+            foreach (var existingItem in existingOrder.Items)
             {
-                if (!orders.Contains(orderId))
+                var inventory = inventories.FirstOrDefault(i => i.ItemId == existingItem.ItemId);
+                if (inventory != null)
                 {
-                    var order = data.FirstOrDefault(o => o.Id == orderId);
-                    order.ShipmentId = -1;
-                    order.OrderStatus = "Scheduled";
-                    UpdateOrder(orderId, order);
+                    // Revert the previous order amount
+                    inventory.TotalOnHand += existingItem.Amount;
+                    inventory.TotalAvailable += existingItem.Amount;
+                    _inventoryService.UpdateInventory(inventory);
                 }
             }
-            foreach (var orderId in orders)
-            {
-                var order = data.FirstOrDefault(o => o.Id == orderId);
-                order.ShipmentId = shipmentId;
-                order.OrderStatus = "Packed";
-                UpdateOrder(orderId, order);
-            }
-            return NoContent();
-        }
 
-        [HttpDelete("{orderId}")]
-        public ActionResult RemoveOrder(int orderId)
-        {
-            try
+            foreach (var item in order.Items)
             {
-                var orders = _orderService.ReadOrdersFromJson();
-                var order = orders.FirstOrDefault(w => w.Id == orderId);
-                if (order == null)
+                var inventory = inventories.FirstOrDefault(i => i.ItemId == item.ItemId);
+                if (inventory == null)
                 {
-                    return NotFound($"Order with id {orderId} not found");
+                    return BadRequest("Invalid item id \n these are the valid item ids: " + string.Join(", ", inventories.Select(i => i.ItemId)));
                 }
-                orders.Remove(order);
-                _orderService.WriteOrdersToJson(orders);
-                return Ok(order);
+
+                // Subtract the new ordered amount from the inventory
+                inventory.TotalOnHand -= item.Amount;
+                inventory.TotalAvailable -= item.Amount;
+                _inventoryService.UpdateInventory(inventory);
             }
-            catch (Exception ex)
+
+            var warehouses = _warehouseService.GetAllWarehouses();
+            if (!warehouses.Any(w => w.Id == order.WarehouseId))
             {
-                return BadRequest($"Error deleting order: {ex.Message}");
+                return BadRequest("Invalid warehouse id");
             }
+
+            order.UpdatedAt = DateTime.Now;
+            _orderService.UpdateOrder(orderId, order);
+            return Ok(order);
         }
     }
 }
-/*
-    private void Save()
-    {
-        using (var writer = new StreamWriter(dataPath))
-        {
-            var data = _orderService.ReadOrdersFromJson();
-            var json = JsonSerializer.Serialize(data);
-            writer.Write(json);
-        }
-    }
-}
-*/

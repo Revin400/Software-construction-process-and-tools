@@ -1,0 +1,69 @@
+### Get all items
+GET http://localhost:5000/api/v2/items
+
+### Get a specific item by ID
+GET http://localhost:5000/api/v2/items/P000002
+
+### Get items by item line ID
+GET http://localhost:5000/api/v2/items/itemLine/1
+### Get items by item group ID
+GET http://localhost:5000/api/v2/items/itemGroup/1
+Content-Type: application/json
+
+### Get items by item type ID
+GET http://localhost:5000/api/v2/items/itemType/1
+Content-Type: application/json
+
+### Get items by supplier ID
+GET http://localhost:5000/api/v2/items/supplier/1
+Content-Type: application/json
+
+### Add a new item
+POST http://localhost:5000/api/v2/items
+Content-Type: application/json
+
+{
+    "Id":"P000001",
+    "code": "NEW1234",
+    "description": "Newly added item",
+    "shortDescription": "New Item",
+    "upcCode": "111111111111",
+    "modelNumber": "NM-2024",
+    "commodityCode": "GENERAL",
+    "itemLineId": 1,
+    "itemGroupId": 1,
+    "itemTypeId": 1,
+    "unitPurchaseQuantity": 1,
+    "unitOrderQuantity": 1,
+    "packOrderQuantity": 1,
+    "supplierId": 1,
+    "supplierCode": "SUP001",
+    "supplierPartNumber": "NM-2024-NEW"
+}
+
+### Update an existing item
+PUT http://localhost:5000/api/v2/items/P000001
+Content-Type: application/json
+
+{
+    "Id": "P000001",
+    "code": "UPDATED123",
+    "description": "Updated item description",
+    "shortDescription": "Updated Item",
+    "upcCode": "123456789012",
+    "modelNumber": "NM-2024-Updated",
+    "commodityCode": "UPDATED-CODE",
+    "itemLineId": 1,
+    "itemGroupId": 1,
+    "itemTypeId": 1,
+    "unitPurchaseQuantity": 2,
+    "unitOrderQuantity": 2,
+    "packOrderQuantity": 2,
+    "supplierId": 1,
+    "supplierCode": "SUP001",
+    "supplierPartNumber": "LT-2024-UPDATED"
+}
+
+### Delete an item
+DELETE http://localhost:5000/api/v2/items/P000001
+Content-Type: application/json

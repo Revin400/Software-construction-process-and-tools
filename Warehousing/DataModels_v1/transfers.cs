@@ -15,6 +15,7 @@ public class Transfer
 
 public class TransferItems
 {
-    public int ItemId { get; set; }
+    public int Id { get; set; }
+    public string ItemId { get; set; }
     public int Amount { get; set; }
 }

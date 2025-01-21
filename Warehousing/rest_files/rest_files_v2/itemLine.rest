@@ -1,0 +1,28 @@
+### Get All ItemLines
+GET http://localhost:5000/api/v2/ItemLine
+
+### Get ItemLine by ID
+GET http://localhost:5000/api/v2/ItemLine/1
+
+### Add a New ItemLine
+POST http://localhost:5000/api/v2/ItemLine
+Content-Type: application/json
+
+  {
+      "name": "Personal Care",
+      "description": "A category for items related to personal hygiene and care products."
+  }
+
+### Update an ItemLine
+PUT http://localhost:5000/api/v2/ItemLine/1
+Content-Type: application/json
+
+  {
+    "name": "Updated Personal Care",
+    "description": "",
+    "created_at": "2020-04-22 07:07:12",
+    "updated_at": "2021-03-08 14:48:38"
+  }
+
+### Delete an ItemLine
+DELETE http://localhost:5000/api/v2/ItemLine/1

@@ -1,0 +1,28 @@
+### Get all item groups
+GET http://localhost:5000/api/v2/ItemGroups
+
+### Get a specific item group by ID
+GET http://localhost:5000/api/v2/ItemGroups/1
+
+### Add a new item group
+POST http://localhost:5000/api/v2/ItemGroups
+Content-Type: application/json
+
+    {
+        "name": "Makeup",
+        "description": "A category for makeup products."
+    }
+
+### Update an existing item group
+PUT http://localhost:5000/api/v2/ItemGroups/1
+Content-Type: application/json
+
+    {
+        "name": "Electronics",
+        "description": "",
+        "created_at": "1975-12-14 06:58:09",
+        "updated_at": "2011-12-04 21:16:55"
+    }
+
+### Delete an item group
+DELETE http://localhost:5000/api/v2/ItemGroups/1

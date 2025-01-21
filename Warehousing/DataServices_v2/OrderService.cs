@@ -1,50 +1,121 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 
 
 
 namespace Warehousing.DataServices_v2
 {
-public class OrderService
-{
-    private readonly string _filePath;
-
-    public OrderService()
+    public class OrderService
     {
-        _filePath = Path.Combine(Directory.GetCurrentDirectory(), "Datasources", "orders.json");
-    }
+        private readonly WarehousingContext _context;
 
-    public List<Order> ReadOrdersFromJson()
-    {
-        if (!File.Exists(_filePath))
+        public OrderService(WarehousingContext context)
         {
-            File.WriteAllText(_filePath, "[]");  
-
-            return new List<Order>();
+            _context = context;
+            _context.Database.EnsureCreated();
         }
 
-        var jsonData = File.ReadAllText(_filePath);
-
-        if (string.IsNullOrWhiteSpace(jsonData))
+        public List<Order> GetOrders()
         {
-            return new List<Order>();
+            return _context.Orders.ToList();
         }
-        return JsonSerializer.Deserialize<List<Order>>(jsonData) ?? new List<Order>();
-    }
 
-    public void WriteOrdersToJson(List<Order> orders)
-    {
-        var jsonData = JsonSerializer.Serialize(orders, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_filePath, jsonData);
-    }
+        public Order GetOrderById(int id)
+        {
+            return _context.Orders.FirstOrDefault(o => o.Id == id);
+        }
 
-    public int NextId()
-    {
-        var orders = ReadOrdersFromJson();
-        return orders.Any() ? orders.Max(o => o.Id) + 1 : 1;
+        public List<OrderItems> GetItemsInOrder(int orderId)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+            return order.Items;
+        }
+
+        public List<int> GetOrdersInShipment(int shipmentId)
+        {
+            return _context.Orders.Where(o => o.ShipmentId == shipmentId).Select(o => o.Id).ToList();
+        }
+
+        public List<Order> GetOrdersForClient(int clientId)
+        {
+            return _context.Orders.Where(o => o.ShipTo == clientId || o.BillTo == clientId).ToList();
+        }
+
+        public void AddOrder(Order order)
+        {
+            order.CreatedAt = DateTime.Now;
+            order.UpdatedAt = DateTime.Now;
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+        }
+
+        public void UpdateOrder(int id, Order order)
+        {
+            var existingOrder = _context.Orders.FirstOrDefault(o => o.Id == id);
+            if (existingOrder == null) return;
+
+            existingOrder.SourceId = order.SourceId;
+            existingOrder.OrderDate = order.OrderDate;
+            existingOrder.RequestDate = order.RequestDate;
+            existingOrder.Reference = order.Reference;
+            existingOrder.ReferenceExtra = order.ReferenceExtra;
+            existingOrder.OrderStatus = order.OrderStatus;
+            existingOrder.Notes = order.Notes;
+            existingOrder.ShippingNotes = order.ShippingNotes;
+            existingOrder.PickingNotes = order.PickingNotes;
+            existingOrder.WarehouseId = order.WarehouseId;
+            existingOrder.ShipTo = order.ShipTo;
+            existingOrder.BillTo = order.BillTo;
+            existingOrder.ShipmentId = order.ShipmentId;
+            existingOrder.TotalAmount = order.TotalAmount;
+            existingOrder.TotalDiscount = order.TotalDiscount;
+            existingOrder.TotalTax = order.TotalTax;
+            existingOrder.TotalSurcharge = order.TotalSurcharge;
+            existingOrder.UpdatedAt = DateTime.Now;
+            existingOrder.Items = order.Items;
+
+            _context.Orders.Update(existingOrder);
+            _context.SaveChanges();
+        }
+
+        public void UpdateOrderItems(int orderId, List<OrderItems> items)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+            if (order == null) return;
+
+            order.Items = items;
+            order.UpdatedAt = DateTime.Now;
+
+            _context.Orders.Update(order);
+            _context.SaveChanges(); 
+        }
+
+        public void UpdateOrdersInShipment(int shipmentId, List<OrderItems> items)
+        {
+            var orders = _context.Orders.Where(o => o.ShipmentId == shipmentId).ToList();
+            if (orders.Count == 0) return;
+
+            foreach (var order in orders)
+            {
+                order.Items = items;
+                order.UpdatedAt = DateTime.Now;
+            }
+
+            _context.Orders.UpdateRange(orders);
+            _context.SaveChanges();
+        }
+
+        public void DeleteOrder(int id)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == id);
+            if (order == null) return;
+
+            _context.Orders.Remove(order);
+            _context.SaveChanges();
+        }
+        
+
+
     }
-}
 }

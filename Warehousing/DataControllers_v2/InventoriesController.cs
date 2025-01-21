@@ -5,167 +5,162 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Warehousing.DataServices_v2;
+using SharpCompress.Readers;
 
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/inventories/v2")]
+    [Route("api/v2/[controller]")]
     [ApiController]
     public class InventoriesController : ControllerBase
     {
         private readonly InventoryService _inventoryService;
+        private readonly LocationService _locationService;
+        private readonly ItemService _itemService;
 
-        public InventoriesController(InventoryService inventoryService)
+        public InventoriesController(InventoryService inventoryService, LocationService locationService, ItemService itemService)
         {
             _inventoryService = inventoryService;
+            _locationService = locationService;
+            _itemService = itemService;
         }
 
         [HttpGet]
-        public IActionResult GetInventories()
+        public ActionResult<List<Inventory>> GetInventories()
         {
-            try
-            {
-                var inventories = _inventoryService.ReadInventoriesFromJson();
-                return Ok(inventories);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error reading inventories: {ex.Message}");
-            }
+            return _inventoryService.GetAllInventories();
         }
 
         [HttpGet("{inventoryId}")]
         public ActionResult<Inventory> GetInventoryById(int inventoryId)
         {
-            try
+            var inventory = _inventoryService.GetInventoryById(inventoryId);
+            if (inventory == null)
             {
-                var inventories = _inventoryService.ReadInventoriesFromJson();
-                var inventory = inventories.FirstOrDefault(t => t.Id == inventoryId);
-                if (inventory == null)
-                {
-                    return NotFound($"Inventory with id {inventoryId} not found");
-                }
-                return Ok(inventory);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error reading inventory: {ex.Message}");
-            }
+            return Ok(inventory);            
         }
 
         [HttpGet("item/{itemId}")]
-        public ActionResult<Dictionary<string, decimal>> GetInventoriesForItem(int itemId)
+        public ActionResult<Dictionary<string, decimal>> GetInventoriesForItem(string itemId)
         {
-            var result = new Dictionary<string, decimal>
-        {
-            { "total_expected", 0 },
-            { "total_ordered", 0 },
-            { "total_allocated", 0 },
-            { "total_available", 0 }
-        };
 
-            var inventories = _inventoryService.ReadInventoriesFromJson();
-            foreach (var item in inventories)
+            if (string.IsNullOrEmpty(itemId))
             {
-                if (item.ItemId == itemId)
-                {
-                    result["total_expected"] += item.TotalExpected;
-                    result["total_ordered"] += item.TotalOrdered;
-                    result["total_allocated"] += item.TotalAllocated;
-                    result["total_available"] += item.TotalAvailable;
-                }
+                return BadRequest("Item Id is required");
             }
-            return Ok(result);
+
+            var inventories = _inventoryService.GetInventoryByItemId(itemId);
+
+            if(inventories.Any(i => i.ItemId != itemId))
+            {
+                return NotFound("Item not found");
+            }
+
+            var result = new Dictionary<string, decimal>
+            {
+
+                { "totalOnHand"    , 0 },
+                { "totalExpected"  , 0 },
+                { "totalOrdered"   , 0 },
+                { "totalAllocated" , 0 },
+                { "totalAvailable" , 0 }
+            };
+
+            
+
+            foreach (var inventory in inventories)
+            {
+                result["totalOnHand"] += inventory.TotalOnHand;
+                result["totalExpected"] += inventory.TotalExpected;
+                result["totalOrdered"] += inventory.TotalOrdered;
+                result["totalAllocated"] += inventory.TotalAllocated;
+                result["totalAvailable"] += inventory.TotalAvailable;
+            }
+
+            return Ok(new { message = $"Inventory for item {itemId}", data = result });
         }
 
         [HttpPost]
         public IActionResult AddInventory([FromBody] Inventory inventory)
         {
-            try
+            var inventories = _inventoryService.GetAllInventories();
+            var locations = _locationService.GetAllLocations();
+            var items = _itemService.GetAllItems();
+
+            if (inventories.Any(i => i.Id == inventory.Id))
             {
-                var inventories = _inventoryService.ReadInventoriesFromJson();
-
-
-                inventory.Id = _inventoryService.NextId();
-                inventory.CreatedAt = DateTime.Now;
-                inventory.UpdatedAt = DateTime.Now;
-
-
-                if (inventories.Any(w => w.Id == inventory.Id))
-                {
-                    return BadRequest($"Inventory with id {inventory.Id} already exists.");
-                }
-
-                inventories.Add(inventory);
-
-                _inventoryService.WriteInventoriesToJson(inventories);
-
-                return Ok(inventory);
+                return BadRequest($"Inventory with id {inventory.Id} already exists.");
             }
-            catch (Exception ex)
+
+            if(inventories.Any(i => i.ItemId == inventory.ItemId))
             {
-                return BadRequest($"Error creating inventory: {ex.Message}");
+                return BadRequest($"Inventory with item id {inventory.ItemId} already exists.");
             }
+
+            if(!items.Any(i => i.Id == inventory.ItemId))
+            {
+                return BadRequest("Item not found");
+            }
+
+            if(inventory.Locations.Any(lid => !locations.Any(lo => lo.Id == lid)))
+            {
+                return BadRequest("Location not found");
+            }
+
+            inventory.CreatedAt = DateTime.Now;
+            inventory.UpdatedAt = DateTime.Now;
+
+            _inventoryService.AddInventory(inventory);
+            return CreatedAtAction(nameof(GetInventoryById), new { inventoryId = inventory}, inventory);
         }
 
         [HttpPut("{inventoryId}")]
         public IActionResult UpdateInventory(int inventoryId, [FromBody] Inventory inventory)
         {
-            try
+            var inventories = _inventoryService.GetAllInventories();
+            var locations = _locationService.GetAllLocations();
+            var items = _itemService.GetAllItems();
+
+            if (inventories.Any(i => i.Id != inventoryId))
             {
-                var inventories = _inventoryService.ReadInventoriesFromJson();
-                var existingInventory = inventories.FirstOrDefault(w => w.Id == inventoryId);
-                if (existingInventory == null)
-                {
-                    return NotFound($"Inventory with id {inventoryId} not found");
-                }
-                existingInventory.Id = inventory.Id;
-
-                if (inventories.Any(w => w.Id == inventory.Id && w.Id != inventoryId))
-                {
-                    return BadRequest($"Inventory with id {inventory.Id} already exists.");
-                }
-
-                existingInventory.ItemId = inventory.ItemId;
-                existingInventory.Description = inventory.Description;
-                existingInventory.ItemReference = inventory.ItemReference;
-                existingInventory.LocationId = inventory.LocationId;
-                existingInventory.TotalOnHand = inventory.TotalOnHand;
-                existingInventory.TotalExpected = inventory.TotalExpected;
-                existingInventory.TotalOrdered = inventory.TotalOrdered;
-                existingInventory.TotalAllocated = inventory.TotalAllocated;
-                existingInventory.TotalAvailable = inventory.TotalAvailable;
-
-                existingInventory.UpdatedAt = DateTime.Now;
-
-                _inventoryService.WriteInventoriesToJson(inventories);
-                return Ok(existingInventory);
+                return NotFound($"Inventory with id {inventoryId} not found");
             }
-            catch (Exception ex)
+
+            if(inventories.Any(i => i.ItemId == inventory.ItemId && i.Id != inventoryId))
             {
-                return BadRequest($"Error updating inventory: {ex.Message}");
+                return BadRequest($"Inventory with item id {inventory.ItemId} already exists.");
             }
+
+            if(inventory.Locations.Any(lid => !locations.Any(lo => lo.Id == lid)))
+            {
+                return BadRequest("Location not found");
+            }
+
+            if(!items.Any(i => i.Id == inventory.ItemId))
+            {
+                return BadRequest("Item not found");
+            }
+
+            inventory.Id = inventoryId;
+            inventory.UpdatedAt = DateTime.Now;
+
+            _inventoryService.UpdateInventory(inventory);
+            return Ok(inventory);
         }
 
         [HttpDelete("{inventoryId}")]
         public IActionResult RemoveInventory(int inventoryId)
         {
-            try
+            var inventory = _inventoryService.GetInventoryById(inventoryId);
+            if (inventory == null)
             {
-                var inventories = _inventoryService.ReadInventoriesFromJson();
-                var inventory = inventories.FirstOrDefault(w => w.Id == inventoryId);
-                if (inventory == null)
-                {
-                    return NotFound($"Inventory with id {inventoryId} not found");
-                }
-                inventories.Remove(inventory);
-                _inventoryService.WriteInventoriesToJson(inventories);
-                return Ok(inventory);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error deleting inventory: {ex.Message}");
-            }
+
+            _inventoryService.DeleteInventory(inventoryId);
+            return Ok();
         }
     }
 }

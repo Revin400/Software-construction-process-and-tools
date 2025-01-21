@@ -3,16 +3,18 @@ using Warehousing.DataServices_v2;
 
 namespace Warehousing.DataControllers_v2
 {
-    [Route("api/location/v2")]
+    [Route("api/v2/[controller]")]
     [ApiController]
 
     public class LocationController : ControllerBase
     {
         private readonly LocationService _locationService;
+        private readonly WarehouseService _warehouseService;
 
-        public LocationController(LocationService locationService)
+        public LocationController(LocationService locationService, WarehouseService warehouseService)
         {
             _locationService = locationService;
+            _warehouseService = warehouseService;
         }
 
         [HttpGet]
@@ -33,29 +35,45 @@ namespace Warehousing.DataControllers_v2
             return Ok(location);
         }
 
+        [HttpGet("warehouse/{warehouseId}")]
+        public IActionResult GetLocationsByWarehouseId(int warehouseId)
+        {   
+            if (_warehouseService.GetWarehouseById(warehouseId) == null)
+            {
+                return BadRequest($"Warehouse with id {warehouseId} not found");
+            }
+
+            return Ok(_locationService.GetLocationsByWarehouseId(warehouseId));
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] Location location)
         {
-            try
-            {
+            
                 var locations = _locationService.GetAllLocations();
-                if (locations.Any(l => l.Code == location.Code))
+                var warehouses = _warehouseService.GetAllWarehouses();
+                
+                if (locations.Any(l => l.Code == location.Code && l.Warehouse_id == location.Warehouse_id))
                 {
                     return BadRequest($"Location with code {location.Code} already exists");
                 }
 
-                if (locations.Any(l => l.Name == location.Name))
+                if (locations.Any(l => l.Name == location.Name && l.Warehouse_id == location.Warehouse_id))
                 {
                     return BadRequest($"Location with name {location.Name} already exists");
                 }
 
+                if(!warehouses.Any(w => w.Id == location.Warehouse_id))
+                {
+                    return BadRequest($"Warehouse with id {location.Warehouse_id} not found");
+                }
+
+              
+
                 _locationService.CreateLocation(location);
                 return CreatedAtAction(nameof(Get), new { id = location.Id }, location);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error creating location: {ex.Message}");
-            }
+            
+           
         }
 
         [HttpPut("{id}")]
@@ -70,12 +88,19 @@ namespace Warehousing.DataControllers_v2
                     return NotFound($"Location with id {id} not found");
                 }
 
-                if (locations.Any(l => l.Code == location.Code && l.Id != id))
+              
+                if (_warehouseService.GetWarehouseById(location.Warehouse_id) == null)
+                {
+                    return BadRequest($"Warehouse with id {location.Warehouse_id} not found");
+                }
+                
+
+                if (locations.Any(l => l.Code == location.Code && l.Id != id && l.Warehouse_id == location.Warehouse_id))
                 {
                     return BadRequest($"Location with code {location.Code} already exists");
                 }
 
-                if (locations.Any(l => l.Name == location.Name && l.Id != id))
+                if (locations.Any(l => l.Name == location.Name && l.Id != id && l.Warehouse_id == location.Warehouse_id))
                 {
                     return BadRequest($"Location with name {location.Name} already exists");
                 }
@@ -101,7 +126,7 @@ namespace Warehousing.DataControllers_v2
                     return NotFound();
                 }
                 _locationService.DeleteLocation(id);
-                return Ok();
+                return Ok("Location deleted");
             }
             catch (Exception ex)
             {

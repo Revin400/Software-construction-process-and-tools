@@ -6,7 +6,7 @@ using Warehousing.DataServices_v2;
 namespace Warehousing.DataControllers_v2
 {
     [ApiController]
-    [Route("api/ItemLine/v2")]
+    [Route("api/v2/ItemLine")]
     public class ItemLineController : ControllerBase
     {
         private readonly ItemLineService _service;
@@ -32,24 +32,40 @@ namespace Warehousing.DataControllers_v2
         }
 
         [HttpPost]
-        public IActionResult AddItemLine([FromBody] ItemLine itemLine)
+        public IActionResult Post([FromBody] ItemLine itemLine)
         {
+           var itemlines = _service.GetAllItemLines();
+           if(itemlines.Any(il => il.Name == itemLine.Name))
+           {
+               return BadRequest($"ItemLine with Name {itemLine.Name} already exists");
+           }
+
             _service.AddItemLine(itemLine);
             return CreatedAtAction(nameof(GetItemLineById), new { id = itemLine.Id }, itemLine);
         }
 
+
         [HttpPut("{id}")]
         public IActionResult UpdateItemLine(int id, [FromBody] ItemLine updatedItemLine)
         {
+            var itemline = _service.GetItemLineById(id);
+            if (itemline == null) return NotFound();
+
+            var itemlines = _service.GetAllItemLines();
+            if(itemlines.Any(il => il.Name == updatedItemLine.Name && il.Id != id))
+            {
+                return BadRequest($"ItemLine with Name {itemline.Name} already exists");
+            }
+
             _service.UpdateItemLine(id, updatedItemLine);
-            return NoContent();
+            return Ok(updatedItemLine);
         }
 
         [HttpDelete("{id}")]
         public IActionResult RemoveItemLine(int id)
         {
             _service.RemoveItemLine(id);
-            return NoContent();
+            return Ok("ItemLine removed");
         }
     }
 }
