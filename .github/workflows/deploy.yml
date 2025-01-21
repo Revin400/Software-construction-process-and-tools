@@ -1,70 +1,93 @@
-name: CI/CD Pipeline for .NET Core
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main  # Trigger pipeline on pushes to the main branch
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  # Step 1: Build the Application
-  build:
+  backend-build:
+    name: Backend Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3  # Checkout the repository
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0'  # Specify the .NET version you are using
-
-      - name: Restore Dependencies
-        run: dotnet restore  # Restore NuGet packages
-
-      - name: Build Application
-        run: dotnet build --configuration Release
-
-  # Step 2: Run Unit Tests
-  unit-tests:
-    runs-on: ubuntu-latest
-    needs: build  # Run this job after the build
-    steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          dotnet-version: '7.0'
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Build backend
+        run: npm run build
 
-      - name: Run Unit Tests
-        run: dotnet test --no-build --verbosity normal
+  backend-unit-test-a:
+    name: Backend Unit Test A
+    runs-on: ubuntu-latest
+    needs: backend-build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Run Unit Test A
+        run: npm run test:a
 
-  # Step 3: Deploy to Staging
+  backend-unit-test-b:
+    name: Backend Unit Test B
+    runs-on: ubuntu-latest
+    needs: backend-build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Run Unit Test B
+        run: npm run test:b
+
+  end-to-end-test:
+    name: End-to-End Test
+    runs-on: ubuntu-latest
+    needs: [backend-unit-test-a, backend-unit-test-b]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Run End-to-End Tests
+        run: npm run test:e2e
+
   deploy-staging:
+    name: Deploy to Staging
     runs-on: ubuntu-latest
-    needs: unit-tests  # Run this job after unit tests pass
+    needs: end-to-end-test
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Deploy to Staging
-        env:
-          STAGING_API_KEY: ${{ secrets.STAGING_API_KEY }}  # Use GitHub Secrets for sensitive information
-        run: |
-          echo "Deploying to Staging..."
-          # Replace with your staging deployment script/command
-          # Example: dotnet publish and deploy via SCP or other tool
-          dotnet publish --configuration Release --output ./publish
-          scp -r ./publish/ user@staging-server:/var/www/warehousing
+        run: npm run deploy:staging
 
-  # Step 4: Deploy to Production
   deploy-production:
+    name: Deploy to Production
     runs-on: ubuntu-latest
-    needs: deploy-staging  # Run this job after staging deployment
+    needs: deploy-staging
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Deploy to Production
-        env:
-          PRODUCTION_API_KEY: ${{ secrets.PRODUCTION_API_KEY }}  # Use GitHub Secrets for sensitive information
-        run: |
-          echo "Deploying to Production..."
-          # Replace with your production deployment script/command
-          dotnet publish --configuration Release --output ./publish
-          scp -r ./publish/ user@production-server:/var/www/warehousing
+        run: npm run deploy:production
