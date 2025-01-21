@@ -42,17 +42,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Environment Variables
+      - name: Deploy Application
         env:
           FULL_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_1 }}
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
-      
-      - name: Deploy Application
         run: |
           echo "Deploying application..."
           # Add deployment logic here, such as starting the application
           # or deploying to a cloud service.
-
 
 #github action page
 # github repo
