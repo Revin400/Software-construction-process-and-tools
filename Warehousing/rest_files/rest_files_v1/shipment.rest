@@ -1,14 +1,22 @@
 ### Get all shipments
 GET http://localhost:5000/api/v1/shipment
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### Get a shipment by ID
 GET http://localhost:5000/api/v1/shipment/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### Get items from a shipment
 GET http://localhost:5000/api/v1/shipment/1/items
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### Add a new shipment
 POST http://localhost:5000/api/v1/shipment
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -38,6 +46,8 @@ Content-Type: application/json
 
 ### Update a shipment
 PUT http://localhost:5000/api/v1/shipment/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -63,3 +73,5 @@ Content-Type: application/json
 
 ### Delete a shipment
 DELETE http://localhost:5000/api/v1/shipment/1
+Headers:
+    X-API-KEY: a1b2c3d4e5

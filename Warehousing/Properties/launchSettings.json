@@ -15,7 +15,9 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5075",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "FULL_ACCESS_KEY": "a1b2c3d4e5",
+        "GET_ACCESS_KEY": "f6g7h8i9j0"
       }
     },
     "https": {
@@ -24,14 +26,18 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7085;http://localhost:5075",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "FULL_ACCESS_KEY": "a1b2c3d4e5",
+        "GET_ACCESS_KEY": "f6g7h8i9j0"
       }
     },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "FULL_ACCESS_KEY": "a1b2c3d4e5",
+        "GET_ACCESS_KEY": "f6g7h8i9j0"
       }
     }
   }

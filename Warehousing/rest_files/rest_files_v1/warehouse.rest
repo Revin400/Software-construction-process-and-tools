@@ -1,15 +1,21 @@
 ### GET all Warehouses
 GET http://localhost:5000/api/v1/warehouses
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ###
 
 ### GET Warehouse by ID
 GET http://localhost:5000/api/v1/warehouses/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ###
 
 ### Create a new Warehouse
 POST http://localhost:5000/api/v1/warehouses
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -33,6 +39,8 @@ Content-Type: application/json
 
 ### Update an existing Warehouse
 PUT http://localhost:5000/api/v1/warehouses/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -56,3 +64,5 @@ Content-Type: application/json
 
 ### Delete an existing Warehouse
 DELETE http://localhost:5000/api/v1/warehouses/1
+Headers:
+    X-API-KEY: a1b2c3d4e5

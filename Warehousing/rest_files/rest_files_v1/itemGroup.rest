@@ -1,13 +1,19 @@
 ### Get all item groups
 GET http://localhost:5000/api/v1/ItemGroups
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Get a specific item group by ID
 GET http://localhost:5000/api/v1/ItemGroups/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Add a new item group
 POST http://localhost:5000/api/v1/ItemGroups
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
     {
@@ -20,6 +26,8 @@ Content-Type: application/json
 
 ### Update an existing item group
 PUT http://localhost:5000/api/v1/ItemGroups/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
     {
@@ -32,4 +40,6 @@ Content-Type: application/json
 
 ### Delete an item group
 DELETE http://localhost:5000/api/v1/ItemGroups/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json

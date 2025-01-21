@@ -1,18 +1,26 @@
 ### GET all Inventories
 GET http://localhost:5000/api/v2/inventories
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ###
 
 ### Get Inventory by ID
 GET http://localhost:5000/api/v2/inventories/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### GET Inventories for a specific Item by Item ID
 GET http://localhost:5000/api/v2/inventories/item/P000001
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ###
 
 ### Create a new Inventory
 POST http://localhost:5000/api/v2/inventories
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -33,6 +41,8 @@ Content-Type: application/json
 
 ### Update an existing Inventory
 PUT http://localhost:5000/api/v2/inventories/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -53,3 +63,5 @@ Content-Type: application/json
 
 ### Delete an Inventory
 DELETE http://localhost:5000/api/v2/inventories/1
+Headers:
+    X-API-KEY: a1b2c3d4e5

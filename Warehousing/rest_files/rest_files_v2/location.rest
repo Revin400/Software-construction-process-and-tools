@@ -1,13 +1,19 @@
 ### GET all Locations
 GET http://localhost:5000/api/v2/location
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ###
 
 ### Get a Location
 GET http://localhost:5000/api/v2/location/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### Create a new Location
 POST http://localhost:5000/api/v2/location
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -18,11 +24,15 @@ Content-Type: application/json
 
 ### Get location in a warehouse
 GET http://localhost:5000/api/v2/location/warehouse/2
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ###
 
 ### Update a Location
 PUT http://localhost:5000/api/v2/location/3
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -35,3 +45,5 @@ Content-Type: application/json
 
 ### Delete a Location
 DELETE http://localhost:5000/api/v2/location/3
+Headers:
+    X-API-KEY: a1b2c3d4e5

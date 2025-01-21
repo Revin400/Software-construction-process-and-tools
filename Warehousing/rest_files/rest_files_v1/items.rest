@@ -1,29 +1,43 @@
 ### Get all items
 GET http://localhost:5000/api/v1/items
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Get a specific item by ID
 GET http://localhost:5000/api/v1/items/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Get items by item line ID
 GET http://localhost:5000/api/v1/items/itemLine/3
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Get items by item group ID
 GET http://localhost:5000/api/v1/items/itemGroup/2
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Get items by item type ID
 GET http://localhost:5000/api/v1/items/itemType/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Get items by supplier ID
 GET http://localhost:5000/api/v1/items/supplier/3
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 ### Add a new item
 POST http://localhost:5000/api/v1/items
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -47,6 +61,8 @@ Content-Type: application/json
 
 ### Update an existing item
 PUT http://localhost:5000/api/v1/items/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -70,4 +86,6 @@ Content-Type: application/json
 
 ### Delete an item
 DELETE http://localhost:5000/api/v1/items/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json

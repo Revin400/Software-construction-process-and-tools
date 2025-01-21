@@ -1,13 +1,19 @@
 ### GET all Suppliers
 GET http://localhost:5000/api/v2/supplier
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ###
 
 ### Get a Supplier by ID
 GET http://localhost:5000/api/v2/supplier/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### Create a new Supplier
 POST http://localhost:5000/api/v2/supplier
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -27,6 +33,8 @@ Content-Type: application/json
 
 ### Update an existing Supplier
 PUT http://localhost:5000/api/v2/supplier/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -55,3 +63,5 @@ Content-Type: application/json
 
 ### Delete an existing Supplier
 DELETE http://localhost:5000/api/v2/supplier/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
