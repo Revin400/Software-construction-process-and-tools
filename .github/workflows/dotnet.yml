@@ -1,46 +1,66 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+name: .NET with Docker
 
-
-name: .NET CI/CD
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore Dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Publish Artifact
-      run: dotnet publish -c Release -o ./publish
-      env:
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-        
-# artifact
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dotnet-app
-        path: ./publish
 
-#github action page
-# github repo
-  # Eerst build and daarna test
-  # code coverage
-  # artifact 
-  # deploy
-  # auto publish VPS
-  
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          docker compose -f NewWarehouse/docker-compose.yml up -d
+
+      # Wait for services to be ready
+      - name: Wait for services
+        run: |
+          echo "Waiting briefly for services to stabilize..."
+          sleep 30
+
+      # Set up .NET environment
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore NewWarehouse
+
+      # Build the target program
+      - name: Build the program
+        run: dotnet build --no-restore NewWarehouse
+
+      # Run the target program
+      - name: Run the target program
+        run: |
+          dotnet run --project NewWarehouse &
+          echo "Waiting for the application to start..."
+          sleep 30
+
+      # Restore dependencies for tests
+      - name: Restore test dependencies
+        run: dotnet restore Testing
+
+      # Build the test project
+      - name: Build tests
+        run: dotnet build --no-restore Testing
+
+      # Run tests
+      - name: Test
+        run: dotnet test --no-build --verbosity normal Testing
+
+      # Clean up Docker services
+      - name: Clean up Docker Compose
+        if: always()
+        run: |
+          docker compose -f NewWarehouse/docker-compose.yml down
