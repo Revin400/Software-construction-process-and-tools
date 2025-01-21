@@ -1,11 +1,17 @@
 ### Get All Item Types
 GET http://localhost:5000/api/v1/ItemType
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### Get Item Type by ID
 GET http://localhost:5000/api/v1/ItemType/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 
 ### Add New Item Type
 POST http://localhost:5000/api/v1/ItemType
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -18,6 +24,8 @@ Content-Type: application/json
 
 ### Update Existing Item Type
 PUT http://localhost:5000/api/v1/ItemType/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -31,3 +39,5 @@ Content-Type: application/json
 
 ### Delete Item Type
 DELETE http://localhost:5000/api/v1/ItemType/1
+Headers:
+    X-API-KEY: a1b2c3d4e5

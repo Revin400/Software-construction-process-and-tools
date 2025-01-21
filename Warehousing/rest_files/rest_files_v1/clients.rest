@@ -1,13 +1,16 @@
 ### GET all Clients
 GET http://localhost:5000/api/v1/client
-
+Headers:
+    X-API-KEY: f6g7h8i9j0
 ###
 
 ### Create a new Client
 POST http://localhost:5000/api/v1/client
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
-{
+{   
     "name": "Acme Corporation",
     "address": "123 Main Street",
     "city": "Anytown",
@@ -25,6 +28,8 @@ Content-Type: application/json
 
 ### Update an existing Client
 PUT http://localhost:5000/api/v1/client/1
+Headers:
+    X-API-KEY: a1b2c3d4e5
 Content-Type: application/json
 
 {
@@ -45,3 +50,5 @@ Content-Type: application/json
 
 ### Delete an existing Client
 DELETE http://localhost:5000/api/v1/client/1
+Headers:
+    X-API-KEY: a1b2c3d4e5

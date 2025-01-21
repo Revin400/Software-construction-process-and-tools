@@ -1,40 +1,61 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-
 name: .NET CI/CD
+
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore Dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-    - name: Publish Artifact
-      run: dotnet publish -c Release -o ./publish
-      env:
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-        
-# artifact
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: dotnet-app
-        path: ./publish
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Start Server
+        run: |
+          dotnet run --project ./Warehousing/ &
+          sleep 10
+
+      - name: Test
+        run: dotnet test --no-build
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment Variables
+        env:
+          FULL_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_1 }}
+          GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
+        run: |
+          echo "FULL_ACCESS_KEY=$FULL_ACCESS_KEY" >> $GITHUB_ENV
+          echo "GET_ACCESS_KEY=$GET_ACCESS_KEY" >> $GITHUB_ENV
+      
+      - name: Deploy Application
+        run: |
+          echo "Deploying application..."
+          # Add deployment logic here, such as starting the application
+          # or deploying to a cloud service.
+
 
 #github action page
 # github repo
