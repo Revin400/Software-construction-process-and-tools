@@ -7,13 +7,15 @@ using Moq;
 using Moq.Protected;
 using Xunit;
 using System.Threading;
+using Warehousing.DataControllers_v2;
+using Warehousing.DataServices_v2;
 
-public class Items_Unit_Tests
+public class SupplierController_Unit_Tests
 {
     private readonly HttpClient _client;
     private readonly Mock<HttpMessageHandler> _handlerMock;
 
-    public Items_Unit_Tests()
+    public SupplierController_Unit_Tests()
     {
         _handlerMock = new Mock<HttpMessageHandler>();
         _client = new HttpClient(_handlerMock.Object) { BaseAddress = new Uri("http://localhost:5000/api/v2/") };
@@ -22,12 +24,12 @@ public class Items_Unit_Tests
     }
 
     [Fact]
-    public async Task GetAllItems_ShouldReturnSuccess()
+    public async Task GetAllSuppliers_ShouldReturnSuccess()
     {
         // Arrange
         var responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
         {
-            Content = new StringContent("[{\"id\":1, \"code\":\"ITEM123\", \"description\":\"Item 1\"}, {\"id\":2, \"code\":\"ITEM124\", \"description\":\"Item 2\"}]")
+            Content = new StringContent("[{\"id\":1, \"code\":\"SUP001\", \"reference\":\"US-SUP001\", \"name\":\"Supplier 1\"}, {\"id\":2, \"code\":\"SUP002\", \"reference\":\"US-SUP002\", \"name\":\"Supplier 2\"}]")
         };
 
         _handlerMock.Protected()
@@ -39,21 +41,21 @@ public class Items_Unit_Tests
             .ReturnsAsync(responseMessage);
 
         // Act
-        var response = await _client.GetAsync("items");
+        var response = await _client.GetAsync("supplier");
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var items = await response.Content.ReadAsStringAsync();
-        Assert.False(string.IsNullOrEmpty(items));
+        var suppliers = await response.Content.ReadAsStringAsync();
+        Assert.False(string.IsNullOrEmpty(suppliers));
     }
 
     [Fact]
-    public async Task GetItemById_ShouldReturnSuccess()
+    public async Task GetSupplierById_ShouldReturnSuccess()
     {
         // Arrange
         var responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
         {
-            Content = new StringContent("{\"id\":1, \"code\":\"ITEM123\", \"description\":\"Item 1\"}")
+            Content = new StringContent("{\"id\":1, \"code\":\"SUP001\", \"reference\":\"US-SUP001\", \"name\":\"Supplier 1\"}")
         };
 
         _handlerMock.Protected()
@@ -65,42 +67,28 @@ public class Items_Unit_Tests
             .ReturnsAsync(responseMessage);
 
         // Act
-        var response = await _client.GetAsync("items/1");
+        var response = await _client.GetAsync("supplier/1");
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var item = await response.Content.ReadAsStringAsync();
-        Assert.False(string.IsNullOrEmpty(item));
+        var supplier = await response.Content.ReadAsStringAsync();
+        Assert.False(string.IsNullOrEmpty(supplier));
     }
 
     [Fact]
-    public async Task AddNewItem_ShouldReturnSuccess()
+    public async Task CreateSupplier_ShouldReturnSuccess()
     {
         // Arrange
-        var newItem = new
+        var newSupplier = new
         {
-            Code = "NEW123",
-            Description = "New high-quality item",
-            ShortDescription = "New Item",
-            UpcCode = "987654321012",
-            ModelNumber = "NI-2024",
-            CommodityCode = "NEW-COMMODITY",
-            ItemLineId = 1,
-            ItemGroupId = 1,
-            ItemTypeId = 1,
-            UnitPurchaseQuantity = 1,
-            UnitOrderQuantity = 1,
-            PackOrderQuantity = 1,
-            SupplierId = 1,
-            SupplierCode = "SUPNEW",
-            SupplierPartNumber = "NI-2024-PART",
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            Code = "SUP003",
+            Reference = "US-SUP003",
+            Name = "Supplier 3"
         };
 
         var responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.Created)
         {
-            Content = new StringContent("{\"id\":1, \"code\":\"NEW123\", \"description\":\"New high-quality item\"}")
+            Content = new StringContent("{\"id\":3, \"code\":\"SUP003\", \"reference\":\"US-SUP003\", \"name\":\"Supplier 3\"}")
         };
 
         _handlerMock.Protected()
@@ -112,43 +100,29 @@ public class Items_Unit_Tests
             .ReturnsAsync(responseMessage);
 
         // Act
-        var response = await _client.PostAsJsonAsync("items", newItem);
+        var response = await _client.PostAsJsonAsync("supplier", newSupplier);
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var createdItem = await response.Content.ReadAsStringAsync();
-        Assert.False(string.IsNullOrEmpty(createdItem));
+        var createdSupplier = await response.Content.ReadAsStringAsync();
+        Assert.False(string.IsNullOrEmpty(createdSupplier));
     }
 
     [Fact]
-    public async Task UpdateItem_ShouldReturnSuccess()
+    public async Task UpdateSupplier_ShouldReturnSuccess()
     {
         // Arrange
-        var updatedItem = new
+        var updatedSupplier = new
         {
             Id = 1,
-            Code = "UPDATED123",
-            Description = "Updated description for item",
-            ShortDescription = "Updated Item",
-            UpcCode = "987654321013",
-            ModelNumber = "UI-2024",
-            CommodityCode = "UPDATED-COMMODITY",
-            ItemLineId = 1,
-            ItemGroupId = 2,
-            ItemTypeId = 1,
-            UnitPurchaseQuantity = 2,
-            UnitOrderQuantity = 2,
-            PackOrderQuantity = 2,
-            SupplierId = 2,
-            SupplierCode = "SUPUPDATED",
-            SupplierPartNumber = "UI-2024-PART",
-            CreatedAt = DateTime.UtcNow.AddDays(-1),
-            UpdatedAt = DateTime.UtcNow
+            Code = "SUP001",
+            Reference = "US-SUP001",
+            Name = "Updated Supplier 1"
         };
 
         var responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
         {
-            Content = new StringContent("{\"id\":1, \"code\":\"UPDATED123\", \"description\":\"Updated description for item\"}")
+            Content = new StringContent("{\"id\":1, \"code\":\"SUP001\", \"reference\":\"US-SUP001\", \"name\":\"Updated Supplier 1\"}")
         };
 
         _handlerMock.Protected()
@@ -160,16 +134,16 @@ public class Items_Unit_Tests
             .ReturnsAsync(responseMessage);
 
         // Act
-        var response = await _client.PutAsJsonAsync("items/1", updatedItem);
+        var response = await _client.PutAsJsonAsync("supplier/1", updatedSupplier);
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var updatedItemResponse = await response.Content.ReadAsStringAsync();
-        Assert.False(string.IsNullOrEmpty(updatedItemResponse));
+        var updatedSupplierResponse = await response.Content.ReadAsStringAsync();
+        Assert.False(string.IsNullOrEmpty(updatedSupplierResponse));
     }
 
     [Fact]
-    public async Task DeleteItem_ShouldReturnSuccess()
+    public async Task DeleteSupplier_ShouldReturnSuccess()
     {
         // Arrange
         var responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.NoContent);
@@ -183,7 +157,7 @@ public class Items_Unit_Tests
             .ReturnsAsync(responseMessage);
 
         // Act
-        var response = await _client.DeleteAsync("items/1");
+        var response = await _client.DeleteAsync("supplier/1");
 
         // Assert
         response.EnsureSuccessStatusCode();

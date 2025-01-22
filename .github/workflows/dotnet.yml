@@ -27,14 +27,50 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Start Server
+      - name: Start Server and Run Tests
         run: |
+          # Start the server in the background and capture its process ID
           dotnet run --project ./Warehousing/ &
-          sleep 10
+          SERVER_PID=$!
 
-      - name: Test
-        run: dotnet test --no-build
+          # Wait for the server to initialize
+          sleep 30
 
+          # Run the tests
+          dotnet test
+
+          # Shut down the server
+          kill $SERVER_PID
+
+  code-coverage:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Project
+        run: dotnet build --no-restore
+
+      - name: Run Tests with Coverage
+        run: |
+          # Run tests with code coverage collection
+          dotnet test --collect:"Code Coverage"
+
+      - name: Upload Code Coverage as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: ./TestResults/*coverage*.xml 
+  
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -48,8 +84,9 @@ jobs:
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
         run: |
           echo "Deploying application..."
-          # Add deployment logic here, such as starting the application
-          # or deploying to a cloud service.
+
+
+
 
 #github action page
 # github repo
