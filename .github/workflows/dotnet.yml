@@ -24,17 +24,22 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build --no-restore
+    - name: Build the application
+        run: dotnet build --configuration Release --no-restore
 
       - name: Start server and run tests concurrently
         run: |
-          dotnet run --project ./Warehousing/ &
-
+          dotnet run --configuration Release --project ./Warehousing/ &
+          echo $! > server.pid
           sleep 10 &
-          
-          # Run tests concurrently
-          dotnet test
+
+      - name: Run tests
+      env:
+        ASPNETCORE_URLS: http://localhost:5000
+      run: dotnet test --no-build --verbosity normal
+
+      - name: Stop server
+        run: kill $(cat server.pid) || true
 
   deploy:
     needs: build-and-test
