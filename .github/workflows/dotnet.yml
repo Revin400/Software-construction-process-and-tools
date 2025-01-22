@@ -84,7 +84,7 @@ jobs:
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
         run: |
           echo "Deploying application..."
-          dotnet run --project ./Warehousing/
+
 
 
 
