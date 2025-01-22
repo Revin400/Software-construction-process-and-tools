@@ -84,16 +84,9 @@ jobs:
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
         run: |
           echo "Deploying application..."
-          # Add deployment logic here, such as starting the application
-          # or deploying to a cloud service.
-          # Example 1: Start the application
-          dotnet run --project ./YourApplication/
+          dotnet run --project ./Warehousing/
 
-          # Example 2: Deploy to a cloud service
-          # Replace the following command with your actual deployment command
-          # such as deploying to Azure, AWS, or Google Cloud
-          echo "Deploying to cloud service..."
-          your-deployment-command
+
 
 #github action page
 # github repo
