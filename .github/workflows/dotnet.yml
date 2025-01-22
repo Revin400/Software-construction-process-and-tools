@@ -27,13 +27,14 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Start Server
+      - name: Start server and run tests concurrently
         run: |
           dotnet run --project ./Warehousing/ &
-          sleep 30
-
-      - name: Test
-        run: dotnet test
+          
+          # Run tests concurrently
+          dotnet test &
+          
+          wait
 
   deploy:
     needs: build-and-test
