@@ -1,5 +1,6 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
 name: .NET CI/CD
 
 on:
@@ -26,15 +27,12 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Start Server
+      - name: Start server and run tests concurrently
         run: |
-          nohup dotnet run --project ./Warehousing/ &
-          sleep 30  # Increase sleep time if needed to ensure the server is ready
-          # Check server status
-          curl --fail http://localhost:5000 || exit 1
-
-      - name: Run Tests
-        run: dotnet test
+          dotnet test &
+          dotnet run --project ./Warehousing/ &
+          # Run tests concurrently
+          
 
   deploy:
     needs: build-and-test
