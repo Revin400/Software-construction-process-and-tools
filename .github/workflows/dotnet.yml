@@ -30,6 +30,8 @@ jobs:
       - name: Start server and run tests concurrently
         run: |
           dotnet run --project ./Warehousing/ &
+
+          sleep 10 &
           
           # Run tests concurrently
           dotnet test &
