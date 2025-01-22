@@ -12,6 +12,20 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    services:
+      warehousing:
+        image: mcr.microsoft.com/dotnet/aspnet:8.0
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+        ports:
+          - 5000:80
+        options: >-
+          --health-cmd "curl --fail http://localhost:80 || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -27,13 +41,14 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Start server and run tests concurrently
-        run: |
-          dotnet run --project ./Warehousing/ &
+      - name: Start Server
+        run: dotnet run --project ./Warehousing/
 
-          sleep 100 
-          
-          dotnet test
+      - name: Wait for Server
+        run: sleep 60  # Increase sleep time if needed to ensure the server is ready
+
+      - name: Run Tests
+        run: dotnet test
 
   deploy:
     needs: build-and-test
