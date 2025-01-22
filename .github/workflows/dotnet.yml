@@ -1,6 +1,5 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET CI/CD
 
 on:
@@ -12,20 +11,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
-    services:
-      warehousing:
-        image: mcr.microsoft.com/dotnet/aspnet:8.0
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
-        ports:
-          - 5000:80
-        options: >-
-          --health-cmd "curl --fail http://localhost:80 || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -42,10 +27,11 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Start Server
-        run: dotnet run --project ./Warehousing/
-
-      - name: Wait for Server
-        run: sleep 60  # Increase sleep time if needed to ensure the server is ready
+        run: |
+          nohup dotnet run --project ./Warehousing/ &
+          sleep 30  # Increase sleep time if needed to ensure the server is ready
+          # Check server status
+          curl --fail http://localhost:5000 || exit 1
 
       - name: Run Tests
         run: dotnet test
