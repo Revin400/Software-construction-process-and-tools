@@ -22,15 +22,15 @@ Content-Type: application/json
         "sourceId": 1,
         "orderDate": "2019-04-03T11:33:15Z",
         "requestDate": "2019-04-07T11:33:15Z",
-        "reference": "ORD00003 ",
+        "reference": "ORD00002",
         "ReferenceExtra": "Bedreven arm straffen bureau.",
         "OrderStatus": "Delivered",
         "notes": "Voedsel vijf vork heel.",
         "ShippingNotes": "Buurman betalen plaats bewolkt.",
         "PickingNotes": "Ademen fijn volgorde scherp aardappel op leren.",
         "warehouseId": 1,
-        "ShipTo": 2,
-        "BillTo": 2,
+        "ShipTo": 1,
+        "BillTo": 1,
         "shipmentId": 1,
         "totalAmount": 9905.13,
         "totalDiscount": 150.77,
@@ -38,8 +38,8 @@ Content-Type: application/json
         "totalSurcharge": 77.6,
         "Items": [
             {
-                "ItemId": "P000002",
-                "amount": 23
+                "ItemId": "P000001",
+                "amount": 25
             }
         ]
     }

@@ -19,7 +19,7 @@ Headers:
 Content-Type: application/json
 
 {
-  "Code": "WH002",
+  "Code": "WH001",
   "Name": "Main Warehouse",
   "Address": "1234 Warehouse St",
   "Zip": "12345",

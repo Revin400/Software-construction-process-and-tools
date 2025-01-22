@@ -30,11 +30,11 @@ Content-Type: application/json
     "locations": [
         1
     ],
-    "totalOnHand"   : 262,
+    "totalOnHand"   : 300,
     "totalExpected" : 0,
     "totalOrdered"  : 80,
     "totalAllocated": 41,
-    "totalAvailable": 141
+    "totalAvailable": 150
     }
 
 ###

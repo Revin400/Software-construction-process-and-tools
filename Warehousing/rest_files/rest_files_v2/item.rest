@@ -37,7 +37,7 @@ Headers:
 Content-Type: application/json
 
 {
-    "Id":"P000003",
+    "Id":"P000001",
     "code": "NEW1234",
     "description": "Newly added item",
     "shortDescription": "New Item",

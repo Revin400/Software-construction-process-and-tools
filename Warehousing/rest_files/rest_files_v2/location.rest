@@ -17,7 +17,7 @@ Headers:
 Content-Type: application/json
 
 {
-    "warehouse_id": 2,
+    "warehouse_id": 1,
     "code": "A.1.1",
     "name": "Row: A, Rack: 1, Shelf: 1"
 }
