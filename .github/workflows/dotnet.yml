@@ -1,3 +1,6 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
 name: .NET CI/CD
 
 on:
@@ -21,22 +24,16 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore
 
-      - name: Build the application
-        run: dotnet build 
+      - name: Build
+        run: dotnet build --no-restore
 
       - name: Start server and run tests concurrently
         run: |
           dotnet run --project ./Warehousing/ &
-          echo $! > server.pid
-          sleep 10 # Ensure server is started before running tests
 
-      - name: Run tests
-        env:
-          ASPNETCORE_URLS: http://localhost:5000
-        run: dotnet test
-
-      - name: Stop server
-        run: kill $(cat server.pid) || true
+          sleep 100 
+          
+          dotnet test
 
   deploy:
     needs: build-and-test
@@ -53,3 +50,12 @@ jobs:
           echo "Deploying application..."
           # Add deployment logic here, such as starting the application
           # or deploying to a cloud service.
+
+#github action page
+# github repo
+  # Eerst build and daarna test
+  # code coverage
+  # artifact 
+  # deploy
+  # auto publish VPS
+  
