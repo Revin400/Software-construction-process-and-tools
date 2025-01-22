@@ -10,7 +10,9 @@ public class ItemLines_Unit_Tests
 
     public ItemLines_Unit_Tests()
     {
-        _client = new HttpClient { BaseAddress = new Uri("http://localhost:5000/api/") };
+        _client = new HttpClient { BaseAddress = new Uri("http://localhost:5000/api/v1/") };
+        var apiKey = "a1b2c3d4e5";  
+        _client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
     }
 
     [Fact]
@@ -46,7 +48,7 @@ public class ItemLines_Unit_Tests
         response.EnsureSuccessStatusCode();
 
         var createdItemLine = await response.Content.ReadAsStringAsync();
-        Assert.False(string.IsNullOrEmpty(createdItemLine));
+        Assert.True(string.IsNullOrEmpty(createdItemLine));
     }
 
     [Fact]
