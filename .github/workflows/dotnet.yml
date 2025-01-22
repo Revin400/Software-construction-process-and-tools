@@ -27,12 +27,20 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Start server and run tests concurrently
+      - name: Start Server and Run Tests
         run: |
-          dotnet test &
+          # Start the server in the background and capture its process ID
           dotnet run --project ./Warehousing/ &
-          # Run tests concurrently
-          
+          SERVER_PID=$!
+
+          # Wait for the server to initialize
+          sleep 30
+
+          # Run the tests
+          dotnet test
+
+          # Shut down the server
+          kill $SERVER_PID
 
   deploy:
     needs: build-and-test
