@@ -34,9 +34,7 @@ jobs:
           sleep 10 &
           
           # Run tests concurrently
-          dotnet test &
-          
-          wait
+          dotnet test
 
   deploy:
     needs: build-and-test
