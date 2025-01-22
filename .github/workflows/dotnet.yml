@@ -30,7 +30,7 @@ jobs:
       - name: Start Server
         run: |
           dotnet run --project ./Warehousing/ &
-          sleep 10
+          sleep 30
 
       - name: Test
         run: dotnet test
