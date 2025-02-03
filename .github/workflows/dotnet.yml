@@ -1,7 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 # This workflow will build, test, generate code coverage, and deploy a .NET project.
-
+# .NET CI/CD Workflow
 name: .NET CI/CD
 
 on:
@@ -73,7 +73,7 @@ jobs:
           zip -r coverage-report.zip coverage-report/
 
       - name: Upload Code Coverage as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage-report.zip
@@ -90,7 +90,7 @@ jobs:
           zip -r deployment.zip .
 
       - name: Upload Deployment Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: deployment-package
           path: deployment.zip
@@ -101,7 +101,6 @@ jobs:
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
         run: |
           echo "Deploying application..."
-
 
 
 #github action page
