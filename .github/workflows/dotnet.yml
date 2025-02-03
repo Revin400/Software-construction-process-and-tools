@@ -69,7 +69,7 @@ jobs:
       - name: Zip Code Coverage Report
         run: |
           mkdir -p coverage-report
-          cp ./TestResults/*coverage*.xml coverage-report/
+          cp $(find . -type f -name "*coverage*.xml") coverage-report/ || echo "No coverage files found!"
           zip -r coverage-report.zip coverage-report/
 
       - name: Upload Code Coverage as Artifact
