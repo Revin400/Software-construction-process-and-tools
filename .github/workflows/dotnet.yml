@@ -1,5 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
 name: .NET CI/CD
 
@@ -37,8 +39,6 @@ jobs:
           sleep 30
 
           # Run the tests
-          dotnet test
-
           dotnet test --logger:"trx;LogFileName=test-results.trx"
 
           # Shut down the server
@@ -70,14 +70,19 @@ jobs:
 
       - name: Run Tests with Coverage
         run: |
-          # Run tests with code coverage collection
-          dotnet test --collect:"Code Coverage"
+          dotnet test --collect:"XPlat Code Coverage"
 
-      - name: Zip Code Coverage Report
+      - name: Find and Zip Code Coverage Report
         run: |
           mkdir -p coverage-report
-          cp $(find . -type f -name "*coverage*.xml") coverage-report/ || echo "No coverage files found!"
-          zip -r coverage-report.zip coverage-report/
+          COVERAGE_FILE=$(find . -type f -name "coverage.cobertura.xml" | head -n 1)
+          if [ -f "$COVERAGE_FILE" ]; then
+            mv "$COVERAGE_FILE" coverage-report/
+            zip -r coverage-report.zip coverage-report/
+          else
+            echo "No coverage files found!"
+            exit 1
+          fi
 
       - name: Upload Code Coverage as Artifact
         uses: actions/upload-artifact@v4
@@ -108,7 +113,6 @@ jobs:
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
         run: |
           echo "Deploying application..."
-
 
 
 
