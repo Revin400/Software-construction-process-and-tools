@@ -2,7 +2,6 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET CI/CD
 
 on:
@@ -31,15 +30,16 @@ jobs:
 
       - name: Start Server and Run Tests
         run: |
-          # Start the server in the background
+          # Start the server in the background and capture its process ID
           dotnet run --project ./Warehousing/ & 
           SERVER_PID=$!
 
-          # Wait for server to initialize
+          # Wait for the server to initialize
           sleep 30
 
-          # Run the tests
-          dotnet test --logger:"trx;LogFileName=test-results.trx"
+          mkdir -p Warehousing/TestResults
+
+          dotnet test --logger:"trx;LogFileName=test-results.trx" --results-directory Warehousing/TestResults/
 
           # Shut down the server
           kill $SERVER_PID
@@ -48,50 +48,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: TestResults/test-results.trx
+          path: Warehousing/TestResults/test-results.trx
 
-  code-coverage:
+  deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Run Tests with Coverage
-        run: |
-          dotnet test --collect:"XPlat Code Coverage"
-
-      - name: Find and Zip Code Coverage Report
-        run: |
-          mkdir -p coverage-report
-          COVERAGE_FILE=$(find . -type f -name "coverage.cobertura.xml" | head -n 1)
-          if [ -f "$COVERAGE_FILE" ]; then
-            mv "$COVERAGE_FILE" coverage-report/
-            zip -r coverage-report.zip coverage-report/
-          else
-            echo "No coverage files found!"
-          fi
-
-      - name: Upload Code Coverage as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage-report.zip
-
-  deploy:
-    needs: code-coverage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
       - name: Zip Deployment Package
-        run: zip -r deployment.zip .
+        run: |
+          zip -r deployment.zip .
 
       - name: Upload Deployment Artifact
         uses: actions/upload-artifact@v4
