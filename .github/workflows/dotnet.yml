@@ -39,8 +39,16 @@ jobs:
           # Run the tests
           dotnet test
 
+          dotnet test --logger:"trx;LogFileName=test-results.trx"
+
           # Shut down the server
           kill $SERVER_PID
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/test-results.trx
 
   code-coverage:
     needs: build-and-test
@@ -65,18 +73,34 @@ jobs:
           # Run tests with code coverage collection
           dotnet test --collect:"Code Coverage"
 
+      - name: Zip Code Coverage Report
+        run: |
+          mkdir -p coverage-report
+          cp $(find . -type f -name "*coverage*.xml") coverage-report/ || echo "No coverage files found!"
+          zip -r coverage-report.zip coverage-report/
+
       - name: Upload Code Coverage as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: ./TestResults/*coverage*.xml 
-  
+          path: coverage-report.zip
+
   deploy:
-    needs: build-and-test
+    needs: code-coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Zip Deployment Package
+        run: |
+          zip -r deployment.zip .
+
+      - name: Upload Deployment Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-package
+          path: deployment.zip
 
       - name: Deploy Application
         env:
