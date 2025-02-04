@@ -1,6 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 name: .NET CI/CD
 
 on:
@@ -25,52 +26,30 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --configuration Release
 
       - name: Start Server and Run Tests
         run: |
           # Start the server in the background and capture its process ID
-          dotnet run --project ./Warehousing/ &
+          dotnet run --project ./Warehousing/ & 
           SERVER_PID=$!
 
           # Wait for the server to initialize
           sleep 30
 
-          # Run the tests
-          dotnet test
+          mkdir -p Warehousing/TestResults
+
+          dotnet test --logger:"trx;LogFileName=test-results.trx" --results-directory Warehousing/TestResults/
 
           # Shut down the server
           kill $SERVER_PID
 
-  code-coverage:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
         with:
-          dotnet-version: 8.0.x
+          name: test-results
+          path: Warehousing/TestResults/test-results.trx
 
-      - name: Restore Dependencies
-        run: dotnet restore
-
-      - name: Build Project
-        run: dotnet build --no-restore
-
-      - name: Run Tests with Coverage
-        run: |
-          # Run tests with code coverage collection
-          dotnet test --collect:"Code Coverage"
-
-      - name: Upload Code Coverage as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: ./TestResults/*coverage*.xml 
-  
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -78,14 +57,22 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Zip Deployment Package
+        run: |
+          zip -r deployment.zip .
+
+      - name: Upload Deployment Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-package
+          path: deployment.zip
+
       - name: Deploy Application
         env:
           FULL_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_1 }}
           GET_ACCESS_KEY: ${{ secrets.DEFINITLY_NOT_OUR_API_KEY_CARGOHUB_DASHBORD_2 }}
         run: |
           echo "Deploying application..."
-
-
 
 
 #github action page
