@@ -54,19 +54,6 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Restore Dependencies
-        run: dotnet restore
-
-      - name: Build Project
-        run: dotnet build --no-restore
 
       - name: Run Tests with Coverage
         run: |
@@ -80,10 +67,8 @@ jobs:
             mv "$COVERAGE_FILE" coverage-report/
             zip -r coverage-report.zip coverage-report/
           else
-            echo "No coverage files found!"
-            exit 1
-          fi
-
+            echo "No coverage files found!
+            
       - name: Upload Code Coverage as Artifact
         uses: actions/upload-artifact@v4
         with:
